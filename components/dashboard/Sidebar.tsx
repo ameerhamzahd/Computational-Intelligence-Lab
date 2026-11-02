@@ -27,31 +27,31 @@ import { CollapsibleNavGroup, MobileNavSheet } from "@/components/dashboard/Side
 
 const NAV_ITEMS = [
     { label: "Home", href: "/", icon: Home, shortLabel: "Home" },
-    { label: "Overview", href: "/dashboard", icon: LayoutDashboard, shortLabel: "Overview" },
+    { label: "Profile", href: "/dashboard", icon: User, shortLabel: "Profile" },
     { label: "Upload Paper & Presentation", href: "/dashboard/upload", icon: Upload, shortLabel: "Upload" },
     { label: "My Papers", href: "/dashboard/my-papers", icon: FileText, shortLabel: "My Papers" },
 ];
 
-const PROFILE_ITEM = { label: "Profile", href: "/dashboard/profile", icon: User };
+// const PROFILE_ITEM = { label: "Profile", href: "/dashboard/profile", icon: User };
 
-function ProfileLink({ collapsed, isActive }: { collapsed: boolean; isActive: boolean }) {
-    const Icon = PROFILE_ITEM.icon;
+// function ProfileLink({ collapsed, isActive }: { collapsed: boolean; isActive: boolean }) {
+//     const Icon = PROFILE_ITEM.icon;
 
-    return (
-        <Link
-            href={PROFILE_ITEM.href}
-            className={cn(
-                "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white",
-                collapsed && "justify-center px-2",
-                isActive && "bg-white/15 text-white shadow-inner"
-            )}
-            title={collapsed ? PROFILE_ITEM.label : undefined}
-        >
-            <Icon size={18} aria-hidden />
-            {!collapsed && PROFILE_ITEM.label}
-        </Link>
-    );
-}
+//     return (
+//         <Link
+//             href={PROFILE_ITEM.href}
+//             className={cn(
+//                 "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white",
+//                 collapsed && "justify-center px-2",
+//                 isActive && "bg-white/15 text-white shadow-inner"
+//             )}
+//             title={collapsed ? PROFILE_ITEM.label : undefined}
+//         >
+//             <Icon size={18} aria-hidden />
+//             {!collapsed && PROFILE_ITEM.label}
+//         </Link>
+//     );
+// }
 
 const PAPER_ACCESS_LABEL = "Paper Access";
 const PAPER_ACCESS_SHORT_LABEL = "Access";
@@ -199,7 +199,7 @@ export default function Sidebar() {
                             );
                         })}
 
-                    <ProfileLink collapsed={collapsed} isActive={pathname === PROFILE_ITEM.href} />
+                    {/* <ProfileLink collapsed={collapsed} isActive={pathname === PROFILE_ITEM.href} /> */}
                 </nav>
 
                 <div className="mt-auto">
@@ -268,7 +268,7 @@ export default function Sidebar() {
                     </button>
                 )}
 
-                <Link
+                {/* <Link
                     href={PROFILE_ITEM.href}
                     className={cn(
                         "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium leading-none text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white",
@@ -277,7 +277,7 @@ export default function Sidebar() {
                 >
                     <User size={18} aria-hidden />
                     <span className="w-full text-center leading-tight">{PROFILE_ITEM.label}</span>
-                </Link>
+                </Link> */}
 
                 <button
                     type="button"

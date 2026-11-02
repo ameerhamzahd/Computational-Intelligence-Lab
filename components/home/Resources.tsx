@@ -363,7 +363,7 @@ function PaperModal({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 12, scale: 0.97 }}
                         transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                        className="relative w-full max-w-xl rounded-[28px] bg-white p-7 shadow-2xl"
+                        className="relative max-h-[calc(100dvh-2rem)] w-full max-w-xl overflow-y-auto overscroll-contain rounded-[28px] bg-white p-7 shadow-2xl"
                     >
                         <button
                             onClick={onClose}

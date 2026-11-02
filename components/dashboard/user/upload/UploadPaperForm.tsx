@@ -36,10 +36,12 @@ const paperCategories = [
 export default function UploadPaperForm() {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState("");
+  const [publisher, setPublisher] = useState("");
   const [abstract, setAbstract] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
   const [publicationLink, setPublicationLink] = useState("");
+  const [featured, setFeatured] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
 
   const [isUploading, setIsUploading] = useState(false);
@@ -126,10 +128,12 @@ export default function UploadPaperForm() {
       formData.append("pdf", pdfFile);
       formData.append("title", title);
       formData.append("authors", authors);
+      formData.append("publisher", publisher.trim());
       formData.append("abstract", abstract);
       formData.append("category", category);
       formData.append("tags", tags);
       formData.append("publicationLink", trimmedPublicationLink);
+      formData.append("featured", String(featured));
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/papers/upload`,
@@ -153,10 +157,12 @@ export default function UploadPaperForm() {
 
       setTitle("");
       setAuthors("");
+      setPublisher("");
       setAbstract("");
       setCategory("");
       setTags("");
       setPublicationLink("");
+      setFeatured(false);
       setPdfFile(null);
       window.dispatchEvent(new Event("uploads:changed"));
     } catch (error) {
@@ -170,11 +176,8 @@ export default function UploadPaperForm() {
   };
 
   return (
-    <Card
-      className="w-full rounded-[20px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl"
-    >
-      <CardContent className="p-5">
-
+    <Card className="w-full min-w-0 max-w-full overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
+      <CardContent className="min-w-0 p-5">
         {/* Header */}
         <div className="flex items-center gap-3 pb-6">
           <div>
@@ -281,6 +284,26 @@ export default function UploadPaperForm() {
               />
             </div>
 
+            {/* Publisher */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="publisher"
+                className="text-xs font-semibold text-[#565D54]"
+              >
+                Publisher
+              </Label>
+
+              <Input
+                id="publisher"
+                value={publisher}
+                onChange={(e) =>
+                  setPublisher(e.target.value)
+                }
+                placeholder="e.g. IEEE, Springer, Elsevier"
+                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+              />
+            </div>
+
             {/* Tags */}
             <div className="space-y-2">
               <Label
@@ -342,6 +365,28 @@ export default function UploadPaperForm() {
                 className="w-full resize-none rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5 text-sm leading-relaxed text-[#252C26] focus:ring-[#858A69]/15"
               />
             </div>
+
+            {/* Featured */}
+            <label
+              htmlFor="paper-featured"
+              className="flex cursor-pointer items-start gap-3 rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5"
+            >
+              <input
+                id="paper-featured"
+                type="checkbox"
+                checked={featured}
+                onChange={(e) => setFeatured(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#626C49]"
+              />
+              <span>
+                <span className="block text-xs font-semibold text-[#565D54]">
+                  Show as featured
+                </span>
+                <span className="block text-[11px] text-[#85897F]">
+                  Highlight this paper as featured.
+                </span>
+              </span>
+            </label>
           </div>
 
           {/* Divider */}
@@ -364,32 +409,26 @@ export default function UploadPaperForm() {
 
             <div
               {...getRootProps()}
-              className={`relative overflow-hidden rounded-[14px] border border-dashed p-7 transition-all duration-200
-                ${isDragActive
-                  ? `border-[#68724D] bg-[#68724D]/8`
-                  : `border-[#C9CBC2] bg-[#ECEBE4] hover:border-[#8A906F] hover:bg-[#E8E8DF]`
-                }`}
+              className={`relative w-full min-w-0 max-w-full overflow-hidden rounded-[14px] border border-dashed p-7 transition-all duration-200 ${isDragActive ? `border-[#68724D] bg-[#68724D]/8` : `border-[#C9CBC2] bg-[#ECEBE4] hover:border-[#8A906F] hover:bg-[#E8E8DF]`}`}
             >
               <input {...getInputProps()} />
 
               {pdfFile ? (
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex min-w-0 items-center gap-3">
+                <div className="flex w-full min-w-0 items-center justify-between gap-4">
+                  <div className="flex min-w-0 flex-1 items-center gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[#DDE5D8]">
-                      <CheckCircle
-                        className="h-5 w-5 text-[#4F8A63]"
-                        strokeWidth={1.8}
-                        aria-hidden
-                      />
+                      <CheckCircle className="h-5 w-5 text-[#4F8A63]" strokeWidth={1.8} aria-hidden />
                     </div>
 
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-[#293129]">
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className="truncate text-sm font-medium text-[#293129]"
+                        title={pdfFile.name}
+                      >
                         {pdfFile.name}
                       </p>
-
                       <p className="mt-0.5 text-[11px] text-[#85897F]">
-                        {(pdfFile.size / 1024 / 1024).toFixed(2)}{" "} MB · PDF
+                        {(pdfFile.size / 1024 / 1024).toFixed(2)} MB · PDF
                       </p>
                     </div>
                   </div>

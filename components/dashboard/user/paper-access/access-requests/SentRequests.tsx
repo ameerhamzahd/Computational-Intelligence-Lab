@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { CheckCircle, Clock, Download, ExternalLink, Link as LinkIcon, Pencil, RefreshCw, Trash2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,11 +29,69 @@ const STATUS_CONFIG: Record<SentRequestStatus, {
     fulfilled: { label: "Resolved", icon: CheckCircle, className: "bg-[#EAF0EA] text-[#4F8A63] border-[#D8E2D9]" },
 };
 
+type RequestGroup = {
+    key: string;
+    head: SentRequest;
+    requests: SentRequest[];
+};
+
+/** The backend creates one request per recipient; merge those sent together into one row. */
+function groupRequests(requests: SentRequest[]): RequestGroup[] {
+    const groups: RequestGroup[] = [];
+    const byKey = new Map<string, RequestGroup>();
+    for (const request of requests) {
+        const minute = request.createdAt.slice(0, 16);
+        const key = [request.shareLink, request.message ?? "", request.expiresAt ?? "", minute].join("|");
+        const existing = byKey.get(key);
+        if (existing) {
+            existing.requests.push(request);
+        } else {
+            const group = { key, head: request, requests: [request] };
+            byKey.set(key, group);
+            groups.push(group);
+        }
+    }
+    return groups;
+}
+
+function RecipientList({ requests }: { requests: SentRequest[] }) {
+    const shown = requests.slice(0, 3);
+    const others = requests.slice(3);
+    return (
+        <p className="text-sm font-semibold text-[#292D25]">
+            To: {shown.map((request) => request.toUser.name).join(", ")}
+            {others.length > 0 && (
+                <>
+                    {" and "}
+                    <span className="group relative inline-block">
+                        <button
+                            type="button"
+                            className="cursor-pointer font-semibold text-[#716F49] underline decoration-dotted underline-offset-2"
+                        >
+                            {others.length} others
+                        </button>
+                        <span className="invisible absolute left-0 top-full z-20 w-72 pt-1 opacity-0 transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                            <span className="block max-h-64 overflow-y-auto rounded-lg border border-[#D7D4C9] bg-white p-2 shadow-lg">
+                                {others.map((request) => (
+                                    <span key={request.id} className="block px-2 py-1.5">
+                                        <span className="block text-xs font-semibold text-[#292D25]">{request.toUser.name}</span>
+                                        <span className="block break-all text-xs font-normal text-[#7B7D72]">{request.toUser.email}</span>
+                                    </span>
+                                ))}
+                            </span>
+                        </span>
+                    </span>
+                </>
+            )}
+        </p>
+    );
+}
+
 export default function SentRequests() {
     const [requests, setRequests] = useState<SentRequest[]>([]);
     const [filter, setFilter] = useState<"all" | SentRequestStatus>("all");
     const [errorMessage, setErrorMessage] = useState("");
-    const [editingRequest, setEditingRequest] = useState<SentRequest | null>(null);
+    const [editingRequest, setEditingRequest] = useState<RequestGroup | null>(null);
     const [editLink, setEditLink] = useState("");
     const [editMessage, setEditMessage] = useState("");
     const [editExpiresAt, setEditExpiresAt] = useState("");
@@ -50,7 +108,10 @@ export default function SentRequests() {
     }, []);
 
     const { isLoading, refresh } = useDashboardLoading(loadRequests);
-    const filteredRequests = requests.filter((request) => filter === "all" || request.status === filter);
+    const filteredRequests = useMemo(
+        () => groupRequests(requests.filter((request) => filter === "all" || request.status === filter)),
+        [requests, filter],
+    );
 
     const formatDate = (value: string) => new Date(value).toLocaleDateString("en-US", {
         year: "numeric",
@@ -60,7 +121,8 @@ export default function SentRequests() {
         minute: "2-digit",
     });
 
-    const revokeRequest = async (request: SentRequest) => {
+    const revokeRequest = async (group: RequestGroup) => {
+        const ids = new Set(group.requests.map((item) => item.id));
         if (!await confirmAction({
             title: "Delete this access request?",
             text: "The recipient will no longer be able to use this request.",
@@ -69,9 +131,9 @@ export default function SentRequests() {
             tone: "danger",
         })) return;
         try {
-            await updateAccessRequest(request.id, "revoked");
+            await Promise.all(group.requests.map((item) => updateAccessRequest(item.id, "revoked")));
             setRequests((current) => current.map((item) => (
-                item.id === request.id
+                ids.has(item.id)
                     ? { ...item, status: "revoked", updatedAt: new Date().toISOString() }
                     : item
             )));
@@ -80,8 +142,9 @@ export default function SentRequests() {
         }
     };
 
-    const openEditor = (request: SentRequest) => {
-        setEditingRequest(request);
+    const openEditor = (group: RequestGroup) => {
+        const request = group.head;
+        setEditingRequest(group);
         setEditLink(request.shareLink);
         setEditMessage(request.message ?? "");
         setEditExpiresAt(request.expiresAt ? request.expiresAt.slice(0, 10) : "");
@@ -94,16 +157,21 @@ export default function SentRequests() {
         setIsSaving(true);
         setErrorMessage("");
         try {
-            const data = await updateSentAccessRequest(editingRequest.id, {
+            const payload = {
                 shareLink: editLink,
                 message: editMessage,
                 expiresAt: editExpiresAt ? new Date(`${editExpiresAt}T23:59:59`).toISOString() : undefined,
-            });
-            setRequests((current) => current.map((request) => (
-                request.id === editingRequest.id
-                    ? { ...request, shareLink: data.request.shareLink, message: data.request.message, expiresAt: data.request.expiresAt, updatedAt: data.request.updatedAt }
-                    : request
-            )));
+            };
+            const results = await Promise.all(
+                editingRequest.requests.map((item) => updateSentAccessRequest(item.id, payload)),
+            );
+            const updated = new Map(editingRequest.requests.map((item, index) => [item.id, results[index].request]));
+            setRequests((current) => current.map((request) => {
+                const data = updated.get(request.id);
+                return data
+                    ? { ...request, shareLink: data.shareLink, message: data.message, expiresAt: data.expiresAt, updatedAt: data.updatedAt }
+                    : request;
+            }));
             setEditingRequest(null);
         } catch (error) {
             setErrorMessage(error instanceof Error ? error.message : "Unable to update request.");
@@ -154,29 +222,48 @@ export default function SentRequests() {
                     </div>
                 ) : (
                     <div className="space-y-3">
-                        {filteredRequests.map((request) => {
+                        {filteredRequests.map((group) => {
+                            const request = group.head;
+                            const allSame = group.requests.every((item) => item.status === request.status);
                             const config = STATUS_CONFIG[request.status];
                             const StatusIcon = config.icon;
                             return (
-                                <div key={request.id} className="rounded-xl border border-[#D9D8CD] bg-[#FBFAF7] p-4">
+                                <div key={group.key} className="rounded-xl border border-[#D9D8CD] bg-[#FBFAF7] p-4">
                                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                         <div className="min-w-0">
                                             <div className="flex flex-wrap items-center gap-2">
-                                                <p className="text-sm font-semibold text-[#292D25]">
-                                                    To: {request.toUser.name}
-                                                </p>
-                                                <Badge className={cn("gap-1 border", config.className)}>
-                                                    <StatusIcon className="h-3 w-3" />{config.label}
-                                                </Badge>
+                                                <RecipientList requests={group.requests} />
+                                                {allSame ? (
+                                                    <Badge className={cn("gap-1 border", config.className)}>
+                                                        <StatusIcon className="h-3 w-3" />{config.label}
+                                                    </Badge>
+                                                ) : (
+                                                    Object.entries(
+                                                        group.requests.reduce<Record<string, number>>((acc, item) => {
+                                                            acc[item.status] = (acc[item.status] ?? 0) + 1;
+                                                            return acc;
+                                                        }, {}),
+                                                    ).map(([status, count]) => {
+                                                        const c = STATUS_CONFIG[status as SentRequestStatus];
+                                                        const Icon = c.icon;
+                                                        return (
+                                                            <Badge key={status} className={cn("gap-1 border", c.className)}>
+                                                                <Icon className="h-3 w-3" />{count} {c.label}
+                                                            </Badge>
+                                                        );
+                                                    })
+                                                )}
                                             </div>
-                                            <p className="mt-1 text-xs text-[#7B7D72]">{request.toUser.email}</p>
+                                            {group.requests.length === 1 && (
+                                                <p className="mt-1 text-xs text-[#7B7D72]">{request.toUser.email}</p>
+                                            )}
                                             <p className="mt-2 text-xs text-[#7B7D72]">
                                                 Sent {formatDate(request.createdAt)}
                                                 {request.expiresAt && ` • Expires ${formatDate(request.expiresAt)}`}
                                             </p>
                                             {request.message && <p className="mt-2 text-sm text-[#565D54]">{request.message}</p>}
                                         </div>
-                                        <div className="flex shrink-0 items-center gap-2">
+                                        <div className="flex flex-wrap shrink-0 items-center gap-2">
                                             <Button variant="outline" size="sm" onClick={() => window.open(request.shareLink, "_blank", "noopener,noreferrer")}>
                                                 <ExternalLink className="mr-1.5 h-3.5 w-3.5" /> Open link
                                             </Button>
@@ -187,10 +274,10 @@ export default function SentRequests() {
                                             )}
                                             {(request.status === "pending" || request.status === "accepted") && (
                                                 <>
-                                                    <Button type="button" variant="outline" size="sm" onClick={() => openEditor(request)}>
+                                                    <Button type="button" variant="outline" size="sm" onClick={() => openEditor(group)}>
                                                         <Pencil className="mr-1.5 h-3.5 w-3.5" /> Edit
                                                     </Button>
-                                                    <Button type="button" variant="outline" size="sm" onClick={() => revokeRequest(request)}>
+                                                    <Button type="button" variant="outline" size="sm" onClick={() => revokeRequest(group)}>
                                                         <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Delete
                                                     </Button>
                                                 </>

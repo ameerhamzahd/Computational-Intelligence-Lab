@@ -42,7 +42,9 @@ export default function UploadPresentationForm() {
   const [date, setDate] = useState("");
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
+  const [publisher, setPublisher] = useState("");
   const [publicationLink, setPublicationLink] = useState("");
+  const [featured, setFeatured] = useState(false);
   const [file, setFile] = useState<File | null>(null);
 
   const [isUploading, setIsUploading] = useState(false);
@@ -142,8 +144,10 @@ export default function UploadPresentationForm() {
       formData.append("event", event);
       formData.append("date", date);
       formData.append("type", type);
+      formData.append("publisher", publisher.trim());
       formData.append("publicationLink", trimmedPublicationLink);
       formData.append("description", description);
+      formData.append("featured", String(featured));
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/presentations/upload`,
@@ -170,6 +174,8 @@ export default function UploadPresentationForm() {
       setDate("");
       setType("");
       setDescription("");
+      setPublisher("");
+      setFeatured(false);
       setFile(null);
       window.dispatchEvent(new Event("uploads:changed"));
     } catch (error) {
@@ -314,6 +320,26 @@ export default function UploadPresentationForm() {
               </div>
             </div>
 
+            {/* Publisher */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="pres-publisher"
+                className="text-xs font-semibold text-[#565D54]"
+              >
+                Publisher
+              </Label>
+
+              <Input
+                id="pres-publisher"
+                value={publisher}
+                onChange={(e) =>
+                  setPublisher(e.target.value)
+                }
+                placeholder="e.g. IEEE, Springer, Elsevier"
+                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+              />
+            </div>
+
             {/* Publication Link */}
             <div className="space-y-2">
               <Label
@@ -355,6 +381,28 @@ export default function UploadPresentationForm() {
                 className="w-full resize-none rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5 text-sm leading-relaxed text-[#252C26] placeholder:text-[#969A91] outline-none transition-all focus:border-[#B77C29] focus:ring-2 focus:ring-[#B77C29]/15"
               />
             </div>
+
+            {/* Featured */}
+            <label
+              htmlFor="pres-featured"
+              className="flex cursor-pointer items-start gap-3 rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5"
+            >
+              <input
+                id="pres-featured"
+                type="checkbox"
+                checked={featured}
+                onChange={(e) => setFeatured(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#626C49]"
+              />
+              <span>
+                <span className="block text-xs font-semibold text-[#565D54]">
+                  Show as featured
+                </span>
+                <span className="block text-[11px] text-[#85897F]">
+                  Highlight this presentation as featured.
+                </span>
+              </span>
+            </label>
           </div>
 
           {/* Divider */}

@@ -1,54 +1,61 @@
-"use client"
+"use client";
 
-import OverviewComponent from '@/components/dashboard/user/overview/OverviewComponent'
-import StateCards from '@/components/dashboard/user/overview/StateCards'
+import { useCallback, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { fetchUserProfile, type UserProfile } from "@/lib/api/users/profile";
+import ProfileForm from "@/components/dashboard/user/profile/ProfileForm";
+import { ProfileSkeleton } from "@/components/dashboard/skeleton-loader/ProfileSkeleton";
+import { useDashboardLoading } from "@/lib/hooks/use-dashboard-loading";
 
-import { Button } from '@/components/ui/button'
-import { RefreshCw } from 'lucide-react'
-import { useDashboardLoading } from '@/lib/hooks/use-dashboard-loading'
-import { cn } from '@/lib/utils'
-import { OverviewSkeleton } from '@/components/dashboard/skeleton-loader/OverviewSkeleton'
+export default function ProfilePage() {
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
-export default function Page() {
-  const { isLoading, refresh } = useDashboardLoading()
+  const loadProfile = useCallback(async () => {
+    try {
+      const profile = await fetchUserProfile();
 
-  return (
-    <section className='w-[95%] mx-auto py-5'>
-      <div>
-        <div className="mb-6">
-          <div className='flex items-center justify-between'>
-            <h1 className="text-2xl font-bold text-white">Overview</h1>
+      setUserProfile(profile);
+    } catch (error) {
+      console.error("Failed to load profile:", error);
+    }
+  }, []);
 
-            <Button
-              variant="ghost"
-              size="lg"
-              className="gap-2 text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
-              onClick={refresh}
-              disabled={isLoading}
-              aria-busy={isLoading}
-            >
-              <RefreshCw className={cn('w-4 h-4', isLoading && 'animate-spin')} aria-hidden />
-              <p className='hidden md:block'>Reload</p>
-            </Button>
+  const { isLoading } = useDashboardLoading(loadProfile);
+
+  if (isLoading) {
+    return (
+      <div className="w-[95%] mx-auto py-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white font-heading">Profile</h1>
+            <p className="text-white/70 mt-1">Manage your account information and preferences</p>
           </div>
-
-          <p className="text-white/80 mt-1">Manage your research papers and presentation uploads</p>
         </div>
 
-        {isLoading ? (
-          <OverviewSkeleton />
-        ) : (
-          <>
-            <StateCards />
-
-            <div className="gap-4 w-full">
-              <div className="space-y-4">
-                <OverviewComponent />
-              </div>
-            </div>
-          </>
-        )}
+        <ProfileSkeleton />
       </div>
-    </section>
-  )
+    );
+  }
+
+  if (!userProfile) {
+    return (
+      <div className="text-center py-12">
+        <Loader2 className="w-8 h-8 text-white/50 animate-spin mx-auto mb-4" />
+        <p className="text-white/70">Unable to load profile</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-[95%] mx-auto py-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white font-heading">Profile</h1>
+          <p className="text-white/70 mt-1">Manage your account information and preferences</p>
+        </div>
+      </div>
+
+      <ProfileForm key={userProfile.id} initialData={userProfile} />
+    </div>
+  );
 }
