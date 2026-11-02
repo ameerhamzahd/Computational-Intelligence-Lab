@@ -9,7 +9,6 @@ export interface UserProfile {
     scholarId: string;
     institution: string;
     role: AcademicRole;
-    avatar?: string;
 }
 
 export interface UpdateProfilePayload {
@@ -19,7 +18,6 @@ export interface UpdateProfilePayload {
     scholarId?: string;
     institution?: string;
     role?: AcademicRole;
-    avatar?: string;
 }
 
 export interface UpdateProfileResponse {
@@ -42,14 +40,13 @@ async function getAuthHeaders(): Promise<HeadersInit> {
     const token = localStorage.getItem("token");
     return {
         "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
+        ...(token ? { Authorization: "Bearer " + token } : {}),
     };
 }
 
 export async function fetchUserProfile(): Promise<UserProfile> {
     if (!API_BASE_URL) {
-        console.warn("NEXT_PUBLIC_SERVER_URL not configured, returning mock profile");
-        return getMockProfile();
+        throw new ProfileApiError("NEXT_PUBLIC_SERVER_URL is not configured.", 0);
     }
 
     try {
@@ -60,21 +57,27 @@ export async function fetchUserProfile(): Promise<UserProfile> {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to fetch profile: ${response.statusText}`);
+            let message = `Failed to fetch profile: ${response.statusText}`;
+            try {
+                const errorData = (await response.json()) as { message?: string };
+                message = errorData.message || message;
+            } catch {
+                // Use the status text when the server does not return JSON.
+            }
+            throw new ProfileApiError(message, response.status);
         }
 
         const data = await response.json();
         return data.user || data;
     } catch (error) {
-        console.error("Error fetching user profile:", error);
-        return getMockProfile();
+        if (error instanceof ProfileApiError) throw error;
+        throw new ProfileApiError("Network error. Check your connection and try again.", 0);
     }
 }
 
 export async function updateUserProfile(payload: UpdateProfilePayload): Promise<UpdateProfileResponse> {
     if (!API_BASE_URL) {
-        console.warn("NEXT_PUBLIC_SERVER_URL not configured, simulating update");
-        return { success: true, message: "Profile updated successfully (mock)" };
+        throw new ProfileApiError("NEXT_PUBLIC_SERVER_URL is not configured.", 0);
     }
 
     try {
@@ -102,16 +105,4 @@ export async function updateUserProfile(payload: UpdateProfilePayload): Promise<
         if (error instanceof ProfileApiError) throw error;
         throw new ProfileApiError("Network error. Check your connection and try again.", 0);
     }
-}
-
-function getMockProfile(): UserProfile {
-    return {
-        id: "1",
-        name: "Dr. Sarah Chen",
-        email: "sarah.chen@university.edu",
-        scholarId: "SCH-2024-001",
-        institution: "Stanford University",
-        role: "Professor",
-        avatar: undefined,
-    };
 }

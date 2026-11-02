@@ -11,8 +11,6 @@ import {
     Building2,
     Eye,
     EyeOff,
-    Camera,
-    Trash2,
     CheckCircle,
     IdCard,
     AlertCircle,
@@ -125,12 +123,10 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
         scholarId: initialData.scholarId,
         institution: initialData.institution,
         role: initialData.role,
-        avatar: initialData.avatar,
     }));
     const [errors, setErrors] = useState<Partial<Record<keyof UpdateProfilePayload, string>>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(initialData.avatar || null);
     const [isDirty, setIsDirty] = useState(false);
 
     const initials = useMemo(() => {
@@ -194,38 +190,6 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
         []
     );
 
-    const handleAvatarChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-
-        if (!file.type.startsWith("image/")) {
-            toast.error("Choose an image file (PNG, JPG or WebP).");
-            return;
-        }
-        if (file.size > 2 * 1024 * 1024) {
-            toast.error("That image is over 2MB. Choose a smaller one.");
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const result = e.target?.result as string;
-            setAvatarPreview(result);
-            setFormData((prev) => ({ ...prev, avatar: result }));
-            setIsDirty(true);
-        };
-        reader.readAsDataURL(file);
-
-        // allow re-selecting the same file
-        event.target.value = "";
-    }, []);
-
-    const removeAvatar = useCallback(() => {
-        setAvatarPreview(null);
-        setFormData((prev) => ({ ...prev, avatar: "" }));
-        setIsDirty(true);
-    }, []);
-
     const handleReset = useCallback(() => {
         setFormData({
             name: initialData.name,
@@ -233,9 +197,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
             scholarId: initialData.scholarId,
             institution: initialData.institution,
             role: initialData.role,
-            avatar: initialData.avatar,
         });
-        setAvatarPreview(initialData.avatar || null);
         setErrors({});
         setIsDirty(false);
     }, [initialData]);
@@ -263,8 +225,6 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                 };
 
                 if (formData.password) payload.password = formData.password;
-                if (formData.avatar !== undefined) payload.avatar = formData.avatar;
-
                 const response = await updateUserProfile(payload);
 
                 if (response.user) {
@@ -296,35 +256,8 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                 ================================================== */}
                 <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
                     <CardContent className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:gap-6">
-                        <div className="relative h-24 w-24 shrink-0">
-                            {avatarPreview ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                    src={avatarPreview}
-                                    alt=""
-                                    className="h-24 w-24 rounded-2xl object-cover ring-1 ring-[#D8D5C9]"
-                                />
-                            ) : (
-                                <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-[#716F49]/10 text-2xl font-semibold tracking-wide text-[#716F49] ring-1 ring-[#D8D5C9]">
-                                    {initials || <User className="h-9 w-9 text-[#969386]" />}
-                                </div>
-                            )}
-
-                            <label
-                                htmlFor="avatar-upload"
-                                title="Change photo"
-                                className="absolute -bottom-1.5 -right-1.5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-[#716F49] shadow-md ring-2 ring-[#F4F3EE] transition-colors hover:bg-[#625F3F] focus-within:ring-2 focus-within:ring-[#716F49]"
-                            >
-                                <Camera className="h-4 w-4 text-white" />
-                                <span className="sr-only">Change profile photo</span>
-                                <input
-                                    id="avatar-upload"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleAvatarChange}
-                                    className="sr-only"
-                                />
-                            </label>
+                        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-[#716F49]/10 text-2xl font-semibold tracking-wide text-[#716F49] ring-1 ring-[#D8D5C9]">
+                            {initials || <User className="h-9 w-9 text-[#969386]" />}
                         </div>
 
                         <div className="min-w-0">
@@ -335,25 +268,6 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                                 {[formData.role, formData.institution].filter(Boolean).join(" · ") ||
                                     "Add your role and institution below"}
                             </p>
-                            <div className="mt-3 flex items-center gap-3">
-                                <label
-                                    htmlFor="avatar-upload"
-                                    className="cursor-pointer text-xs font-medium text-[#716F49] underline-offset-4 hover:underline"
-                                >
-                                    Upload photo
-                                </label>
-                                {avatarPreview && (
-                                    <button
-                                        type="button"
-                                        onClick={removeAvatar}
-                                        className="flex items-center gap-1 text-xs font-medium text-[#89877B] transition-colors hover:text-[#A45B4B]"
-                                    >
-                                        <Trash2 className="h-3.5 w-3.5" />
-                                        Remove
-                                    </button>
-                                )}
-                                <span className="text-xs text-[#99978C]">PNG or JPG, up to 2MB</span>
-                            </div>
                         </div>
                     </CardContent>
                 </Card>
