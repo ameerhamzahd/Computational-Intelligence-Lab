@@ -8,6 +8,7 @@ import { fetchResearch } from "@/lib/api/research";
 import { AnimatePresence, motion } from "motion/react";
 import {
     BookOpen,
+    Check,
     ChevronDown,
     FileText,
     Link,
@@ -222,6 +223,14 @@ function PaperCard({
     onHoverChange: (paused: boolean) => void;
 }) {
     const tint = TINTS[index % TINTS.length];
+    const [copied, setCopied] = useState(false);
+
+    const share = () => {
+        navigator.clipboard?.writeText(paper.htmlUrl ?? "");
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1800);
+    };
+
     return (
         <motion.article
             whileHover={{ y: -8, scale: 1.02 }}
@@ -241,10 +250,10 @@ function PaperCard({
 
                 <button
                     aria-label="Share paper"
-                    onClick={() => navigator.clipboard?.writeText(paper.title)}
+                    onClick={share}
                     className="absolute right-3.5 top-3.5 grid size-10 place-items-center rounded-xl border border-white/60 bg-white/40 text-neutral-900 backdrop-blur-md transition hover:bg-white/70"
                 >
-                    <Share2 className="size-4.5" />
+                    {copied ? <Check className="size-4.5 text-emerald-700" /> : <Share2 className="size-4.5" />}
                 </button>
 
                 <span className="absolute -bottom-4 left-3 select-none text-[92px] font-bold leading-none tracking-tighter text-white/40">
@@ -326,7 +335,15 @@ function MarqueeRow({
 
 /* ----------------------------- detail modal ---------------------------- */
 
-function PaperModal({ paper, onClose }: { paper: Paper | null; onClose: () => void }) {
+function PaperModal({
+    paper,
+    onClose,
+}: {
+    paper: Paper | null;
+    onClose: () => void;
+}) {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+
     return (
         <AnimatePresence>
             {paper && (
@@ -363,15 +380,26 @@ function PaperModal({ paper, onClose }: { paper: Paper | null; onClose: () => vo
                         <p className="mt-5 text-sm leading-relaxed text-neutral-700">
                             {paper.abstract ?? "No abstract available."}
                         </p>
-                        <div className="mt-6 flex gap-3">
+                        <div className="mt-6 flex flex-wrap gap-3">
                             <a
-                                href={paper.pdfUrl ?? "#"}
+                                href={paper ? `${apiBaseUrl}/api/research/${paper.id}/pdf` : "#"}
+                                download
                                 className="flex items-center gap-2 rounded-2xl bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
                             >
                                 <FileText className="size-4" /> PDF
                             </a>
                             <a
+                                href={paper ? `${apiBaseUrl}/api/research/${paper.id}/preview` : "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 rounded-2xl border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
+                            >
+                                <BookOpen className="size-4" /> Preview
+                            </a>
+                            <a
                                 href={paper.htmlUrl ?? "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="flex items-center gap-2 rounded-2xl border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
                             >
                                 <Link className="size-4" /> LINK

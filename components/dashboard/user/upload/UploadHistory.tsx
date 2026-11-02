@@ -143,6 +143,15 @@ export default function UploadHistory() {
   };
 
   const handleFileAction = async (upload: UploadItem, action: "preview" | "download") => {
+    if (action === "preview") {
+      window.open(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/research/${upload.id}/preview`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+      return;
+    }
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}${upload.cloudinary_url}`,
@@ -151,16 +160,12 @@ export default function UploadHistory() {
       if (!response.ok) throw new Error("Unable to retrieve the uploaded file.");
 
       const fileUrl = URL.createObjectURL(await response.blob());
-      if (action === "preview") {
-        window.open(fileUrl, "_blank", "noopener,noreferrer");
-      } else {
-        const link = document.createElement("a");
-        link.href = fileUrl;
-        link.download = upload.original_filename;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-      }
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = upload.original_filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
       window.setTimeout(() => URL.revokeObjectURL(fileUrl), 60_000);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Unable to retrieve the uploaded file.");

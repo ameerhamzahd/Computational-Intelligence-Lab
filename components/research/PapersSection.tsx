@@ -14,6 +14,7 @@ import {
 export default function PapersSection({ showHeading = true }: { showHeading?: boolean }) {
     const { papers, loading, error } = useResearch();
     const [modal, setModal] = useState<ModalData | null>(null);
+    const apiBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
     return (
         <>
@@ -39,9 +40,13 @@ export default function PapersSection({ showHeading = true }: { showHeading?: bo
                         title={p.title}
                         byline={`${p.authors[0]}${p.authors.length > 1 ? " et al." : ""}`}
                         meta={`${p.type} · Cited by ${p.citedBy}`}
-                        shareText={p.title}
+                        shareText={p.htmlUrl ?? ""}
                         openLabel={`View details: ${p.title}`}
-                        onOpen={() => setModal(paperModal(p))}
+                        onOpen={() => setModal(paperModal(
+                            p,
+                            `${apiBaseUrl}/api/research/${p.id}/pdf`,
+                            `${apiBaseUrl}/api/research/${p.id}/preview`,
+                        ))}
                     />
                 )}
             />

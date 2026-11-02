@@ -454,7 +454,7 @@ export interface ModalData {
     sub?: string;
     body: string;
     note?: string;
-    actions: { label: string; href?: string; icon: LucideIcon; primary?: boolean }[];
+    actions: { label: string; href?: string; icon: LucideIcon; primary?: boolean; download?: boolean }[];
 }
 
 export function DetailModal({ data, onClose }: { data: ModalData | null; onClose: () => void }) {
@@ -519,6 +519,7 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
                                         <a
                                             key={a.label}
                                             href={a.href ?? "#"}
+                                            {...(a.download ? { download: true } : {})}
                                             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                                             className={
                                                 a.primary
@@ -539,7 +540,7 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
     );
 }
 
-export const paperModal = (p: Paper): ModalData => ({
+export const paperModal = (p: Paper, pdfUrl = p.pdfUrl, previewUrl = p.pdfUrl): ModalData => ({
     eyebrow: `${p.type} · ${p.year} · ${p.publisher}`,
     title: p.title,
     byline: p.authors.join("; "),
@@ -547,7 +548,8 @@ export const paperModal = (p: Paper): ModalData => ({
     body: p.abstract ?? "No abstract available.",
     note: p.access === "locked" ? "Full text requires a publisher subscription or institutional access." : undefined,
     actions: [
-        ...(p.pdfUrl ? [{ label: "PDF", href: p.pdfUrl, icon: FileText, primary: true }] : []),
+        ...(pdfUrl ? [{ label: "PDF", href: pdfUrl, icon: FileText, primary: true, download: true }] : []),
+        ...(previewUrl ? [{ label: "Preview", href: previewUrl, icon: BookOpen }] : []),
         ...(p.htmlUrl ? [{ label: "LINK", href: p.htmlUrl, icon: Link }] : []),
     ],
 });
