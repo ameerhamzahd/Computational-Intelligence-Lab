@@ -14,7 +14,6 @@ import {
     Presentation as PresentationIcon,
     Search,
     Share2,
-    Video,
     X,
     type LucideIcon,
 } from "lucide-react";
@@ -540,7 +539,13 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
     );
 }
 
-export const paperModal = (p: Paper, pdfUrl = p.pdfUrl, previewUrl = p.pdfUrl): ModalData => ({
+export const paperModal = (
+    p: Paper,
+    pdfUrl = p.pdfUrl,
+    previewUrl = p.pdfUrl,
+    presentation?: Presentation,
+    presentationPdfUrl?: string,
+): ModalData => ({
     eyebrow: `${p.type} · ${p.year} · ${p.publisher}`,
     title: p.title,
     byline: p.authors.join("; "),
@@ -550,11 +555,14 @@ export const paperModal = (p: Paper, pdfUrl = p.pdfUrl, previewUrl = p.pdfUrl): 
     actions: [
         ...(pdfUrl ? [{ label: "PDF", href: pdfUrl, icon: FileText, primary: true, download: true }] : []),
         ...(previewUrl ? [{ label: "Preview", href: previewUrl, icon: BookOpen }] : []),
+        ...(presentation && presentationPdfUrl
+            ? [{ label: "Presentation Slide", href: presentationPdfUrl, icon: PresentationIcon, download: true }]
+            : []),
         ...(p.htmlUrl ? [{ label: "LINK", href: p.htmlUrl, icon: Link }] : []),
     ],
 });
 
-export const presentationModal = (p: Presentation): ModalData => ({
+export const presentationModal = (p: Presentation, paperPreviewUrl?: string): ModalData => ({
     eyebrow: `${p.type} · ${formatDate(p.date)}`,
     title: p.title,
     byline: p.speakers.join("; "),
@@ -562,6 +570,6 @@ export const presentationModal = (p: Presentation): ModalData => ({
     body: p.abstract ?? "No abstract available.",
     actions: [
         ...(p.slidesUrl ? [{ label: "Slides", href: p.slidesUrl, icon: PresentationIcon, primary: true }] : []),
-        ...(p.videoUrl ? [{ label: "Recording", href: p.videoUrl, icon: Video }] : []),
+        ...(paperPreviewUrl ? [{ label: "Paper", href: paperPreviewUrl, icon: FileText }] : []),
     ],
 });

@@ -12,7 +12,7 @@ import {
 } from "./research-shared";
 
 export default function PapersSection({ showHeading = true }: { showHeading?: boolean }) {
-    const { papers, loading, error } = useResearch();
+    const { papers, presentations, loading, error } = useResearch();
     const [modal, setModal] = useState<ModalData | null>(null);
     const apiBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -31,24 +31,31 @@ export default function PapersSection({ showHeading = true }: { showHeading?: bo
                 searchText={(p) =>
                     [p.title, p.authors.join(" "), p.venue, p.topic, p.type, p.publisher, p.year].join(" ")
                 }
-                renderCard={(p, i, tokens) => (
-                    <ResearchCard
-                        index={i}
-                        tokens={tokens}
-                        topic={p.topic}
-                        year={p.year}
-                        title={p.title}
-                        byline={`${p.authors[0]}${p.authors.length > 1 ? " et al." : ""}`}
-                        meta={`${p.type} · Cited by ${p.citedBy}`}
-                        shareText={p.htmlUrl ?? ""}
-                        openLabel={`View details: ${p.title}`}
-                        onOpen={() => setModal(paperModal(
-                            p,
-                            `${apiBaseUrl}/api/research/${p.id}/pdf`,
-                            `${apiBaseUrl}/api/research/${p.id}/preview`,
-                        ))}
-                    />
-                )}
+                renderCard={(p, i, tokens) => {
+                    const presentation = presentations.find((item) =>
+                        Boolean(p.htmlUrl && p.htmlUrl === item.videoUrl)
+                    );
+                    return (
+                        <ResearchCard
+                            index={i}
+                            tokens={tokens}
+                            topic={p.topic}
+                            year={p.year}
+                            title={p.title}
+                            byline={`${p.authors[0]}${p.authors.length > 1 ? " et al." : ""}`}
+                            meta={`${p.type} · Cited by ${p.citedBy}`}
+                            shareText={p.htmlUrl ?? ""}
+                            openLabel={`View details: ${p.title}`}
+                            onOpen={() => setModal(paperModal(
+                                p,
+                                `${apiBaseUrl}/api/research/${p.id}/pdf`,
+                                `${apiBaseUrl}/api/research/${p.id}/preview`,
+                                presentation,
+                                presentation ? `${apiBaseUrl}/api/research/${presentation.id}/presentation` : undefined,
+                            ))}
+                        />
+                    );
+                }}
             />
 
             <DetailModal data={modal} onClose={() => setModal(null)} />

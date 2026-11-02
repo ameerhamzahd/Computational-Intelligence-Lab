@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchResearch } from "@/lib/api/research";
+import type { Presentation } from "@/lib/types/research";
 import { AnimatePresence, motion } from "motion/react";
 import {
     BookOpen,
@@ -337,9 +338,11 @@ function MarqueeRow({
 
 function PaperModal({
     paper,
+    presentation,
     onClose,
 }: {
     paper: Paper | null;
+    presentation?: Presentation;
     onClose: () => void;
 }) {
     const apiBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -396,6 +399,15 @@ function PaperModal({
                             >
                                 <BookOpen className="size-4" /> Preview
                             </a>
+                            {paper && presentation && (
+                                <a
+                                    href={`${apiBaseUrl}/api/research/${presentation.id}/presentation`}
+                                    download
+                                    className="flex items-center gap-2 rounded-2xl bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
+                                >
+                                    <FileText className="size-4" /> Presentation Slide
+                                </a>
+                            )}
                             <a
                                 href={paper.htmlUrl ?? "#"}
                                 target="_blank"
@@ -417,15 +429,17 @@ function PaperModal({
 export default function Resources() {
     const [active, setActive] = useState<Paper | null>(null);
     const [researchPapers, setResearchPapers] = useState<Paper[]>([]);
+    const [researchPresentations, setResearchPresentations] = useState<Presentation[]>([]);
     const [loadError, setLoadError] = useState<string | null>(null);
 
     useEffect(() => {
         let activeRequest = true;
 
         fetchResearch()
-            .then(({ papers: fetchedPapers }) => {
+            .then(({ papers: fetchedPapers, presentations: fetchedPresentations }) => {
                 if (!activeRequest) return;
                 setResearchPapers(fetchedPapers);
+                setResearchPresentations(fetchedPresentations);
             })
             .catch((error: unknown) => {
                 if (!activeRequest) return;
@@ -490,7 +504,13 @@ export default function Resources() {
                 <MarqueeRow items={bottom} duration={90} offset={-12} reverse onOpen={setActive} />
             </motion.div>
 
-            <PaperModal paper={active} onClose={() => setActive(null)} />
+            <PaperModal
+                paper={active}
+                presentation={researchPresentations.find((presentation) =>
+                    Boolean(active?.htmlUrl && active.htmlUrl === presentation.videoUrl)
+                )}
+                onClose={() => setActive(null)}
+            />
         </section>
     );
 }
