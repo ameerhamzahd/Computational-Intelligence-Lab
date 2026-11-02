@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
+import { fetchPublicStats, type PublicStats } from "@/lib/api/stats";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Particle {
@@ -34,11 +35,11 @@ const BG_COLOR = "#f8fafc";               // slate-50
 const MOBILE_CANVAS_MAX = 640;
 
 // ─── Stats data ───────────────────────────────────────────────────────────────
-const STATS = [
-  { value: 100, suffix: "+", label: "Research Papers" },
-  { value: 50, suffix: "+", label: "Journals Indexed" },
-  { value: 30, suffix: "+", label: "Active Researchers" },
-];
+const STAT_DEFINITIONS = [
+  { key: "papers", suffix: "+", label: "Research Papers" },
+  { key: "presentations", suffix: "+", label: "Presentations" },
+  { key: "researchers", suffix: "+", label: "Active Researchers" },
+] as const;
 
 type ParticleConfig = {
   count: number;
@@ -264,36 +265,70 @@ function useParticleCanvas(
 // ─── Stats Row Component ──────────────────────────────────────────────────────
 function StatsRow() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
+  const [stats, setStats] = useState<PublicStats | null>(null);
+  const [statsError, setStatsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    fetchPublicStats()
+      .then((data) => {
+        if (active) setStats(data);
+      })
+      .catch((cause: unknown) => {
+        if (active) {
+          setStatsError(
+            cause instanceof Error ? cause.message : "Unable to load public statistics."
+          );
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
-    <div
-      ref={ref}
-      className="mt-14 flex flex-wrap items-center justify-center gap-8 text-center"
-    >
-      {STATS.map(({ value, suffix, label }) => (
-        <div key={label} className="flex flex-col items-center">
-          <span className="text-2xl font-extrabold text-[#716f49] sm:text-3xl">
-            {inView ? (
-              <CountUp
-                start={0}
-                end={value}
-                duration={2.4}
-                separator=","
-                suffix={suffix}
-                useEasing
-                easingFn={(t, b, c, d) => {
-                  // ease-out-expo
-                  return t === d ? b + c : c * (-Math.pow(2, (-10 * t) / d) + 1) + b;
-                }}
-              />
-            ) : (
-              `0${suffix}`
-            )}
-          </span>
-          <span className="mt-0.5 text-xs text-[#716f49]">{label}</span>
-        </div>
-      ))}
-    </div>
+    <>
+      <div
+        ref={ref}
+        className="mt-14 flex flex-wrap items-center justify-center gap-8 text-center"
+      >
+        {STAT_DEFINITIONS.map(({ key, suffix, label }) => {
+          const value = stats?.[key];
+
+          return (
+            <div key={label} className="flex flex-col items-center">
+              <span className="text-2xl font-extrabold text-[#716f49] sm:text-3xl">
+                {value === undefined ? (
+                  "—"
+                ) : inView ? (
+                  <CountUp
+                    start={0}
+                    end={value}
+                    duration={2.4}
+                    separator=","
+                    suffix={suffix}
+                    useEasing
+                    easingFn={(t, b, c, d) =>
+                      t === d ? b + c : c * (-Math.pow(2, (-10 * t) / d) + 1) + b
+                    }
+                  />
+                ) : (
+                  `0${suffix}`
+                )}
+              </span>
+              <span className="mt-0.5 text-xs text-[#716f49]">{label}</span>
+            </div>
+          );
+        })}
+      </div>
+      {statsError && (
+        <p className="mt-3 text-center text-xs text-slate-500" role="status">
+          Statistics are currently unavailable.
+        </p>
+      )}
+    </>
   );
 }
 
