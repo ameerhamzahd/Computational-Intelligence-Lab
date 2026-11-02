@@ -174,6 +174,10 @@ export default function LoginForm() {
                                 )}
                             </Button>
 
+                            <Link href="/auth/forgot-password" className="block text-center text-sm font-semibold text-[#716f49] hover:underline">
+                                Forgot password?
+                            </Link>
+
                             <div className="flex items-center justify-center gap-2">
                                 <p>Don&apos;t have an account?</p>
                                 <Link href="/auth/register" className="text-[#716f49] font-semibold hover:underline">
