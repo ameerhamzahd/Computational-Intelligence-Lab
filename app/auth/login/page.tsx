@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { Loader2, Mail, KeyRound, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, Asterisk } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { safeRedirectPath, saveSession } from "@/lib/auth/session";
 import type { LoginFormData, LoginFormErrors, LoginTextField } from "@/lib/types/auth/login";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion } from "motion/react";
+import AuthShell, { authInputClass } from "@/components/shared/AuthShell";
 import { toast } from "react-toastify";
 
 const initialFormData: LoginFormData = {
@@ -85,109 +85,89 @@ export default function LoginForm() {
     );
 
     return (
-        <section className="relative isolate overflow-hidden bg-[#F8FAFC] px-4 py-32 sm:px-6 font-montserrat">
-            <div className="relative mx-auto max-w-3xl text-center">
-                <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-                    Welcome <span className="text-[#716f49]">back</span>
-                </h1>
-                <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-neutral-400 sm:text-base">
-                    Sign in to publish, discover, and collaborate on research with the community.
-                </p>
-            </div>
+        <AuthShell>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+                Welcome <span className="text-[#716f49]">back</span>
+            </h1>
+            <p className="mt-2 text-xs leading-relaxed text-neutral-400">
+                Sign in to publish, discover, and collaborate on research with the community.
+            </p>
 
-            <div className="relative mx-auto mt-14 max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-white/3 shadow-2xl shadow-black/40 backdrop-blur">
-                <div className="grid md:grid-cols-2">
-                    <div className="relative hidden min-h-140 overflow-hidden md:block">
-                        <div className="absolute inset-0 bg-linear-to-br from-[#716f49] to-[#1F321C]" />
-                        <motion.div
-                            className="absolute inset-0 bg-linear-to-br from-[#1F321C] to-[#716f49]"
-                            animate={{ opacity: [0, 1, 0] }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            <form onSubmit={handleSubmit} noValidate className="mt-8 space-y-5">
+                <div>
+                    <Label htmlFor="email" className="text-xs font-semibold text-slate-900">
+                        Your email
+                    </Label>
+                    <Input
+                        id="email"
+                        type="email"
+                        autoComplete="email"
+                        placeholder="jane@university.edu"
+                        value={formData.email}
+                        onChange={handleTextChange("email")}
+                        className={`mt-1.5 ${authInputClass}`}
+                        aria-invalid={Boolean(errors.email)}
+                    />
+                    {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+                </div>
+
+                <div>
+                    <Label htmlFor="password" className="text-xs font-semibold text-slate-900">
+                        Your password
+                    </Label>
+                    <div className="relative mt-1.5">
+                        <Input
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            autoComplete="current-password"
+                            placeholder="Your password"
+                            value={formData.password}
+                            onChange={handleTextChange("password")}
+                            className={`${authInputClass} pr-10`}
+                            aria-invalid={Boolean(errors.password)}
                         />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent_60%)]" />
-                        <div className="absolute bottom-8 left-8 right-8 text-white/80">
-                            <p className="text-sm font-medium">Built for the research community.</p>
-                            <p className="mt-1 text-xs text-white/50">Verified scholar profiles, one platform.</p>
-                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 transition-colors hover:cursor-pointer hover:text-[#716f49]"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
                     </div>
-
-                    <div className="p-8 sm:p-10 flex flex-col justify-center">
-                        <form onSubmit={handleSubmit} noValidate className="space-y-5">
-                            <div>
-                                <Label htmlFor="email" className="text-slate-900">
-                                    Email <span className="text-red-400">*</span>
-                                </Label>
-                                <div className="relative mt-1.5">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder="jane@university.edu"
-                                        value={formData.email}
-                                        onChange={handleTextChange("email")}
-                                        className="w-full h-10 pl-11 pr-4 py-3 bg-[#dddbd8] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49] text-[#707070] font-medium shadow-[0px_3px_4px_2px_#564F5C33]"
-                                        aria-invalid={Boolean(errors.email)}
-                                    />
-                                </div>
-                                {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email}</p>}
-                            </div>
-
-                            <div>
-                                <Label htmlFor="password" className="text-slate-900">
-                                    Password <span className="text-red-400">*</span>
-                                </Label>
-                                <div className="relative mt-1.5">
-                                    <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
-                                    <Input
-                                        id="password"
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="Your password"
-                                        value={formData.password}
-                                        onChange={handleTextChange("password")}
-                                        className="w-full h-10 pl-11 pr-4 py-3 bg-[#dddbd8] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49] text-[#707070] font-medium shadow-[0px_3px_4px_2px_#564F5C33]"
-                                        aria-invalid={Boolean(errors.password)}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword((prev) => !prev)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-[#716f49] hover:cursor-pointer"
-                                        aria-label={showPassword ? "Hide password" : "Show password"}
-                                    >
-                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                    </button>
-                                </div>
-                                {errors.password && <p className="mt-1 text-xs text-red-400">{errors.password}</p>}
-                            </div>
-
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full h-10 px-4 py-3 bg-[#716f49] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49]/30 text-white font-medium shadow-[0px_3px_4px_2px_#564F5C33] cursor-pointer hover:bg-[] transition-colors duration-200"
-                            >
-                                {isSubmitting ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Signing in...
-                                    </>
-                                ) : (
-                                    "Sign In"
-                                )}
-                            </Button>
-
-                            <Link href="/auth/forgot-password" className="block text-center text-sm font-semibold text-[#716f49] hover:underline">
-                                Forgot password?
-                            </Link>
-
-                            <div className="flex items-center justify-center gap-2">
-                                <p>Don&apos;t have an account?</p>
-                                <Link href="/auth/register" className="text-[#716f49] font-semibold hover:underline">
-                                    Register
-                                </Link>
-                            </div>
-                        </form>
+                    {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+                    <div className="mt-2 text-right">
+                        <Link
+                            href="/auth/forgot-password"
+                            className="text-xs font-semibold text-[#716f49] hover:underline"
+                        >
+                            Forgot password?
+                        </Link>
                     </div>
                 </div>
-            </div>
-        </section>
+
+                <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="h-11 w-full cursor-pointer rounded-md bg-[#716f49] text-sm font-medium text-white shadow-[0_14px_24px_-8px_#716f49] transition-colors duration-200 hover:bg-[#1F321C] disabled:opacity-70"
+                >
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Signing in...
+                        </>
+                    ) : (
+                        "Sign In"
+                    )}
+                </Button>
+
+                <p className="pt-2 text-center text-xs text-neutral-400">
+                    Don&apos;t have an account?{" "}
+                    <Link href="/auth/register" className="font-semibold text-[#716f49] hover:underline">
+                        Register
+                    </Link>
+                </p>
+            </form>
+        </AuthShell>
     );
 }

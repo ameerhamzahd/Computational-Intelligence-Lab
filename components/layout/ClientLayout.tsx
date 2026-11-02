@@ -5,6 +5,8 @@ import Footer from "@/components/shared/Footer";
 import { usePathname } from "next/navigation";
 import { ToastContainer, Bounce } from "react-toastify";
 
+const HIDE_CHROME_PREFIXES = ["/dashboard", "/auth"];
+
 export default function ClientLayout({
     children,
 }: {
@@ -12,7 +14,9 @@ export default function ClientLayout({
 }) {
     const pathname = usePathname();
 
-    const hideChrome = pathname.startsWith("/dashboard");
+    const hideChrome = HIDE_CHROME_PREFIXES.some((prefix) =>
+        pathname.startsWith(prefix)
+    );
 
     return (
         <>
@@ -30,9 +34,11 @@ export default function ClientLayout({
                 transition={Bounce}
             />
 
-            <header>
-                {!hideChrome && <Navbar />}
-            </header>
+            {!hideChrome && (
+                <header>
+                    <Navbar />
+                </header>
+            )}
 
             <main>
                 {children}

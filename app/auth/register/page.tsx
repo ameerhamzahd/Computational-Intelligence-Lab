@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { Loader2, User, Mail, KeyRound, Hash, Building2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ import { RegisterApiError, submitRegisterApplication } from "@/lib/api/auth/regi
 import { ACADEMIC_ROLES, type RegisterFormData, type RegisterFormErrors, type RegisterTextField, type AcademicRole } from "@/lib/types/auth/register";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion } from "motion/react";
+import AuthShell, { authButtonClass, authInputClass, authLabelClass } from "@/components/shared/AuthShell";
 import { toast } from "react-toastify";
 
 const initialFormData: RegisterFormData = {
@@ -107,187 +107,145 @@ export default function RegisterForm() {
     );
 
     return (
-        <section className="relative isolate overflow-hidden bg-[#F8FAFC] px-4 py-32 sm:px-6 font-montserrat">
-            <div className="relative mx-auto max-w-3xl text-center">
-                <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-                    Create your <span className="text-[#716f49]">researcher account</span>
-                </h1>
-                <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-neutral-400 sm:text-base">
-                    Publish, discover, and collaborate on research. Whether you&apos;re a student, faculty, or
-                    industry researcher, your account connects you to the community.
-                </p>
-            </div>
+        <AuthShell>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+                Create your <span className="text-[#716f49]">account</span>
+            </h1>
+            <p className="mt-2 text-xs leading-relaxed text-neutral-400">
+                Publish, discover, and collaborate on research. Whether you&apos;re a student, faculty, or
+                industry researcher, your account connects you to the community.
+            </p>
 
-            <div className="relative mx-auto mt-14 max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-white/3 shadow-2xl shadow-black/40 backdrop-blur">
-                <div className="grid md:grid-cols-2">
-                    <div className="relative hidden min-h-140 overflow-hidden md:block">
-                        <div className="absolute inset-0 bg-linear-to-br from-[#716f49] to-[#1F321C]" />
-                        <motion.div
-                            className="absolute inset-0 bg-linear-to-br from-[#1F321C] to-[#716f49]"
-                            animate={{ opacity: [0, 1, 0] }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent_60%)]" />
-                        <div className="absolute bottom-8 left-8 right-8 text-white/80">
-                            <p className="text-sm font-medium">Built for the research community.</p>
-                            <p className="mt-1 text-xs text-white/50">Verified scholar profiles, one platform.</p>
-                        </div>
-                    </div>
-
-                    <div className="p-8 sm:p-10 flex flex-col justify-center">
-                        <form onSubmit={handleSubmit} noValidate className="space-y-5">
-                            <div>
-                                <Label htmlFor="name" className="text-slate-900">
-                                    Name <span className="text-red-400">*</span>
-                                </Label>
-                                <div className="relative mt-1.5">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
-                                    <Input
-                                        id="name"
-                                        placeholder="Jane Smith"
-                                        value={formData.name}
-                                        onChange={handleTextChange("name")}
-                                        className="w-full h-10 pl-11 pr-4 py-3 bg-[#dddbd8] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49] text-[#707070] font-medium shadow-[0px_3px_4px_2px_#564F5C33]"
-                                        aria-invalid={Boolean(errors.name)}
-                                    />
-                                </div>
-                                {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
-                            </div>
-
-                            <div>
-                                <Label htmlFor="email" className="text-slate-900">
-                                    Email <span className="text-red-400">*</span>
-                                </Label>
-                                <div className="relative mt-1.5">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder="jane@university.edu"
-                                        value={formData.email}
-                                        onChange={handleTextChange("email")}
-                                        className="w-full h-10 pl-11 pr-4 py-3 bg-[#dddbd8] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49] text-[#707070] font-medium shadow-[0px_3px_4px_2px_#564F5C33]"
-                                        aria-invalid={Boolean(errors.email)}
-                                    />
-                                </div>
-                                {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email}</p>}
-                            </div>
-
-                            <div>
-                                <Label htmlFor="password" className="text-slate-900">
-                                    Create Password <span className="text-red-400">*</span>
-                                </Label>
-                                <div className="relative mt-1.5">
-                                    <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
-                                    <Input
-                                        id="password"
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="At least 8 characters"
-                                        value={formData.password}
-                                        onChange={handleTextChange("password")}
-                                        className="w-full h-10 pl-11 pr-4 py-3 bg-[#dddbd8] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49] text-[#707070] font-medium shadow-[0px_3px_4px_2px_#564F5C33]"
-                                        aria-invalid={Boolean(errors.password)}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword((prev) => !prev)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-[#716f49] hover:cursor-pointer"
-                                        aria-label={showPassword ? "Hide password" : "Show password"}
-                                    >
-                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                    </button>
-                                </div>
-                                {errors.password && <p className="mt-1 text-xs text-red-400">{errors.password}</p>}
-                            </div>
-
-                            <div className="grid gap-5 grid-cols-1">
-                                <div>
-                                    <Label htmlFor="scholarId" className="text-slate-900">
-                                        Scholar ID <span className="text-red-400">*</span>
-                                    </Label>
-                                    <div className="relative mt-1.5">
-                                        <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
-                                        <Input
-                                            id="scholarId"
-                                            placeholder="e.g. 0000-0002-1825-0097"
-                                            value={formData.scholarId}
-                                            onChange={handleTextChange("scholarId")}
-                                            className="w-full h-10 pl-11 pr-4 py-3 bg-[#dddbd8] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49] text-[#707070] font-medium shadow-[0px_3px_4px_2px_#564F5C33]"
-                                            aria-invalid={Boolean(errors.scholarId)}
-                                        />
-                                    </div>
-                                    {errors.scholarId && <p className="mt-1 text-xs text-red-400">{errors.scholarId}</p>}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="institution" className="text-slate-900">
-                                        Institution / Organization <span className="text-red-400">*</span>
-                                    </Label>
-                                    <div className="relative mt-1.5">
-                                        <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
-                                        <Input
-                                            id="institution"
-                                            placeholder="IIUC"
-                                            value={formData.institution}
-                                            onChange={handleTextChange("institution")}
-                                            className="w-full h-10 pl-11 pr-4 py-3 bg-[#dddbd8] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49] text-[#707070] font-medium shadow-[0px_3px_4px_2px_#564F5C33]"
-                                            aria-invalid={Boolean(errors.institution)}
-                                        />
-                                    </div>
-                                    {errors.institution && (
-                                        <p className="mt-1 text-xs text-red-400">{errors.institution}</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <Label htmlFor="role" className="text-slate-900">
-                                    Current Role <span className="text-red-400">*</span>
-                                </Label>
-                                <Select value={formData.role} onValueChange={handleRoleChange}>
-                                    <SelectTrigger
-                                        id="role"
-                                        className="mt-1.5 w-full p-4 bg-[#dddbd8] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49] text-[#707070] shadow-[0px_3px_4px_2px_#564F5C33]"
-                                        aria-invalid={Boolean(errors.role)}
-                                    >
-                                        <SelectValue placeholder="Select your current role" />
-                                    </SelectTrigger>
-                                    <SelectContent className="max-h-72">
-                                        {ACADEMIC_ROLES.map((role) => (
-                                            <SelectItem key={role} value={role}>
-                                                {role}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                {errors.role && <p className="mt-1 text-xs text-red-400">{errors.role}</p>}
-                            </div>
-
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full h-10 px-4 py-3 bg-[#716f49] border-2 border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#716f49]/30 text-white font-medium shadow-[0px_3px_4px_2px_#564F5C33] cursor-pointer hover:bg-[] transition-colors duration-200"
-                            >
-                                {isSubmitting ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Creating account...
-                                    </>
-                                ) : (
-                                    "Create Account"
-                                )}
-                            </Button>
-
-                            <div className="flex items-center justify-center gap-2">
-                                <p>Already have an account?</p>
-                                <Link href="/auth/login" className="text-[#716f49] font-semibold hover:underline">
-                                    Login
-                                </Link>
-                            </div>
-                        </form>
-                    </div>
+            <form onSubmit={handleSubmit} noValidate className="mt-8 space-y-5">
+                <div>
+                    <Label htmlFor="name" className={authLabelClass}>
+                        Name
+                    </Label>
+                    <Input
+                        id="name"
+                        placeholder="Jane Smith"
+                        value={formData.name}
+                        onChange={handleTextChange("name")}
+                        className={`mt-1.5 ${authInputClass}`}
+                        aria-invalid={Boolean(errors.name)}
+                    />
+                    {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
                 </div>
-            </div>
-        </section>
+
+                <div>
+                    <Label htmlFor="email" className={authLabelClass}>
+                        Your email
+                    </Label>
+                    <Input
+                        id="email"
+                        type="email"
+                        placeholder="jane@university.edu"
+                        value={formData.email}
+                        onChange={handleTextChange("email")}
+                        className={`mt-1.5 ${authInputClass}`}
+                        aria-invalid={Boolean(errors.email)}
+                    />
+                    {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+                </div>
+
+                <div>
+                    <Label htmlFor="password" className={authLabelClass}>
+                        Create password
+                    </Label>
+                    <div className="relative mt-1.5">
+                        <Input
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            autoComplete="new-password"
+                            placeholder="At least 8 characters"
+                            value={formData.password}
+                            onChange={handleTextChange("password")}
+                            className={`${authInputClass} pr-10`}
+                            aria-invalid={Boolean(errors.password)}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 transition-colors hover:cursor-pointer hover:text-[#716f49]"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                    </div>
+                    {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+                </div>
+
+                <div>
+                    <Label htmlFor="scholarId" className={authLabelClass}>
+                        Scholar ID
+                    </Label>
+                    <Input
+                        id="scholarId"
+                        placeholder="e.g. 0000-0002-1825-0097"
+                        value={formData.scholarId}
+                        onChange={handleTextChange("scholarId")}
+                        className={`mt-1.5 ${authInputClass}`}
+                        aria-invalid={Boolean(errors.scholarId)}
+                    />
+                    {errors.scholarId && <p className="mt-1 text-xs text-red-500">{errors.scholarId}</p>}
+                </div>
+
+                <div>
+                    <Label htmlFor="institution" className={authLabelClass}>
+                        Institution / organization
+                    </Label>
+                    <Input
+                        id="institution"
+                        placeholder="IIUC"
+                        value={formData.institution}
+                        onChange={handleTextChange("institution")}
+                        className={`mt-1.5 ${authInputClass}`}
+                        aria-invalid={Boolean(errors.institution)}
+                    />
+                    {errors.institution && <p className="mt-1 text-xs text-red-500">{errors.institution}</p>}
+                </div>
+
+                <div>
+                    <Label htmlFor="role" className={authLabelClass}>
+                        Current role
+                    </Label>
+                    <Select value={formData.role} onValueChange={handleRoleChange}>
+                        <SelectTrigger
+                            id="role"
+                            className="mt-1.5 h-11 w-full rounded-md border border-[#dddbd8] bg-[#F8FAFC] px-3.5 text-sm font-medium text-slate-900 shadow-none focus-visible:border-[#716f49] focus-visible:ring-2 focus-visible:ring-[#716f49]/20"
+                            aria-invalid={Boolean(errors.role)}
+                        >
+                            <SelectValue placeholder="Select your current role" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-72">
+                            {ACADEMIC_ROLES.map((role) => (
+                                <SelectItem key={role} value={role}>
+                                    {role}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {errors.role && <p className="mt-1 text-xs text-red-500">{errors.role}</p>}
+                </div>
+
+                <Button type="submit" disabled={isSubmitting} className={authButtonClass}>
+                    {isSubmitting ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Creating account...
+                        </>
+                    ) : (
+                        "Create Account"
+                    )}
+                </Button>
+
+                <p className="pt-2 text-center text-xs text-neutral-400">
+                    Already have an account?{" "}
+                    <Link href="/auth/login" className="font-semibold text-[#716f49] hover:underline">
+                        Login
+                    </Link>
+                </p>
+            </form>
+        </AuthShell>
     );
 }
