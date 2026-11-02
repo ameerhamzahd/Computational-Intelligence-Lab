@@ -142,6 +142,31 @@ export default function UploadHistory() {
     }
   };
 
+  const handleFileAction = async (upload: UploadItem, action: "preview" | "download") => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}${upload.cloudinary_url}`,
+        { headers: authHeaders() }
+      );
+      if (!response.ok) throw new Error("Unable to retrieve the uploaded file.");
+
+      const fileUrl = URL.createObjectURL(await response.blob());
+      if (action === "preview") {
+        window.open(fileUrl, "_blank", "noopener,noreferrer");
+      } else {
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.download = upload.original_filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+      window.setTimeout(() => URL.revokeObjectURL(fileUrl), 60_000);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Unable to retrieve the uploaded file.");
+    }
+  };
+
   const saveEdit = async (event: FormEvent) => {
     event.preventDefault();
     if (!editing) return;
@@ -228,8 +253,8 @@ export default function UploadHistory() {
                       </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => window.open(upload.cloudinary_url, "_blank")} title="Preview"><Eye className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => window.open(upload.cloudinary_url, "_blank")} title="Download"><Download className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => handleFileAction(upload, "preview")} title="Preview"><Eye className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => handleFileAction(upload, "download")} title="Download"><Download className="h-4 w-4" /></Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => openEditor(upload)} title="Edit"><Pencil className="h-4 w-4" /></Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-[#9A6B6B]" onClick={() => handleDelete(upload.id)} title="Delete"><Trash2 className="h-4 w-4" /></Button>
                     </div>
