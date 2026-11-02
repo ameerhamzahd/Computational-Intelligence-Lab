@@ -7,14 +7,17 @@ interface ResearchResponse extends ResearchData {
 }
 
 /** Shared in-flight request so papers + presentations sections reuse one fetch. */
-let inFlight: Promise<ResearchData> | null = null;
+let inFlight: { query: string; promise: Promise<ResearchData> } | null = null;
 
-async function requestResearch(): Promise<ResearchData> {
+async function requestResearch(query: string): Promise<ResearchData> {
     if (!API_BASE_URL) {
         throw new Error("NEXT_PUBLIC_SERVER_URL is not configured.");
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/research`, { cache: "no-store" });
+    const endpoint = query
+        ? `${API_BASE_URL}/api/research/search?q=${encodeURIComponent(query)}`
+        : `${API_BASE_URL}/api/research`;
+    const response = await fetch(endpoint, { cache: "no-store" });
     if (!response.ok) {
         throw new Error(`Unable to load research (HTTP ${response.status}).`);
     }
@@ -27,12 +30,13 @@ async function requestResearch(): Promise<ResearchData> {
     return { papers: data.papers, presentations: data.presentations };
 }
 
-export function fetchResearch(): Promise<ResearchData> {
-    if (!inFlight) {
-        inFlight = requestResearch().finally(() => {
-            inFlight = null;
+export function fetchResearch(query = ""): Promise<ResearchData> {
+    if (!inFlight || inFlight.query !== query) {
+        const promise = requestResearch(query).finally(() => {
+            if (inFlight?.promise === promise) inFlight = null;
         });
+        inFlight = { query, promise };
     }
 
-    return inFlight;
+    return inFlight.promise;
 }

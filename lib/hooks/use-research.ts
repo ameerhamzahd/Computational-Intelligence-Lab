@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { fetchResearch } from "@/lib/api/research";
 import type { Paper, Presentation } from "@/lib/types/research";
 
@@ -10,6 +11,8 @@ import type { Paper, Presentation } from "@/lib/types/research";
  * (papers + presentations) only hits the network once.
  */
 export function useResearch() {
+    const searchParams = useSearchParams();
+    const query = searchParams.get("search")?.trim() ?? "";
     const [papers, setPapers] = useState<Paper[]>([]);
     const [presentations, setPresentations] = useState<Presentation[]>([]);
     const [loading, setLoading] = useState(true);
@@ -18,7 +21,7 @@ export function useResearch() {
     useEffect(() => {
         let active = true;
 
-        fetchResearch()
+        fetchResearch(query)
             .then((data) => {
                 if (!active) return;
                 setPapers(data.papers);
@@ -36,7 +39,7 @@ export function useResearch() {
         return () => {
             active = false;
         };
-    }, []);
+    }, [query]);
 
     return { papers, presentations, loading, error };
 }

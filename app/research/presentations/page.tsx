@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import PresentationsSection from "@/components/research/PresentationsSection";
 import { ResearchHero, ResearchShell } from "@/components/research/ResearchShell";
 
@@ -16,7 +17,9 @@ export default function PresentationsPage() {
             }
         >
             <div className="mt-14">
-                <PresentationsSection showHeading={false} />
+                <Suspense fallback={null}>
+                    <PresentationsSection showHeading={false} />
+                </Suspense>
             </div>
         </ResearchShell>
     );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
@@ -346,14 +347,15 @@ const SUGGESTIONS = [
 export default function Banner() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useParticleCanvas(canvasRef);
+  const router = useRouter();
 
   const [query, setQuery] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim()) return;
-    // TODO: wire up to your search route
-    console.log("Search:", query);
+    const search = query.trim();
+    if (!search) return;
+    router.push(`/research?search=${encodeURIComponent(search)}`);
   };
 
   return (
