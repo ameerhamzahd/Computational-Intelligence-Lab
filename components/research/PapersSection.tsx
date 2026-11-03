@@ -43,7 +43,12 @@ export default function PapersSection({ showHeading = true }: { showHeading?: bo
                             year={p.year}
                             title={p.title}
                             byline={`${p.authors[0]}${p.authors.length > 1 ? " et al." : ""}`}
-                            meta={`${p.type} · Cited by ${p.citedBy}`}
+                            meta={`${p.type} · ${p.publisher}`}
+                            venue={p.venue}
+                            abstract={p.abstract}
+                            status={p.access}
+                            footnote={`Cited by ${p.citedBy}`}
+                            thumbId={p.id}
                             shareText={p.htmlUrl ?? ""}
                             openLabel={`View details: ${p.title}`}
                             onOpen={() => setModal(paperModal(

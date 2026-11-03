@@ -145,7 +145,7 @@ export default function Introduction() {
     };
 
     return (
-        <section id="introduction" className="relative bg-[#F8FAFC] py-16 md:py-24">
+        <section id="introduction" className="relative bg-[#F8FAFC] pt-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6">
                 <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
                     {/* Left column - sticky intro + step selector */}

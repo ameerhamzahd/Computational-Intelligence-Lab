@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { format } from "date-fns";
 import {
@@ -14,9 +14,11 @@ import {
     Presentation as PresentationIcon,
     Search,
     Share2,
+    Unlock,
     X,
     type LucideIcon,
 } from "lucide-react";
+import { loadPdfThumb } from "@/lib/pdf-thumb";
 import type { Paper, Presentation } from "@/lib/types/research";
 import { ResearchGridSkeleton, ResearchResultsSkeleton } from "./ResearchSkeleton";
 
@@ -83,6 +85,24 @@ function Highlight({ text, tokens }: { text: string; tokens: string[] }) {
 /*                                    card                                    */
 /* -------------------------------------------------------------------------- */
 
+// Widths (%) used to draw the faux body text of the page.
+const LINE_WIDTHS = [100, 94, 98, 88, 100, 92, 96, 84, 100, 90, 97, 62];
+
+function TextLines({ seed, count }: { seed: number; count: number }) {
+    return (
+        <div className="space-y-1.5">
+            {Array.from({ length: count }).map((_, i) => (
+                <div
+                    key={i}
+                    className="h-0.75 rounded-full bg-neutral-300/80"
+                    style={{ width: `${LINE_WIDTHS[(i + seed) % LINE_WIDTHS.length]}%` }}
+                />
+            ))}
+        </div>
+    );
+}
+
+/** Stacked-sheets card: the first page of a paper / talk with two sheets peeking out behind it. */
 export function ResearchCard({
     index,
     tokens,
@@ -91,6 +111,11 @@ export function ResearchCard({
     title,
     byline,
     meta,
+    venue,
+    abstract,
+    status,
+    footnote,
+    thumbId,
     badge,
     shareText,
     openLabel,
@@ -101,8 +126,17 @@ export function ResearchCard({
     topic: string;
     year: number;
     title: string;
+    /** authors / speakers line */
     byline: string;
+    /** running-header text, e.g. "Conference · 2024" */
     meta: string;
+    venue?: string;
+    abstract?: string;
+    /** lock state shown in the footer; omit for items without access control */
+    status?: "open" | "locked";
+    footnote?: string;
+    /** paper id whose PDF first page is rendered as the card face */
+    thumbId?: string;
     badge?: ReactNode;
     shareText: string;
     openLabel: string;
@@ -110,8 +144,35 @@ export function ResearchCard({
 }) {
     const tint = TINTS[index % TINTS.length];
     const [copied, setCopied] = useState(false);
+    const cardRef = useRef<HTMLElement>(null);
+    const [thumb, setThumb] = useState<string | null>(null);
 
-    const share = () => {
+    // Only render the PDF once the card is (almost) on screen.
+    useEffect(() => {
+        const node = cardRef.current;
+        if (!node || !thumbId) return;
+        let cancelled = false;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry.isIntersecting) return;
+                observer.disconnect();
+                loadPdfThumb(thumbId).then((url) => {
+                    if (!cancelled) setThumb(url);
+                });
+            },
+            { rootMargin: "200px" }
+        );
+        observer.observe(node);
+
+        return () => {
+            cancelled = true;
+            observer.disconnect();
+        };
+    }, [thumbId]);
+
+    const share = (event: MouseEvent) => {
+        event.stopPropagation();
         navigator.clipboard?.writeText(shareText);
         setCopied(true);
         window.setTimeout(() => setCopied(false), 1800);
@@ -119,60 +180,117 @@ export function ResearchCard({
 
     return (
         <motion.article
+            ref={cardRef}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.6, delay: Math.min((index % 4) * 0.08, 0.24), ease }}
             whileHover={{ y: -8 }}
-            className="group w-full rounded-[28px] bg-neutral-100 p-2.5 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.25)]"
+            onClick={onOpen}
+            className="group relative mx-auto aspect-3/4 w-full max-w-72 cursor-pointer"
         >
-            {/* gradient panel */}
-            <div
-                className="relative h-52.5 overflow-hidden rounded-[22px] ring-1 ring-black/5"
-                style={{ background: `linear-gradient(135deg, ${tint.from} 0%, ${tint.to} 100%)` }}
-            >
-                <span className="absolute left-3.5 top-5.5 max-w-[60%] truncate rounded-full bg-white/60 px-3 py-1 text-[11px] font-medium text-neutral-800 backdrop-blur-md">
-                    <Highlight text={topic} tokens={tokens} />
-                </span>
+            {/* sheets stacked behind the first page */}
+            <div className="absolute inset-0 origin-bottom-left -rotate-3 rounded-sm bg-[#ECEBDD] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:-rotate-6" />
+            <div className="absolute inset-0 origin-bottom-right rotate-2 rounded-sm bg-[#F3F2E8] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:rotate-4" />
 
-                <button
-                    type="button"
-                    aria-label="Copy title"
-                    onClick={share}
-                    className="absolute right-3.5 top-3.5 grid size-10 place-items-center rounded-xl border border-white/60 bg-white/40 text-neutral-900 backdrop-blur-md transition hover:bg-white/70"
-                >
-                    {copied ? <Check className="size-4.5 text-emerald-700" /> : <Share2 className="size-4.5" />}
-                </button>
+            {/* first page */}
+            <div className="relative flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-[0_14px_30px_-10px_rgba(31,50,28,0.45)] ring-1 ring-black/10">
+                <div
+                    className="h-1.5 w-full"
+                    style={{ background: `linear-gradient(90deg, ${tint.from}, ${tint.to})` }}
+                />
 
-                <span className="absolute -bottom-4 left-3 select-none text-[76px] font-bold leading-none tracking-tighter text-white/40">
-                    <Highlight text={String(year)} tokens={tokens} />
-                </span>
+                {thumb ? (
+                    <div className="relative flex-1 bg-white">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={thumb}
+                            alt={`First page of ${title}`}
+                            className="absolute inset-0 size-full object-cover object-top"
+                            draggable={false}
+                        />
+                    </div>
+                ) : (
+                    <div className="flex flex-1 flex-col px-4 pt-3">
+                        {/* running header */}
+                        <div className="flex items-center justify-between gap-2 border-b border-neutral-200 pb-1.5 text-[8px] font-medium uppercase tracking-wider text-neutral-400">
+                            <span className="truncate">
+                                <Highlight text={`${meta} · ${year}`} tokens={tokens} />
+                            </span>
+                            <span className="max-w-24 shrink-0 truncate text-[#716f49]">
+                                <Highlight text={topic} tokens={tokens} />
+                            </span>
+                        </div>
 
-                <p className="absolute inset-x-4 top-1/2 line-clamp-3 -translate-y-1/2 text-[15px] font-semibold leading-snug text-neutral-900/80">
-                    <Highlight text={title} tokens={tokens} />
-                </p>
+                        {/* title */}
+                        <h3 className="mt-3 line-clamp-4 text-center font-serif text-[15px] font-bold leading-snug text-neutral-900">
+                            <Highlight text={title} tokens={tokens} />
+                        </h3>
 
-                {badge && <div className="absolute bottom-3.5 right-3.5">{badge}</div>}
-            </div>
+                        {/* authors + venue */}
+                        <p className="mt-2 line-clamp-2 text-center text-[9px] font-medium leading-snug text-neutral-700">
+                            <Highlight text={byline} tokens={tokens} />
+                        </p>
+                        {venue && (
+                            <p className="mt-0.5 line-clamp-2 text-center text-[8px] italic leading-snug text-neutral-400">
+                                <Highlight text={venue} tokens={tokens} />
+                            </p>
+                        )}
 
-            {/* footer */}
-            <div className="flex items-center justify-between gap-3 px-3 pb-2 pt-3.5">
-                <div className="min-w-0">
-                    <h3 className="truncate text-[15px] font-semibold text-neutral-900">
-                        <Highlight text={byline} tokens={tokens} />
-                    </h3>
-                    <p className="mt-0.5 truncate text-xs text-neutral-500">
-                        <Highlight text={meta} tokens={tokens} />
-                    </p>
+                        {/* abstract */}
+                        <p className="mt-3 line-clamp-3 text-justify font-serif text-[9px] leading-snug text-neutral-600">
+                            <span className="font-bold italic text-neutral-800">Abstract—</span>
+                            {abstract ?? "No abstract available."}
+                        </p>
+
+                        {/* faux two-column body text */}
+                        <div className="mt-3 grid grid-cols-2 gap-3">
+                            <TextLines seed={index} count={8} />
+                            <TextLines seed={index + 5} count={8} />
+                        </div>
+                    </div>
+                )}
+
+                {badge && <div className="absolute right-3 top-4">{badge}</div>}
+
+                {/* footer fades over the text, like a page curling away */}
+                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-linear-to-t from-white via-white/95 to-transparent px-4 pb-3 pt-10">
+                    <div className="min-w-0">
+                        {status && (
+                            <p className="flex items-center gap-1 text-[10px] font-semibold text-neutral-700">
+                                {status === "open" ? (
+                                    <Unlock className="size-3 text-[#716f49]" aria-hidden />
+                                ) : (
+                                    <Lock className="size-3 text-[#716f49]" aria-hidden />
+                                )}
+                                {status === "open" ? "Open access" : "Restricted"}
+                            </p>
+                        )}
+                        {footnote && <p className="mt-0.5 truncate text-[9px] text-neutral-400">{footnote}</p>}
+                    </div>
+
+                    <div className="flex shrink-0 items-center gap-1.5">
+                        <button
+                            type="button"
+                            aria-label="Copy link"
+                            onClick={share}
+                            className="grid size-8 place-items-center rounded-lg border border-[#dddbd8] bg-[#F8FAFC] text-neutral-800 transition hover:bg-[#F3F2E8]"
+                        >
+                            {copied ? <Check className="size-3.5 text-emerald-700" /> : <Share2 className="size-3.5" />}
+                        </button>
+                        <button
+                            type="button"
+                            aria-label={openLabel}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                onOpen();
+                            }}
+                            className="grid size-8 place-items-center rounded-lg bg-[#716f49] text-white transition hover:bg-[#1F321C]"
+                        >
+                            <BookOpen className="size-3.5" />
+                        </button>
+                    </div>
                 </div>
-                <button
-                    type="button"
-                    onClick={onOpen}
-                    aria-label={openLabel}
-                    className="flex shrink-0 items-center gap-1.5 rounded-md bg-neutral-900 px-3.5 py-2.5 text-xs font-medium text-white transition hover:bg-neutral-700"
-                >
-                    <BookOpen className="size-3.5" />
-                </button>
             </div>
         </motion.article>
     );
@@ -406,7 +524,7 @@ export function ResearchGrid<T extends { id: string }>({
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.45, ease }}
-                    className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    className="mt-8 grid grid-cols-1 gap-x-16 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                 >
                     {visible.map((item, i) => (
                         <div key={item.id}>{renderCard(item, start + i, tokens)}</div>

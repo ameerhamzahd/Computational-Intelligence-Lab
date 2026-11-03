@@ -6,26 +6,36 @@ const CARD_COUNT = 8;
 
 function ResearchCardSkeleton() {
     return (
-        <div className="w-full rounded-[28px] bg-neutral-100 p-2.5 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.25)]">
-            {/* gradient panel placeholder */}
-            <div className="relative h-52.5 overflow-hidden rounded-[22px] bg-neutral-200/70">
-                <Skeleton className="absolute left-3.5 top-5.5 h-6 w-28 rounded-full bg-white/55" />
-                <Skeleton className="absolute right-3.5 top-3.5 size-10 rounded-xl bg-white/55" />
-                <Skeleton className="absolute -bottom-4 left-3 h-16 w-32 rounded-none bg-white/40" />
+        <div className="relative mx-auto aspect-3/4 w-full max-w-72">
+            {/* stacked sheets */}
+            <div className="absolute inset-0 -rotate-3 rounded-sm bg-neutral-200/60" />
+            <div className="absolute inset-0 rotate-2 rounded-sm bg-neutral-200/80" />
 
-                <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 space-y-2">
-                    <Skeleton className="h-4 w-full bg-white/55" />
-                    <Skeleton className="h-4 w-4/5 bg-white/55" />
+            {/* first page */}
+            <div className="relative flex h-full flex-col overflow-hidden rounded-sm bg-white ring-1 ring-black/10">
+                <Skeleton className="h-1.5 w-full rounded-none" />
+                <div className="flex-1 space-y-3 px-4 pt-4">
+                    <Skeleton className="h-2 w-full" />
+                    <div className="space-y-2 pt-2">
+                        <Skeleton className="mx-auto h-4 w-11/12" />
+                        <Skeleton className="mx-auto h-4 w-4/5" />
+                        <Skeleton className="mx-auto h-4 w-3/5" />
+                    </div>
+                    <Skeleton className="mx-auto h-2 w-2/3" />
+                    <div className="space-y-1.5 pt-3">
+                        <Skeleton className="h-1.5 w-full" />
+                        <Skeleton className="h-1.5 w-11/12" />
+                        <Skeleton className="h-1.5 w-full" />
+                        <Skeleton className="h-1.5 w-3/4" />
+                    </div>
                 </div>
-            </div>
-
-            {/* footer placeholder */}
-            <div className="flex items-center justify-between gap-3 px-3 pb-2 pt-3.5">
-                <div className="min-w-0 flex-1 space-y-2">
-                    <Skeleton className="h-4 w-2/3" />
-                    <Skeleton className="h-3 w-1/2" />
+                <div className="flex items-center justify-between px-4 pb-3">
+                    <Skeleton className="h-3 w-16" />
+                    <div className="flex gap-1.5">
+                        <Skeleton className="size-8 rounded-lg" />
+                        <Skeleton className="size-8 rounded-lg" />
+                    </div>
                 </div>
-                <Skeleton className="size-9.5 shrink-0 rounded-md" />
             </div>
         </div>
     );
@@ -36,7 +46,7 @@ function ResearchGridSkeleton({ count = CARD_COUNT }: { count?: number }) {
     return (
         <div
             aria-hidden
-            className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
             {Array.from({ length: count }).map((_, index) => (
                 <ResearchCardSkeleton key={index} />
