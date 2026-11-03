@@ -26,6 +26,7 @@ const NAV_ITEMS: NavItem[] = [
     {
         label: "About us",
         children: [
+            { label: "Introduction", href: "/#introduction" },
             { label: "Members", href: "/about-us/members" },
             { label: "Contact information", href: "/about-us/contact-information" },
         ],
@@ -174,7 +175,7 @@ function MobileMenu({ open, onClose, isLoggedIn }: { open: boolean; onClose: () 
 
             <div className="mt-auto px-5 pb-8 pt-4">
                 <Link
-                    href={isLoggedIn ? "/dashboard" : "/auth/login"}
+                    href={isLoggedIn ? "/dashboard/profile" : "/auth/login"}
                     onClick={onClose}
                     className="block w-full rounded-full bg-[#1f321c] py-3 text-center text-sm font-bold tracking-wider text-white"
                 >
@@ -194,6 +195,7 @@ function ComputationalIntelligenceLabLogo() {
                 alt="Computational Intelligence Lab Logo"
                 width={150}
                 height={60}
+                style={{ width: 150, height: "auto" }}
                 priority
             />
         </Link>
@@ -253,7 +255,7 @@ export default function Navbar() {
                         </ul>
 
                         <Link
-                            href={isLoggedIn ? "/dashboard" : "/auth/login"}
+                            href={isLoggedIn ? "/dashboard/profile" : "/auth/login"}
                             className="group inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-linear-to-br from-[#716f49]/95 to-[#1f321c]/80 px-5 py-2 text-sm font-semibold tracking-[0.06em] text-white shadow-[0_12px_30px_rgba(31,50,28,0.35),0_4px_12px_rgba(113,111,73,0.25),inset_0_1px_0_rgba(255,255,255,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02] active:translate-y-0 active:scale-[0.98]"
                         >
                             {isLoggedIn ? "Dashboard" : "Login"}

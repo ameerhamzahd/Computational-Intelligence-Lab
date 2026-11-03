@@ -31,7 +31,7 @@ export function proxy(request: NextRequest) {
 
     // Logged-in users have no business on the login/register pages.
     if (isAuthRoute) {
-        if (token) return NextResponse.redirect(new URL("/dashboard", request.url));
+        if (token) return NextResponse.redirect(new URL("/dashboard/profile", request.url));
         return rawToken ? clearAuthCookies(NextResponse.next()) : NextResponse.next();
     }
 
@@ -46,7 +46,7 @@ export function proxy(request: NextRequest) {
     if (rule) {
         const role = resolveAppRole(token, request.cookies.get(AUTH_ROLE_COOKIE)?.value);
         if (!role || !rule.roles.includes(role)) {
-            return NextResponse.redirect(new URL("/dashboard", request.url));
+            return NextResponse.redirect(new URL("/dashboard/profile", request.url));
         }
     }
 

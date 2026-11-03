@@ -27,7 +27,7 @@ import { CollapsibleNavGroup, MobileNavSheet } from "@/components/dashboard/Side
 
 const NAV_ITEMS = [
     { label: "Home", href: "/", icon: Home, shortLabel: "Home" },
-    { label: "Profile", href: "/dashboard", icon: User, shortLabel: "Profile" },
+    { label: "Profile", href: "/dashboard/profile", icon: User, shortLabel: "Profile" },
     { label: "Upload Paper & Presentation", href: "/dashboard/upload", icon: Upload, shortLabel: "Upload" },
     { label: "My Papers", href: "/dashboard/my-papers", icon: FileText, shortLabel: "My Papers" },
 ];
@@ -123,22 +123,24 @@ export default function Sidebar() {
                 <div className={cn("flex items-center justify-center gap-2", collapsed && "flex-col")}>
                     {collapsed ? (
                         <Image
-                            src="/logos/sidebar-logo.png"
-                            alt="Computational Intelligence Lab Logo"
-                            width={59}
-                            height={59}
-                            className="hidden"
-                            priority
-                        />
+                        src="/logos/sidebar-logo.png"
+                        alt="Computational Intelligence Lab Logo"
+                        width={59}
+                        height={59}
+                        className="hidden h-auto w-auto"
+                        priority
+                    />
                     ) : (
+                    <div className="p-2">
                         <Image
                             src="/logos/sidebar-logo.png"
                             alt="Computational Intelligence Lab Logo"
                             width={175}
                             height={54}
-                            className="rounded-lg p-2"
+                            className="h-auto w-auto rounded-lg"
                             priority
                         />
+                    </div>
                     )}
                 </div>
 

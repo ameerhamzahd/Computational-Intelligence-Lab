@@ -43,7 +43,7 @@ export function resolveAppRole(token: string, roleCookie: string | undefined): A
 }
 
 /** Only allow same-origin relative paths as post-login redirect targets. */
-export function safeRedirectPath(value: string | null | undefined, fallback = "/dashboard"): string {
+export function safeRedirectPath(value: string | null | undefined, fallback = "/dashboard/profile"): string {
     if (!value || !value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) return fallback;
     if (value.startsWith("/auth")) return fallback;
     return value;
