@@ -28,7 +28,7 @@ interface UploadItem {
   id: string;
   title: string;
   upload_type: UploadType;
-  metadata: Record<string, string>;
+  metadata: Record<string, string | string[] | boolean>;
   original_filename: string;
   cloudinary_url: string;
   status: UploadStatus;
@@ -61,6 +61,10 @@ const PRESENTATION_TYPES = [
 function authHeaders(): Record<string, string> {
   const token = localStorage.getItem("token");
   return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+function metadataText(value: string | string[] | boolean | undefined): string {
+  return Array.isArray(value) ? value.join(", ") : typeof value === "string" ? value : "";
 }
 
 export default function UploadHistory() {
@@ -110,13 +114,13 @@ export default function UploadHistory() {
       id: upload.id,
       type: upload.upload_type,
       title: upload.title,
-      categoryOrType: upload.upload_type === "paper" ? metadata.category ?? "" : metadata.presentationType ?? "",
-      authors: metadata.authors ?? "",
-      event: metadata.event ?? "",
-      date: metadata.date ?? "",
-      tags: metadata.tags ?? "",
-      abstractOrDescription: upload.upload_type === "paper" ? metadata.abstract ?? "" : metadata.description ?? "",
-      publicationLink: metadata.publicationLink ?? "",
+      categoryOrType: upload.upload_type === "paper" ? metadataText(metadata.paper_category) : metadataText(metadata.presentation_event),
+      authors: metadataText(upload.upload_type === "paper" ? metadata.authors_name : metadata.presenter_name),
+      event: metadataText(metadata.presentation_event),
+      date: metadataText(upload.upload_type === "paper" ? metadata.publication_date : metadata.presentation_date),
+      tags: metadataText(upload.upload_type === "paper" ? metadata.paper_tags : metadata.presentation_tags),
+      abstractOrDescription: metadataText(metadata.paper_abstract),
+      publicationLink: metadataText(metadata.paper_url),
     });
   };
 
@@ -179,12 +183,13 @@ export default function UploadHistory() {
     setErrorMessage("");
     const body = editing.type === "paper"
       ? {
-          title: editing.title, authors: editing.authors, abstract: editing.abstractOrDescription,
-          category: editing.categoryOrType, tags: editing.tags, publicationLink: editing.publicationLink,
+          paper_title: editing.title, authors_name: editing.authors, paper_abstract: editing.abstractOrDescription,
+          paper_category: editing.categoryOrType, paper_tags: editing.tags, paper_url: editing.publicationLink,
         }
       : {
-          title: editing.title, event: editing.event, date: editing.date, type: editing.categoryOrType,
-          description: editing.abstractOrDescription, publicationLink: editing.publicationLink,
+          presentation_title: editing.title, presenter_name: editing.authors, presentation_event: editing.event,
+          presentation_date: editing.date, presentation_category: editing.categoryOrType,
+          presentation_tags: editing.tags, paper_url: editing.publicationLink,
         };
 
     try {

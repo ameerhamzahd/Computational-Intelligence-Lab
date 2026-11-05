@@ -14,33 +14,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const paperCategories = [
-  "Machine Learning",
-  "Computer Vision",
-  "NLP",
-  "Graph Neural Networks",
-  "Optimization",
-  "Robotics",
-  "Reinforcement Learning",
-  "Other",
-];
-
 export default function UploadPaperForm() {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState("");
+  const [authorsEmail, setAuthorsEmail] = useState("");
   const [publisher, setPublisher] = useState("");
   const [abstract, setAbstract] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
   const [publicationLink, setPublicationLink] = useState("");
+  const [publicationType, setPublicationType] = useState("");
+  const [publicationVenue, setPublicationVenue] = useState("");
+  const [indexedIn, setIndexedIn] = useState("");
+  const [publicationDate, setPublicationDate] = useState("");
   const [featured, setFeatured] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
 
@@ -125,15 +111,20 @@ export default function UploadPaperForm() {
     try {
       const formData = new FormData();
 
-      formData.append("pdf", pdfFile);
-      formData.append("title", title);
-      formData.append("authors", authors);
+      formData.append("paper_file", pdfFile);
+      formData.append("paper_title", title.trim());
+      formData.append("authors_name", authors);
+      formData.append("authors_email", authorsEmail);
+      formData.append("paper_category", category);
+      formData.append("publication_type", publicationType);
+      formData.append("publication_venue", publicationVenue);
       formData.append("publisher", publisher.trim());
-      formData.append("abstract", abstract);
-      formData.append("category", category);
-      formData.append("tags", tags);
-      formData.append("publicationLink", trimmedPublicationLink);
-      formData.append("featured", String(featured));
+      formData.append("indexed_in", indexedIn);
+      formData.append("publication_date", publicationDate);
+      formData.append("paper_tags", tags);
+      formData.append("paper_url", trimmedPublicationLink);
+      formData.append("paper_abstract", abstract);
+      formData.append("is_featured", String(featured));
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/papers/upload`,
@@ -157,11 +148,16 @@ export default function UploadPaperForm() {
 
       setTitle("");
       setAuthors("");
+      setAuthorsEmail("");
       setPublisher("");
       setAbstract("");
       setCategory("");
       setTags("");
       setPublicationLink("");
+      setPublicationType("");
+      setPublicationVenue("");
+      setIndexedIn("");
+      setPublicationDate("");
       setFeatured(false);
       setPdfFile(null);
       window.dispatchEvent(new Event("uploads:changed"));
@@ -176,7 +172,7 @@ export default function UploadPaperForm() {
   };
 
   return (
-    <Card className="w-full min-w-0 max-w-full overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
+    <Card className="w-full min-w-0 max-w-full overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
       <CardContent className="min-w-0 p-5">
         {/* Header */}
         <div className="flex items-center gap-3 pb-6">
@@ -220,47 +216,27 @@ export default function UploadPaperForm() {
                   }
                   placeholder="Enter paper title"
                   required
-                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none transition-all focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none transition-all focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
 
               {/* Category */}
               <div className="space-y-2">
-                <Label
-                  htmlFor="category"
-                  className="text-xs font-semibold text-[#565D54]"
-                >
-                  Category
-                  <span className="ml-1 text-[#B85C55]">
-                    *
-                  </span>
+                <Label htmlFor="category" className="text-xs font-semibold text-[#565D54]">
+                  Paper Category
+                  <span className="ml-1 text-[#B85C55]">*</span>
                 </Label>
-
-                <Select
+                <Input
+                  id="category"
                   value={category}
-                  onValueChange={(value: string | null) => {
-                    setCategory(value ?? "");
+                  onChange={(e) => {
+                    setCategory(e.target.value);
                     setErrorMessage("");
                   }}
-                >
-                  <SelectTrigger
-                    id="category"
-                    className="h-10 w-full rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus:ring-2 focus:ring-[#858A69]/15"
-                  >
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    {paperCategories.map((cat) => (
-                      <SelectItem
-                        key={cat}
-                        value={cat}
-                      >
-                        {cat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="e.g. Machine Learning, Computer Vision"
+                  required
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
               </div>
             </div>
 
@@ -280,48 +256,133 @@ export default function UploadPaperForm() {
                   setAuthors(e.target.value)
                 }
                 placeholder="Author names, separated by commas"
-                className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
               />
             </div>
 
-            {/* Publisher */}
             <div className="space-y-2">
               <Label
-                htmlFor="publisher"
+                htmlFor="authors-email"
                 className="text-xs font-semibold text-[#565D54]"
               >
-                Publisher
+                Author Emails
               </Label>
-
               <Input
-                id="publisher"
-                value={publisher}
-                onChange={(e) =>
-                  setPublisher(e.target.value)
-                }
-                placeholder="e.g. IEEE, Springer, Elsevier"
-                className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                id="authors-email"
+                value={authorsEmail}
+                onChange={(e) => setAuthorsEmail(e.target.value)}
+                placeholder="Emails, separated by commas"
+                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
               />
             </div>
 
-            {/* Tags */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="tags"
-                className="text-xs font-semibold text-[#565D54]"
-              >
-                Research Tags
-              </Label>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="publication-type"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Publication Type
+                </Label>
+                <Input
+                  id="publication-type"
+                  value={publicationType}
+                  onChange={(e) => setPublicationType(e.target.value)}
+                  placeholder="e.g. journal"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="publication-venue"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Publication Venue
+                </Label>
+                <Input
+                  id="publication-venue"
+                  value={publicationVenue}
+                  onChange={(e) => setPublicationVenue(e.target.value)}
+                  placeholder="Journal or conference name"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+            </div>
 
-              <Input
-                id="tags"
-                value={tags}
-                onChange={(e) =>
-                  setTags(e.target.value)
-                }
-                placeholder="e.g. deep learning, transformers, computer vision"
-                className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
-              />
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              {/* Publisher */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="publisher"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Publisher
+                </Label>
+
+                <Input
+                  id="publisher"
+                  value={publisher}
+                  onChange={(e) =>
+                    setPublisher(e.target.value)
+                  }
+                  placeholder="e.g. IEEE, Springer, Elsevier"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="indexed-in"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Indexed In
+                </Label>
+                <Input
+                  id="indexed-in"
+                  value={indexedIn}
+                  onChange={(e) => setIndexedIn(e.target.value)}
+                  placeholder="Scopus, Web of Science"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="publication-date"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Publication Date
+                </Label>
+                <Input
+                  id="publication-date"
+                  type="date"
+                  value={publicationDate}
+                  onChange={(e) => setPublicationDate(e.target.value)}
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+
+              {/* Tags */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="tags"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Research Tags
+                </Label>
+
+                <Input
+                  id="tags"
+                  value={tags}
+                  onChange={(e) =>
+                    setTags(e.target.value)
+                  }
+                  placeholder="e.g. cnn, gnn"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
             </div>
 
             {/* Publication Link */}
@@ -341,7 +402,7 @@ export default function UploadPaperForm() {
                   setPublicationLink(e.target.value)
                 }
                 placeholder="e.g. https://doi.org/10.1000/xyz123 or publisher page"
-                className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
               />
             </div>
 
@@ -362,14 +423,14 @@ export default function UploadPaperForm() {
                 }
                 placeholder="Provide a brief summary of your research..."
                 rows={5}
-                className="w-full resize-none rounded-lg border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5 text-sm leading-relaxed text-[#252C26] focus:ring-[#858A69]/15"
+                className="w-full resize-none rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5 text-sm leading-relaxed text-[#252C26] focus:ring-[#858A69]/15"
               />
             </div>
 
             {/* Featured */}
             <label
               htmlFor="paper-featured"
-              className="flex cursor-pointer items-start gap-3 rounded-lg border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5"
+              className="flex cursor-pointer items-start gap-3 rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5"
             >
               <input
                 id="paper-featured"
@@ -409,14 +470,14 @@ export default function UploadPaperForm() {
 
             <div
               {...getRootProps()}
-              className={`relative w-full min-w-0 max-w-full overflow-hidden rounded-lg border border-dashed p-7 transition-all duration-200 ${isDragActive ? `border-[#68724D] bg-[#68724D]/8` : `border-[#C9CBC2] bg-[#ECEBE4] hover:border-[#8A906F] hover:bg-[#E8E8DF]`}`}
+              className={`relative w-full min-w-0 max-w-full overflow-hidden rounded-[14px] border border-dashed p-7 transition-all duration-200 ${isDragActive ? `border-[#68724D] bg-[#68724D]/8` : `border-[#C9CBC2] bg-[#ECEBE4] hover:border-[#8A906F] hover:bg-[#E8E8DF]`}`}
             >
               <input {...getInputProps()} />
 
               {pdfFile ? (
                 <div className="flex w-full min-w-0 items-center justify-between gap-4">
                   <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#DDE5D8]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[#DDE5D8]">
                       <CheckCircle className="h-5 w-5 text-[#4F8A63]" strokeWidth={1.8} aria-hidden />
                     </div>
 
@@ -436,7 +497,7 @@ export default function UploadPaperForm() {
                   <button
                     type="button"
                     onClick={removeFile}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#85897F] transition-colors hover:bg-[#DCDDD5] hover:text-[#B85C55]"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] text-[#85897F] transition-colors hover:bg-[#DCDDD5] hover:text-[#B85C55]"
                     aria-label="Remove file"
                   >
                     <X
@@ -447,7 +508,7 @@ export default function UploadPaperForm() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-[#D5D7CE] bg-[#E2E2D9]">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[12px] border border-[#D5D7CE] bg-[#E2E2D9]">
                     <Upload
                       className="h-5 w-5 text-[#69734E]"
                       strokeWidth={1.8}
@@ -470,7 +531,7 @@ export default function UploadPaperForm() {
                     type="button"
                     variant="outline"
                     onClick={open}
-                    className="mt-4 h-9 rounded-lg border-[#C9CBC2] bg-[#F4F3EE] px-4 text-xs font-medium text-[#4C5548] shadow-none hover:bg-[#E3E4DB] hover:text-[#30382F]"
+                    className="mt-4 h-9 rounded-[9px] border-[#C9CBC2] bg-[#F4F3EE] px-4 text-xs font-medium text-[#4C5548] shadow-none hover:bg-[#E3E4DB] hover:text-[#30382F]"
                   >
                     Browse File
                   </Button>
@@ -481,7 +542,7 @@ export default function UploadPaperForm() {
             {/* Error */}
             {errorMessage && (
               <div
-                className="flex items-center gap-2 rounded-lg border border-[#E6C9C6] bg-[#F6E9E7] px-3 py-2 text-xs text-[#A84D47]"
+                className="flex items-center gap-2 rounded-[9px] border border-[#E6C9C6] bg-[#F6E9E7] px-3 py-2 text-xs text-[#A84D47]"
               >
                 <AlertCircle
                   className="h-4 w-4 shrink-0"
@@ -494,7 +555,7 @@ export default function UploadPaperForm() {
 
             {/* Success */}
             {uploadStatus === "success" && (
-              <div className="flex items-center gap-2 rounded-lg border border-[#C8D9CB] bg-[#EAF1EB] px-3 py-2 text-xs text-[#4F8A63]">
+              <div className="flex items-center gap-2 rounded-[9px] border border-[#C8D9CB] bg-[#EAF1EB] px-3 py-2 text-xs text-[#4F8A63]">
                 <CheckCircle
                   className="h-4 w-4 shrink-0"
                   aria-hidden
