@@ -181,7 +181,7 @@ export default function SentRequests() {
     };
 
     return (
-        <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+        <Card className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
             <CardHeader className="border-b border-[#DEDCD3] px-5 py-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
@@ -196,7 +196,7 @@ export default function SentRequests() {
                                     type="button"
                                     onClick={() => setFilter(value)}
                                     className={cn(
-                                        "rounded-md px-2.5 py-1 text-xs font-medium",
+                                        "rounded-lg px-2.5 py-1 text-xs font-medium",
                                         filter === value ? "bg-white text-[#716F49] shadow-sm" : "text-[#737568]"
                                     )}
                                 >
@@ -215,7 +215,7 @@ export default function SentRequests() {
                 {isLoading ? (
                     <p className="py-8 text-center text-sm text-[#777568]">Loading sent requests...</p>
                 ) : filteredRequests.length === 0 ? (
-                    <div className="rounded-xl border border-dashed border-[#CFCFC2] bg-[#FBFAF7] py-10 text-center">
+                    <div className="rounded-lg border border-dashed border-[#CFCFC2] bg-[#FBFAF7] py-10 text-center">
                         <LinkIcon className="mx-auto mb-2 h-5 w-5 text-[#85897F]" />
                         <p className="text-sm font-medium text-[#4B4D42]">No sent requests found</p>
                         <p className="mt-1 text-xs text-[#8A8C81]">Requests you send will appear here.</p>
@@ -228,7 +228,7 @@ export default function SentRequests() {
                             const config = STATUS_CONFIG[request.status];
                             const StatusIcon = config.icon;
                             return (
-                                <div key={group.key} className="rounded-xl border border-[#D9D8CD] bg-[#FBFAF7] p-4">
+                                <div key={group.key} className="rounded-lg border border-[#D9D8CD] bg-[#FBFAF7] p-4">
                                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                         <div className="min-w-0">
                                             <div className="flex flex-wrap items-center gap-2">
@@ -292,22 +292,22 @@ export default function SentRequests() {
             </CardContent>
             {editingRequest && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#30351f]/45 p-4" onClick={() => !isSaving && setEditingRequest(null)}>
-                    <form className="w-full max-w-lg space-y-4 rounded-2xl bg-[#F4F3EE] p-6 shadow-2xl" onSubmit={saveEdit} onClick={(event) => event.stopPropagation()}>
+                    <form className="w-full max-w-lg space-y-4 rounded-lg bg-[#F4F3EE] p-6 shadow-2xl" onSubmit={saveEdit} onClick={(event) => event.stopPropagation()}>
                         <div>
                             <h2 className="text-lg font-semibold text-[#292D25]">Edit access request</h2>
                             <p className="text-xs text-[#777568]">Update the shared link or request details.</p>
                         </div>
                         <label className="block space-y-1.5 text-sm font-medium text-[#565D54]">
                             Shared link
-                            <input type="url" required value={editLink} onChange={(event) => setEditLink(event.target.value)} className="h-10 w-full rounded-md border border-[#D7D4C9] bg-white px-3 text-sm" />
+                            <input type="url" required value={editLink} onChange={(event) => setEditLink(event.target.value)} className="h-10 w-full rounded-lg border border-[#D7D4C9] bg-white px-3 text-sm" />
                         </label>
                         <label className="block space-y-1.5 text-sm font-medium text-[#565D54]">
                             Message
-                            <textarea value={editMessage} onChange={(event) => setEditMessage(event.target.value)} rows={4} className="w-full rounded-md border border-[#D7D4C9] bg-white px-3 py-2 text-sm" />
+                            <textarea value={editMessage} onChange={(event) => setEditMessage(event.target.value)} rows={4} className="w-full rounded-lg border border-[#D7D4C9] bg-white px-3 py-2 text-sm" />
                         </label>
                         <label className="block space-y-1.5 text-sm font-medium text-[#565D54]">
                             Expiration date
-                            <input type="date" value={editExpiresAt} onChange={(event) => setEditExpiresAt(event.target.value)} className="h-10 w-full rounded-md border border-[#D7D4C9] bg-white px-3 text-sm" />
+                            <input type="date" value={editExpiresAt} onChange={(event) => setEditExpiresAt(event.target.value)} className="h-10 w-full rounded-lg border border-[#D7D4C9] bg-white px-3 text-sm" />
                         </label>
                         <div className="flex justify-end gap-2">
                             <Button type="button" variant="outline" onClick={() => setEditingRequest(null)} disabled={isSaving}>Cancel</Button>

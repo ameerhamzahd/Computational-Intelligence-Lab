@@ -179,14 +179,14 @@ export default function AvailabilityPanel({
                                 const isBusy = busySlotId === slot.id;
 
                                 return (
-                                    <div key={slot.id} className="rounded-xl border border-[#D9D8CD] bg-[#FBFAF7] px-4 py-4">
+                                    <div key={slot.id} className="rounded-lg border border-[#D9D8CD] bg-[#FBFAF7] px-4 py-4">
                                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                             <div className="min-w-0">
                                                 <div className="flex flex-wrap items-center gap-2">
                                                     <p className="w-full text-sm font-semibold text-[#25251F]">
                                                         {slot.name}
                                                     </p>
-                                                    <span className="rounded-md border border-[#DEDCD3] bg-[#ECEBE4] px-2 py-1 text-xs text-[#5E5D50]">
+                                                    <span className="rounded-lg border border-[#DEDCD3] bg-[#ECEBE4] px-2 py-1 text-xs text-[#5E5D50]">
                                                         {slot.active ? "Open" : "Hidden"}
                                                     </span>
                                                 </div>

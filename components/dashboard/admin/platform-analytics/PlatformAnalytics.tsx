@@ -145,7 +145,7 @@ export default function PlatformAnalytics() {
                 <>
                     <AdminStatCards stats={directoryStats} />
 
-                    <Card className="overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
+                    <Card className="overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
                         <CardContent className="p-5">
                             <div className="flex flex-wrap items-end justify-between gap-3">
                                 <div>
@@ -246,7 +246,7 @@ export default function PlatformAnalytics() {
                                         className="flex items-center gap-2 text-[11px] text-[#59605A]"
                                     >
                                         <span
-                                            className="size-2 rounded-full"
+                                            className="size-2 rounded-lg"
                                             style={{ backgroundColor: series.color }}
                                             aria-hidden
                                         />
@@ -260,7 +260,7 @@ export default function PlatformAnalytics() {
 
                     <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
                         <div>
-                            <Card className="overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
+                            <Card className="overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
                                 <CardContent className="p-5">
                                     <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#85897F]">
                                         Moderation
@@ -318,9 +318,9 @@ export default function PlatformAnalytics() {
                                                     </span>
                                                 </div>
 
-                                                <div className="mt-2.5 h-1 w-full overflow-hidden rounded-full bg-[#DFE0DA]">
+                                                <div className="mt-2.5 h-1 w-full overflow-hidden rounded-lg bg-[#DFE0DA]">
                                                     <div
-                                                        className="h-full rounded-full transition-all duration-500"
+                                                        className="h-full rounded-lg transition-all duration-500"
                                                         style={{
                                                             width: `${item.percent}%`,
                                                             backgroundColor: item.color,
@@ -331,7 +331,7 @@ export default function PlatformAnalytics() {
                                         ))}
                                     </div>
 
-                                    <div className="mt-6 flex items-center gap-3 rounded-xl border border-[#DEDCD3] bg-[#FBFAF7] p-4">
+                                    <div className="mt-6 flex items-center gap-3 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-4">
                                         <span className="flex size-9 items-center justify-center rounded-lg bg-[#716F49]/10">
                                             <Gauge
                                                 className="h-4 w-4 text-[#716F49]"
@@ -355,7 +355,7 @@ export default function PlatformAnalytics() {
                         </div>
 
                         <div>
-                            <Card className="overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
+                            <Card className="overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
                                 <CardContent className="p-5">
                                     <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#85897F]">
                                         Membership
@@ -378,9 +378,9 @@ export default function PlatformAnalytics() {
                                                     </span>
                                                 </div>
 
-                                                <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-[#DFE0DA]">
+                                                <div className="mt-2 h-1 w-full overflow-hidden rounded-lg bg-[#DFE0DA]">
                                                     <div
-                                                        className="h-full rounded-full transition-all duration-500"
+                                                        className="h-full rounded-lg transition-all duration-500"
                                                         style={{
                                                             width: `${(entry.users / maxRoleCount) * 100
                                                                 }%`,

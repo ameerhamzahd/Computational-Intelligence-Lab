@@ -70,7 +70,7 @@ function SectionCard({
     children: ReactNode;
 }) {
     return (
-        <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+        <Card className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
             <CardHeader className="border-b border-[#DEDCD3] px-5 py-4">
                 <div className="flex items-center gap-3">
                     <div>
@@ -254,9 +254,9 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                 {/* =================================================
                     IDENTITY CARD
                 ================================================== */}
-                <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+                <Card className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
                     <CardContent className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:gap-6">
-                        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-[#716F49]/10 text-2xl font-semibold tracking-wide text-[#716F49] ring-1 ring-[#D8D5C9]">
+                        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg bg-[#716F49]/10 text-2xl font-semibold tracking-wide text-[#716F49] ring-1 ring-[#D8D5C9]">
                             {initials || <User className="h-9 w-9 text-[#969386]" />}
                         </div>
 
@@ -428,7 +428,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword((prev) => !prev)}
-                                className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-[#969386] transition-colors hover:bg-[#716F49]/10 hover:text-[#716F49] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#716F49]"
+                                className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-lg text-[#969386] transition-colors hover:bg-[#716F49]/10 hover:text-[#716F49] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#716F49]"
                                 aria-label={showPassword ? "Hide password" : "Show password"}
                             >
                                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

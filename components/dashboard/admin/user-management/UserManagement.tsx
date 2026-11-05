@@ -265,7 +265,7 @@ export default function UserManagement() {
                 <>
                     <AdminStatCards stats={stats} />
 
-                    <Card className="rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+                    <Card className="rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
                         <CardContent className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 xl:grid-cols-4">
                             <div>
                                 <Label
@@ -482,11 +482,11 @@ export default function UserManagement() {
                                 return (
                                     <Card
                                         key={user.id}
-                                        className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] transition-shadow hover:shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
+                                        className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] transition-shadow hover:shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
                                     >
                                         <CardContent className="p-5 sm:p-6">
                                             <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-                                                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#716F49]/10 text-sm font-semibold text-[#716F49]">
+                                                <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-[#716F49]/10 text-sm font-semibold text-[#716F49]">
                                                     {getInitials(user.name)}
                                                 </div>
 

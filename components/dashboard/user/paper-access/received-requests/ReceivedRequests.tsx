@@ -63,7 +63,7 @@ interface SummaryStatProps {
 
 function SummaryStat({ title, value, icon: Icon, accent }: SummaryStatProps) {
     return (
-        <Card className="group rounded-[18px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5">
+        <Card className="group rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5">
             <CardContent className="flex h-full flex-col p-5">
                 <div className="flex items-center gap-3">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.09em] text-[#85897F]">
@@ -76,9 +76,9 @@ function SummaryStat({ title, value, icon: Icon, accent }: SummaryStatProps) {
                 </h3>
 
                 <div className="mt-auto pt-6">
-                    <div className="h-0.75 w-full overflow-hidden rounded-full bg-[#DFE0DA]">
+                    <div className="h-0.75 w-full overflow-hidden rounded-lg bg-[#DFE0DA]">
                         <div
-                            className="h-full rounded-full transition-all duration-500 group-hover:w-[85%]"
+                            className="h-full rounded-lg transition-all duration-500 group-hover:w-[85%]"
                             style={{ width: "45%", backgroundColor: accent }}
                         />
                     </div>
@@ -176,7 +176,7 @@ export default function ReceivedRequests() {
                                 type="button"
                                 onClick={() => setFilter(f)}
                                 className={cn(
-                                    "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                                    "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
                                     filter === f
                                         ? "bg-[#F4F3EE] text-[#716F49] shadow-sm"
                                         : "text-white/70 hover:text-white"
@@ -216,13 +216,13 @@ export default function ReceivedRequests() {
             {isLoading ? (
                 <ReceivedRequestsSkeleton showStats={false} />
             ) : errorMessage ? (
-                <Card className="rounded-2xl border border-[#E4C2BC] bg-[#FBF0EE] p-12 text-center">
+                <Card className="rounded-lg border border-[#E4C2BC] bg-[#FBF0EE] p-12 text-center">
                     <XCircle className="mx-auto mb-4 h-12 w-12 text-[#A45B4B]" aria-hidden />
                     <h3 className="mb-1 text-lg font-medium text-[#873F34]">Unable to load requests</h3>
                     <p className="text-sm text-[#9A5A50]">{errorMessage}</p>
                 </Card>
             ) : filteredRequests.length === 0 ? (
-                <Card className="rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] p-12 text-center">
+                <Card className="rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] p-12 text-center">
                     <Mail className="mx-auto mb-4 h-16 w-16 text-[#B3B0A4]" aria-hidden />
                     <h3 className="mb-1 text-lg font-medium text-[#25251F]">No requests found</h3>
                     <p className="text-sm text-[#777568]">No access requests match your current filter.</p>
@@ -237,11 +237,11 @@ export default function ReceivedRequests() {
                         return (
                             <Card
                                 key={request.id}
-                                className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] transition-shadow hover:shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
+                                className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] transition-shadow hover:shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
                             >
                                 <CardContent className="p-6">
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#716F49]/10">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#716F49]/10">
                                             <span className="text-sm font-medium text-[#716F49]">
                                                 {request.fromUser.name.split(" ").map((n) => n[0]).join("")}
                                             </span>
@@ -306,7 +306,7 @@ export default function ReceivedRequests() {
                                             </div>
 
                                             {["pending", "accepted"].includes(request.status) && (
-                                                <div className="mt-4 flex flex-col gap-2 rounded-xl border border-[#DEDCD3] bg-[#FBFAF7] p-3 sm:flex-row sm:items-center sm:justify-between">
+                                                <div className="mt-4 flex flex-col gap-2 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-3 sm:flex-row sm:items-center sm:justify-between">
                                                     <div className="min-w-0">
                                                         <p className="text-sm font-medium text-[#25251F]">
                                                             {request.paper ? "Requested paper uploaded" : "Upload requested paper"}
@@ -344,7 +344,7 @@ export default function ReceivedRequests() {
                                             )}
 
                                             {openQrId === request.id && (
-                                                <div className="mt-4 rounded-xl border border-[#DEDCD3] bg-[#FBFAF7] p-4 duration-200 animate-in fade-in slide-in-from-top-2">
+                                                <div className="mt-4 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-4 duration-200 animate-in fade-in slide-in-from-top-2">
                                                     <div className="mb-3 flex items-center justify-between">
                                                         <span className="text-sm font-medium text-[#25251F]">QR Code</span>
                                                         <Button

@@ -149,7 +149,7 @@ export default function LoginForm() {
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="h-11 w-full cursor-pointer rounded-md bg-[#716f49] text-sm font-medium text-white shadow-[0_14px_24px_-8px_#716f49] transition-colors duration-200 hover:bg-[#1F321C] disabled:opacity-70"
+                    className="h-11 w-full cursor-pointer rounded-lg bg-[#716f49] text-sm font-medium text-white shadow-[0_14px_24px_-8px_#716f49] transition-colors duration-200 hover:bg-[#1F321C] disabled:opacity-70"
                 >
                     {isSubmitting ? (
                         <>

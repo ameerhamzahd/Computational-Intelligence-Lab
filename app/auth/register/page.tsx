@@ -212,7 +212,7 @@ export default function RegisterForm() {
                     <Select value={formData.role} onValueChange={handleRoleChange}>
                         <SelectTrigger
                             id="role"
-                            className="mt-1.5 h-11 w-full rounded-md border border-[#dddbd8] bg-[#F8FAFC] px-3.5 text-sm font-medium text-slate-900 shadow-none focus-visible:border-[#716f49] focus-visible:ring-2 focus-visible:ring-[#716f49]/20"
+                            className="mt-1.5 h-11 w-full rounded-lg border border-[#dddbd8] bg-[#F8FAFC] px-3.5 text-sm font-medium text-slate-900 shadow-none focus-visible:border-[#716f49] focus-visible:ring-2 focus-visible:ring-[#716f49]/20"
                             aria-invalid={Boolean(errors.role)}
                         >
                             <SelectValue placeholder="Select your current role" />

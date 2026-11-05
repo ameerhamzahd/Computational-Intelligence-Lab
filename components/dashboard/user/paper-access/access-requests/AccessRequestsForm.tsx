@@ -288,7 +288,7 @@ export default function AccessRequestsForm() {
                             {/* SHARE DETAILS */}
 
                             <Card
-                                className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]"
+                                className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]"
                             >
                                 <CardHeader className="border-b border-[#DEDCD3] px-5 py-4">
                                     <div className="flex items-center gap-3">
@@ -430,7 +430,7 @@ export default function AccessRequestsForm() {
                             {/* SUCCESS */}
 
                             {submitStatus === "success" && (
-                                <div className="flex items-start gap-3 rounded-xl border border-[#BFD6C1] bg-[#EEF6EE] p-4">
+                                <div className="flex items-start gap-3 rounded-lg border border-[#BFD6C1] bg-[#EEF6EE] p-4">
                                     <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#397A40]" />
 
                                     <div>
@@ -448,7 +448,7 @@ export default function AccessRequestsForm() {
                             {/* ERROR */}
 
                             {submitStatus === "error" && (
-                                <div className="flex items-start gap-3 rounded-xl border border-[#E4C2BC] bg-[#FBF0EE] p-4">
+                                <div className="flex items-start gap-3 rounded-lg border border-[#E4C2BC] bg-[#FBF0EE] p-4">
                                     <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#A45B4B]" />
 
                                     <div>
@@ -470,7 +470,7 @@ export default function AccessRequestsForm() {
 
                         <div>
                             <Card
-                                className="sticky top-24 overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
+                                className="sticky top-24 overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
                             >
                                 <CardHeader className="border-b border-[#DEDCD3] px-5 py-4">
 
@@ -489,7 +489,7 @@ export default function AccessRequestsForm() {
                                         </div>
 
                                         <span 
-                                            className="whitespace-nowrap rounded-full border border-[#716F49]/15 bg-[#716F49]/8 px-2.5 py-1 text-[11px] font-semibold text-[#716F49]"
+                                            className="whitespace-nowrap rounded-lg border border-[#716F49]/15 bg-[#716F49]/8 px-2.5 py-1 text-[11px] font-semibold text-[#716F49]"
                                         >
                                             {selectedCount} selected
                                         </span>
@@ -593,7 +593,7 @@ export default function AccessRequestsForm() {
                                                 return (
                                                     <label
                                                         key={user.id}
-                                                        className={`group flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all duration-200
+                                                        className={`group flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-all duration-200
                                                             ${isSelected
                                                                 ? "border-[#716F49]/25 bg-[#716F49]/[0.07]"
                                                                 : "border-transparent hover:border-[#DEDCD3] hover:bg-[#FBFAF7]"
@@ -613,7 +613,7 @@ export default function AccessRequestsForm() {
                                                         />
 
                                                         <div
-                                                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-colors
+                                                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-semibold transition-colors
                                                                 ${isSelected
                                                                     ? "bg-[#716F49] text-white"
                                                                     : "bg-[#E4E1D7] text-[#716F49]"

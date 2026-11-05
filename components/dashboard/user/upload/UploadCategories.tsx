@@ -154,11 +154,11 @@ export default function UploadCategories() {
   return (
     <div className="grid grid-cols-1 gap-6">
       {/* Paper Categories */}
-      <Card className="bg-white rounded-2xl shadow-sm">
+      <Card className="bg-white rounded-lg shadow-sm">
         <div className="p-5 border-b border-[#E6E6E6]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#716f49]/10">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#716f49]/10">
                 <FileText className="w-6 h-6 text-[#716f49]" aria-hidden />
               </div>
               <h2 className="text-xl font-semibold text-gray-900">Paper</h2>
@@ -196,11 +196,11 @@ export default function UploadCategories() {
       </Card>
 
       {/* Presentation Categories */}
-      <Card className="bg-white rounded-2xl shadow-sm">
+      <Card className="bg-white rounded-lg shadow-sm">
         <div className="p-5 border-b border-[#E6E6E6]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#FFB200]/10">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#FFB200]/10">
                 <Presentation className="w-6 h-6 text-[#FFB200]" aria-hidden />
               </div>
               <h2 className="text-xl font-semibold text-gray-900">Presentation</h2>

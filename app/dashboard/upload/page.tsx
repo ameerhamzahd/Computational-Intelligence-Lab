@@ -24,7 +24,7 @@ export default function UploadPage() {
           <h1 className="text-2xl font-bold text-white">Upload Papers & Presentations</h1>
 
           <div className='flex gap-1'>
-            <Button
+            {/* <Button
               variant="ghost"
               size="lg"
               className="gap-2 text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
@@ -32,7 +32,7 @@ export default function UploadPage() {
             >
               <History className="w-4 h-4" aria-hidden />
               <p className='hidden md:block'>History</p>
-            </Button>
+            </Button> */}
 
             <Button
               variant="ghost"
@@ -67,7 +67,7 @@ export default function UploadPage() {
           onClick={() => setHistoryOpen(false)}
         >
           <div
-            className="w-full max-w-4xl max-h-[85vh] overflow-hidden rounded-2xl border border-white/30 bg-[#F4F3EE] shadow-[0_20px_60px_rgba(35,40,22,0.25)]"
+            className="w-full max-w-4xl max-h-[85vh] overflow-hidden rounded-lg border border-white/30 bg-[#F4F3EE] shadow-[0_20px_60px_rgba(35,40,22,0.25)]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}

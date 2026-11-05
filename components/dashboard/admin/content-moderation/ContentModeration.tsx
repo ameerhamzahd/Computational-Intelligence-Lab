@@ -287,11 +287,11 @@ export default function ContentModeration() {
                                 return (
                                     <Card
                                         key={submission.id}
-                                        className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] transition-shadow hover:shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
+                                        className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] transition-shadow hover:shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
                                     >
                                         <CardContent className="p-6">
                                             <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-                                                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#716F49]/10">
+                                                <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-[#716F49]/10">
                                                     <ContentIcon
                                                         className="h-5 w-5 text-[#716F49]"
                                                         strokeWidth={1.8}
@@ -358,7 +358,7 @@ export default function ContentModeration() {
                                                     )}
 
                                                     {isNoteOpen && (
-                                                        <div className="mt-4 rounded-xl border border-[#DEDCD3] bg-[#FBFAF7] p-4 animate-in fade-in slide-in-from-top-2">
+                                                        <div className="mt-4 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-4 animate-in fade-in slide-in-from-top-2">
                                                             <label
                                                                 htmlFor={`moderation-note-${submission.id}`}
                                                                 className="text-xs font-semibold uppercase tracking-wide text-[#5E5D50]"

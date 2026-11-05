@@ -107,14 +107,14 @@ export default function Sidebar() {
         <>
             <aside
                 className={cn(
-                    "sticky top-4 hidden h-[calc(100vh-2rem)] shrink-0 flex-col gap-6 rounded-2xl border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl transition-all duration-300 lg:flex ml-4",
+                    "sticky top-4 hidden h-[calc(100vh-2rem)] shrink-0 flex-col gap-6 rounded-lg border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl transition-all duration-300 lg:flex ml-4",
                     collapsed ? "w-20 items-center px-3 py-5" : "w-72 p-5"
                 )}
             >
                 <button
                     type="button"
                     onClick={() => setCollapsed((v) => !v)}
-                    className="absolute top-10 -right-3 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 shadow-sm text-gray-400 hover:text-[#716f49] transition-colors cursor-pointer"
+                    className="absolute top-10 -right-3 z-10 flex items-center justify-center w-6 h-6 rounded-lg bg-white border border-gray-200 shadow-sm text-gray-400 hover:text-[#716f49] transition-colors cursor-pointer"
                     aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
                     {collapsed ? <PanelLeftOpen size={13} aria-hidden /> : <PanelLeftClose size={13} aria-hidden />}
@@ -154,7 +154,7 @@ export default function Sidebar() {
                                 key={item.label}
                                 href={item.href}
                                 className={cn(
-                                    "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white",
+                                    "flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white",
                                     collapsed && "justify-center px-2",
                                     isActive && "bg-white/15 text-white shadow-inner"
                                 )}
@@ -189,7 +189,7 @@ export default function Sidebar() {
                                     key={item.label}
                                     href={item.href}
                                     className={cn(
-                                        "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white",
+                                        "flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white",
                                         collapsed && "justify-center px-2",
                                         isActive && "bg-white/15 text-white shadow-inner"
                                     )}
@@ -209,7 +209,7 @@ export default function Sidebar() {
                         type="button"
                         onClick={handleLogout}
                         className={cn(
-                            "flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-red-500/20 hover:text-white cursor-pointer",
+                            "flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-red-500/20 hover:text-white cursor-pointer",
                             collapsed && "justify-center px-2"
                         )}
                         title={collapsed ? "Logout" : undefined}
@@ -220,7 +220,7 @@ export default function Sidebar() {
                 </div>
             </aside>
 
-            <nav className="fixed bottom-2 left-2 right-2 z-50 flex items-stretch justify-around gap-1 border border-white/10 bg-[#716f49]/80 shadow-2xl px-2 py-2 backdrop-blur-xl rounded-2xl lg:hidden">
+            <nav className="fixed bottom-2 left-2 right-2 z-50 flex items-stretch justify-around gap-1 border border-white/10 bg-[#716f49]/80 shadow-2xl px-2 py-2 backdrop-blur-xl rounded-lg lg:hidden">
                 {NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
@@ -230,7 +230,7 @@ export default function Sidebar() {
                             key={item.label}
                             href={item.href}
                             className={cn(
-                                "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-md px-1 py-2 text-[11px] font-medium leading-none text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white",
+                                "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[11px] font-medium leading-none text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white",
                                 isActive && "bg-white/15 text-white"
                             )}
                         >
@@ -244,7 +244,7 @@ export default function Sidebar() {
                     type="button"
                     onClick={() => setMobileSheet("paper-access")}
                     className={cn(
-                        "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium leading-none text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white",
+                        "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[11px] font-medium leading-none text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white",
                         isPaperAccessActive && "bg-white/15 text-white"
                     )}
                     aria-haspopup="dialog"
@@ -259,7 +259,7 @@ export default function Sidebar() {
                         type="button"
                         onClick={() => setMobileSheet("admin")}
                         className={cn(
-                            "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium leading-none text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white",
+                            "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[11px] font-medium leading-none text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white",
                             isAdminActive && "bg-white/15 text-white"
                         )}
                         aria-haspopup="dialog"
@@ -284,7 +284,7 @@ export default function Sidebar() {
                 <button
                     type="button"
                     onClick={handleLogout}
-                    className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium leading-none text-red-300/90 transition-colors duration-150 hover:bg-red-500/20 hover:text-red-100"
+                    className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 text-[11px] font-medium leading-none text-red-300/90 transition-colors duration-150 hover:bg-red-500/20 hover:text-red-100"
                 >
                     <LogOut size={18} aria-hidden />
                     <span className="w-full text-center leading-tight">Logout</span>

@@ -22,7 +22,7 @@ export default function MyPapersPage() {
           <span className="hidden md:block">Reload</span>
         </Button>
       </div>
-      <div className="overflow-hidden rounded-2xl border border-white/30 bg-[#F4F3EE] shadow-[0_20px_60px_rgba(35,40,22,0.15)]">
+      <div className="overflow-hidden rounded-lg border border-white/30 bg-[#F4F3EE] shadow-[0_20px_60px_rgba(35,40,22,0.15)]">
         <UploadHistory />
       </div>
     </section>

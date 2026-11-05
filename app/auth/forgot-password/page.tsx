@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
 
             {sent ? (
                 <div className="mt-8 space-y-5">
-                    <p className="rounded-md bg-[#EAF0EA] p-4 text-xs leading-relaxed text-[#356044]">
+                    <p className="rounded-lg bg-[#EAF0EA] p-4 text-xs leading-relaxed text-[#356044]">
                         Check your email for the password reset link. If an account exists for that email, it will arrive shortly.
                     </p>
                     <p className="pt-2 text-center text-xs text-neutral-400">

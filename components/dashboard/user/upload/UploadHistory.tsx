@@ -219,7 +219,7 @@ export default function UploadHistory() {
     <div className="w-full">
       <div className="border-b border-[#D9D8CD] px-6 py-4">
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "all" | UploadType)}>
-          <TabsList className="h-10 w-full gap-1 rounded-xl border border-[#D5D4C9] bg-[#E8E7DD] p-1 sm:w-fit">
+          <TabsList className="h-10 w-full gap-1 rounded-lg border border-[#D5D4C9] bg-[#E8E7DD] p-1 sm:w-fit">
             <TabsTrigger value="all" className="rounded-lg px-4 text-xs text-[#737568] data-[state=active]:bg-[#656748] data-[state=active]:text-white">All ({uploads.length})</TabsTrigger>
             <TabsTrigger value="paper" className="rounded-lg px-4 text-xs text-[#737568] data-[state=active]:bg-[#656748] data-[state=active]:text-white">Papers ({uploads.filter((u) => u.upload_type === "paper").length})</TabsTrigger>
             <TabsTrigger value="presentation" className="rounded-lg px-4 text-xs text-[#737568] data-[state=active]:bg-[#656748] data-[state=active]:text-white">Presentations ({uploads.filter((u) => u.upload_type === "presentation").length})</TabsTrigger>
@@ -232,7 +232,7 @@ export default function UploadHistory() {
         {isLoading ? (
           <div className="flex justify-center py-14"><Loader2 className="h-6 w-6 animate-spin text-[#656748]" /></div>
         ) : filteredUploads.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[#CFCFC2] bg-[#F7F6F1] py-14">
+          <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[#CFCFC2] bg-[#F7F6F1] py-14">
             <FileText className="mb-3 h-5 w-5 text-[#7A7C70]" />
             <p className="text-sm font-medium text-[#4B4D42]">No uploads found</p>
             <p className="mt-1 text-xs text-[#8A8C81]">Uploaded papers and presentations will appear here.</p>
@@ -244,7 +244,7 @@ export default function UploadHistory() {
               const category = isPaper ? upload.metadata?.category : upload.metadata?.presentationType;
               const Icon = isPaper ? FileText : Presentation;
               return (
-                <div key={upload.id} className="rounded-xl border border-[#D9D8CD] bg-[#F7F6F1] px-4 py-4">
+                <div key={upload.id} className="rounded-lg border border-[#D9D8CD] bg-[#F7F6F1] px-4 py-4">
                   <div className="flex items-start gap-3">
                     <Icon className="mt-0.5 h-5 w-5 shrink-0 text-[#656748]" />
                     <div className="min-w-0 flex-1">
@@ -272,11 +272,11 @@ export default function UploadHistory() {
       </div>
 
       {editing && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#30351f]/45 p-4" onClick={() => !isSaving && setEditing(null)}>
-          <form className="max-h-[90vh] w-full max-w-xl space-y-4 overflow-y-auto rounded-2xl bg-[#F4F3EE] p-6 shadow-2xl" onSubmit={saveEdit} onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-[#30351f]/45 p-4" onClick={() => !isSaving && setEditing(null)}>
+          <form className="max-h-[90vh] w-full max-w-xl space-y-4 overflow-y-auto rounded-lg bg-[#F4F3EE] p-6 shadow-2xl" onSubmit={saveEdit} onClick={(event) => event.stopPropagation()}>
             <div><h2 className="text-lg font-semibold text-[#292D25]">Edit {editing.type === "paper" ? "paper" : "presentation"}</h2><p className="text-xs text-[#7A7C70]">Update the uploaded file details.</p></div>
             <div className="space-y-2"><Label htmlFor="edit-title">Title</Label><Input id="edit-title" value={editing.title} onChange={(event) => setEditing({ ...editing, title: event.target.value })} required /></div>
-            <div className="space-y-2"><Label htmlFor="edit-category">{editing.type === "paper" ? "Category" : "Presentation type"}</Label><select id="edit-category" className="h-10 w-full rounded-md border border-[#D7D8D0] bg-white px-3 text-sm" value={editing.categoryOrType} onChange={(event) => setEditing({ ...editing, categoryOrType: event.target.value })} required><option value="">Select one</option>{(editing.type === "paper" ? PAPER_CATEGORIES : PRESENTATION_TYPES).map((option) => <option key={option} value={option}>{option}</option>)}</select></div>
+            <div className="space-y-2"><Label htmlFor="edit-category">{editing.type === "paper" ? "Category" : "Presentation type"}</Label><select id="edit-category" className="h-10 w-full rounded-lg border border-[#D7D8D0] bg-white px-3 text-sm" value={editing.categoryOrType} onChange={(event) => setEditing({ ...editing, categoryOrType: event.target.value })} required><option value="">Select one</option>{(editing.type === "paper" ? PAPER_CATEGORIES : PRESENTATION_TYPES).map((option) => <option key={option} value={option}>{option}</option>)}</select></div>
             {editing.type === "paper" ? (
               <>
                 <div className="space-y-2"><Label htmlFor="edit-authors">Authors</Label><Input id="edit-authors" value={editing.authors} onChange={(event) => setEditing({ ...editing, authors: event.target.value })} /></div>
@@ -288,7 +288,7 @@ export default function UploadHistory() {
                 <div className="space-y-2"><Label htmlFor="edit-date">Date</Label><Input id="edit-date" type="date" value={editing.date} onChange={(event) => setEditing({ ...editing, date: event.target.value })} /></div>
               </>
             )}
-            <div className="space-y-2"><Label htmlFor="edit-description">{editing.type === "paper" ? "Abstract" : "Description"}</Label><textarea id="edit-description" className="min-h-24 w-full rounded-md border border-[#D7D8D0] bg-white px-3 py-2 text-sm" value={editing.abstractOrDescription} onChange={(event) => setEditing({ ...editing, abstractOrDescription: event.target.value })} /></div>
+            <div className="space-y-2"><Label htmlFor="edit-description">{editing.type === "paper" ? "Abstract" : "Description"}</Label><textarea id="edit-description" className="min-h-24 w-full rounded-lg border border-[#D7D8D0] bg-white px-3 py-2 text-sm" value={editing.abstractOrDescription} onChange={(event) => setEditing({ ...editing, abstractOrDescription: event.target.value })} /></div>
             <div className="space-y-2"><Label htmlFor="edit-link">Publication link</Label><Input id="edit-link" type="url" value={editing.publicationLink} onChange={(event) => setEditing({ ...editing, publicationLink: event.target.value })} /></div>
             <div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setEditing(null)} disabled={isSaving}>Cancel</Button><Button type="submit" disabled={isSaving}>{isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Save changes</Button></div>
           </form>

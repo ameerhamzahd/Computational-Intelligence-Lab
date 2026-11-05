@@ -54,7 +54,7 @@ export function SectionCard({
     children: ReactNode;
 }) {
     return (
-        <div className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+        <div className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DEDCD3] px-5 py-4">
                 <div className="flex min-w-0 items-center gap-3">
                     <div className="min-w-0">

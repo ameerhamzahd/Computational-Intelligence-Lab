@@ -517,7 +517,7 @@ function ComposerCard({
     };
 
     return (
-        <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+        <Card className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
             <div className="flex items-center justify-between gap-3 border-b border-[#DEDCD3] px-5 py-4">
                 <div className="flex items-center gap-3">
                     <div>
@@ -570,7 +570,7 @@ function ComposerCard({
                                         setErrors({});
                                     }}
                                     className={cn(
-                                        "flex flex-col items-center gap-1 rounded-md px-2 py-2 text-xs font-medium transition-colors",
+                                        "flex flex-col items-center gap-1 rounded-lg px-2 py-2 text-xs font-medium transition-colors",
                                         isActive
                                             ? "bg-[#656748] text-white shadow-sm"
                                             : "text-[#737568] hover:text-[#41482D]",
@@ -730,7 +730,7 @@ function ComposerCard({
                                 <button
                                     type="button"
                                     onClick={removePoster}
-                                    className="absolute right-0.5 top-0.5 rounded-full bg-[#A45B4B] p-0.5 text-white"
+                                    className="absolute right-0.5 top-0.5 rounded-lg bg-[#A45B4B] p-0.5 text-white"
                                     aria-label="Remove poster"
                                 >
                                     <X className="h-3 w-3" aria-hidden />
@@ -978,7 +978,7 @@ function ListPanel({
                         return (
                             <Card
                                 key={item.id}
-                                className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] transition-shadow hover:shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
+                                className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] transition-shadow hover:shadow-[0_12px_35px_rgba(30,31,20,0.08)]"
                             >
                                 <CardContent className="p-6">
                                     <div className="flex flex-wrap items-center gap-2">
@@ -1021,7 +1021,7 @@ function ListPanel({
 
                                     {(item.kind === "seminar" || item.kind === "announcement") &&
                                         (item.eventAt || item.venue) && (
-                                            <div className="mt-4 grid grid-cols-1 gap-3 rounded-xl border border-[#DEDCD3] bg-[#FBFAF7] p-4 sm:grid-cols-3">
+                                            <div className="mt-4 grid grid-cols-1 gap-3 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-4 sm:grid-cols-3">
                                                 {item.kind === "seminar" && (
                                                     <ScheduleDetail
                                                         icon={CalendarClock}

@@ -33,7 +33,7 @@ function StatCard({
   trend,
 }: StatCardProps) {
   return (
-    <Card className="group rounded-[18px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5">
+    <Card className="group rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5">
       <CardContent className="flex h-full flex-col p-5">
 
         {/* Top */}
@@ -49,7 +49,7 @@ function StatCard({
 
           {/* Trend */}
           {trend && (
-            <div className="flex shrink-0 items-center gap-1 rounded-[8px] border border-[#D8E2D9] bg-[#EAF0EA] px-2 py-1 text-[10px] font-medium text-[#4F8A63]"
+            <div className="flex shrink-0 items-center gap-1 rounded-lg border border-[#D8E2D9] bg-[#EAF0EA] px-2 py-1 text-[10px] font-medium text-[#4F8A63]"
             >
               <TrendingUp
                 className="h-3 w-3"
@@ -81,9 +81,9 @@ function StatCard({
 
         {/* Bottom accent */}
         <div className="mt-auto pt-6">
-          <div className="h-0.75 w-full overflow-hidden rounded-full bg-[#DFE0DA]">
+          <div className="h-0.75 w-full overflow-hidden rounded-lg bg-[#DFE0DA]">
             <div
-              className="h-full rounded-full transition-all duration-500 group-hover:w-[85%]"
+              className="h-full rounded-lg transition-all duration-500 group-hover:w-[85%]"
               style={{
                 width: trend ? "70%" : "45%",
                 backgroundColor: accent,

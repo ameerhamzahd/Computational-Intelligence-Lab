@@ -35,7 +35,7 @@ export function CollapsibleNavGroup({
                 type="button"
                 onClick={() => onOpenChange(!open)}
                 className={cn(
-                    "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white cursor-pointer",
+                    "flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white cursor-pointer",
                     collapsed && "justify-center px-2",
                     isGroupActive && "bg-white/15 text-white"
                 )}
@@ -105,7 +105,7 @@ export function MobileNavSheet({ open, title, groups, onClose }: MobileNavSheetP
                 onClick={onClose}
             />
 
-            <div className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-white p-6 shadow-2xl animate-in slide-in-from-bottom-12 duration-300 ease-out">
+            <div className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-lg bg-white p-6 shadow-2xl animate-in slide-in-from-bottom-12 duration-300 ease-out">
                 <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-base font-semibold text-[#1f321c]">{title}</h2>
 
@@ -131,7 +131,7 @@ export function MobileNavSheet({ open, title, groups, onClose }: MobileNavSheetP
                                         href={item.href}
                                         onClick={onClose}
                                         className={cn(
-                                            "rounded-xl px-4 py-3 text-sm font-medium text-[#1f321c] transition-colors duration-150 hover:bg-[#716f49]/10",
+                                            "rounded-lg px-4 py-3 text-sm font-medium text-[#1f321c] transition-colors duration-150 hover:bg-[#716f49]/10",
                                             pathname === item.href && "bg-[#716f49]/15 text-[#716f49]"
                                         )}
                                     >
