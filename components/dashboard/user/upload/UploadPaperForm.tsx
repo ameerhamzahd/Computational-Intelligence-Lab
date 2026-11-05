@@ -14,33 +14,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const paperCategories = [
-  "Machine Learning",
-  "Computer Vision",
-  "NLP",
-  "Graph Neural Networks",
-  "Optimization",
-  "Robotics",
-  "Reinforcement Learning",
-  "Other",
-];
-
 export default function UploadPaperForm() {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState("");
+  const [authorsEmail, setAuthorsEmail] = useState("");
   const [publisher, setPublisher] = useState("");
   const [abstract, setAbstract] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
   const [publicationLink, setPublicationLink] = useState("");
+  const [publicationType, setPublicationType] = useState("");
+  const [publicationVenue, setPublicationVenue] = useState("");
+  const [indexedIn, setIndexedIn] = useState("");
+  const [publicationDate, setPublicationDate] = useState("");
   const [featured, setFeatured] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
 
@@ -125,15 +111,20 @@ export default function UploadPaperForm() {
     try {
       const formData = new FormData();
 
-      formData.append("pdf", pdfFile);
-      formData.append("title", title);
-      formData.append("authors", authors);
+      formData.append("paper_file", pdfFile);
+      formData.append("paper_title", title.trim());
+      formData.append("authors_name", authors);
+      formData.append("authors_email", authorsEmail);
+      formData.append("paper_category", category);
+      formData.append("publication_type", publicationType);
+      formData.append("publication_venue", publicationVenue);
       formData.append("publisher", publisher.trim());
-      formData.append("abstract", abstract);
-      formData.append("category", category);
-      formData.append("tags", tags);
-      formData.append("publicationLink", trimmedPublicationLink);
-      formData.append("featured", String(featured));
+      formData.append("indexed_in", indexedIn);
+      formData.append("publication_date", publicationDate);
+      formData.append("paper_tags", tags);
+      formData.append("paper_url", trimmedPublicationLink);
+      formData.append("paper_abstract", abstract);
+      formData.append("is_featured", String(featured));
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/papers/upload`,
@@ -157,11 +148,16 @@ export default function UploadPaperForm() {
 
       setTitle("");
       setAuthors("");
+      setAuthorsEmail("");
       setPublisher("");
       setAbstract("");
       setCategory("");
       setTags("");
       setPublicationLink("");
+      setPublicationType("");
+      setPublicationVenue("");
+      setIndexedIn("");
+      setPublicationDate("");
       setFeatured(false);
       setPdfFile(null);
       window.dispatchEvent(new Event("uploads:changed"));
@@ -226,41 +222,21 @@ export default function UploadPaperForm() {
 
               {/* Category */}
               <div className="space-y-2">
-                <Label
-                  htmlFor="category"
-                  className="text-xs font-semibold text-[#565D54]"
-                >
-                  Category
-                  <span className="ml-1 text-[#B85C55]">
-                    *
-                  </span>
+                <Label htmlFor="category" className="text-xs font-semibold text-[#565D54]">
+                  Paper Category
+                  <span className="ml-1 text-[#B85C55]">*</span>
                 </Label>
-
-                <Select
+                <Input
+                  id="category"
                   value={category}
-                  onValueChange={(value: string | null) => {
-                    setCategory(value ?? "");
+                  onChange={(e) => {
+                    setCategory(e.target.value);
                     setErrorMessage("");
                   }}
-                >
-                  <SelectTrigger
-                    id="category"
-                    className="h-10 w-full rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus:ring-2 focus:ring-[#858A69]/15"
-                  >
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    {paperCategories.map((cat) => (
-                      <SelectItem
-                        key={cat}
-                        value={cat}
-                      >
-                        {cat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="e.g. Machine Learning, Computer Vision"
+                  required
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
               </div>
             </div>
 
@@ -284,44 +260,129 @@ export default function UploadPaperForm() {
               />
             </div>
 
-            {/* Publisher */}
             <div className="space-y-2">
               <Label
-                htmlFor="publisher"
+                htmlFor="authors-email"
                 className="text-xs font-semibold text-[#565D54]"
               >
-                Publisher
+                Author Emails
               </Label>
-
               <Input
-                id="publisher"
-                value={publisher}
-                onChange={(e) =>
-                  setPublisher(e.target.value)
-                }
-                placeholder="e.g. IEEE, Springer, Elsevier"
+                id="authors-email"
+                value={authorsEmail}
+                onChange={(e) => setAuthorsEmail(e.target.value)}
+                placeholder="Emails, separated by commas"
                 className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
               />
             </div>
 
-            {/* Tags */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="tags"
-                className="text-xs font-semibold text-[#565D54]"
-              >
-                Research Tags
-              </Label>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="publication-type"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Publication Type
+                </Label>
+                <Input
+                  id="publication-type"
+                  value={publicationType}
+                  onChange={(e) => setPublicationType(e.target.value)}
+                  placeholder="e.g. journal"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="publication-venue"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Publication Venue
+                </Label>
+                <Input
+                  id="publication-venue"
+                  value={publicationVenue}
+                  onChange={(e) => setPublicationVenue(e.target.value)}
+                  placeholder="Journal or conference name"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+            </div>
 
-              <Input
-                id="tags"
-                value={tags}
-                onChange={(e) =>
-                  setTags(e.target.value)
-                }
-                placeholder="e.g. deep learning, transformers, computer vision"
-                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
-              />
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              {/* Publisher */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="publisher"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Publisher
+                </Label>
+
+                <Input
+                  id="publisher"
+                  value={publisher}
+                  onChange={(e) =>
+                    setPublisher(e.target.value)
+                  }
+                  placeholder="e.g. IEEE, Springer, Elsevier"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label
+                  htmlFor="indexed-in"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Indexed In
+                </Label>
+                <Input
+                  id="indexed-in"
+                  value={indexedIn}
+                  onChange={(e) => setIndexedIn(e.target.value)}
+                  placeholder="Scopus, Web of Science"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="publication-date"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Publication Date
+                </Label>
+                <Input
+                  id="publication-date"
+                  type="date"
+                  value={publicationDate}
+                  onChange={(e) => setPublicationDate(e.target.value)}
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
+
+              {/* Tags */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="tags"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Research Tags
+                </Label>
+
+                <Input
+                  id="tags"
+                  value={tags}
+                  onChange={(e) =>
+                    setTags(e.target.value)
+                  }
+                  placeholder="e.g. cnn, gnn"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                />
+              </div>
             </div>
 
             {/* Publication Link */}

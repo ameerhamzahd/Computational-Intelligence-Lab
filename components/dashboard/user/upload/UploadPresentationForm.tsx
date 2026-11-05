@@ -16,33 +16,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const presentationTypes = [
-  "Conference Talk",
-  "Workshop",
-  "Seminar",
-  "Poster Session",
-  "Demo Session",
-  "Tutorial",
-  "Keynote",
-  "Panel Discussion",
-  "Other",
-];
-
 export default function UploadPresentationForm() {
   const [title, setTitle] = useState("");
   const [event, setEvent] = useState("");
   const [date, setDate] = useState("");
   const [type, setType] = useState("");
+  const [category, setCategory] = useState("");
+  const [presenterNames, setPresenterNames] = useState("");
+  const [presenterEmails, setPresenterEmails] = useState("");
+  const [tags, setTags] = useState("");
   const [description, setDescription] = useState("");
-  const [publisher, setPublisher] = useState("");
   const [publicationLink, setPublicationLink] = useState("");
   const [featured, setFeatured] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -139,15 +122,16 @@ export default function UploadPresentationForm() {
     try {
       const formData = new FormData();
 
-      formData.append("file", file);
-      formData.append("title", title);
-      formData.append("event", event);
-      formData.append("date", date);
-      formData.append("type", type);
-      formData.append("publisher", publisher.trim());
-      formData.append("publicationLink", trimmedPublicationLink);
-      formData.append("description", description);
-      formData.append("featured", String(featured));
+      formData.append("presentation_file", file);
+      formData.append("presentation_title", title.trim());
+      formData.append("presenter_name", presenterNames);
+      formData.append("presenter_email", presenterEmails);
+      formData.append("presentation_category", category);
+      formData.append("presentation_event", type);
+      formData.append("presentation_date", date);
+      formData.append("presentation_tags", tags);
+      formData.append("paper_url", trimmedPublicationLink);
+      formData.append("is_featured", String(featured));
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/presentations/upload`,
@@ -173,8 +157,11 @@ export default function UploadPresentationForm() {
       setEvent("");
       setDate("");
       setType("");
+      setCategory("");
+      setPresenterNames("");
+      setPresenterEmails("");
+      setTags("");
       setDescription("");
-      setPublisher("");
       setFeatured(false);
       setFile(null);
       window.dispatchEvent(new Event("uploads:changed"));
@@ -240,41 +227,70 @@ export default function UploadPresentationForm() {
               </div>
 
               <div className="space-y-2">
-                <Label
-                  htmlFor="pres-type"
-                  className="text-xs font-semibold text-[#565D54]"
-                >
-                  Presentation Type
-                  <span className="ml-1 text-[#B85C55]">
-                    *
-                  </span>
+                <Label htmlFor="pres-type" className="text-xs font-semibold text-[#565D54]">
+                  Presentation Event
+                  <span className="ml-1 text-[#B85C55]">*</span>
                 </Label>
-
-                <Select
+                <Input
+                  id="pres-type"
                   value={type}
-                  onValueChange={(value: string | null) => {
-                    setType(value ?? "");
+                  onChange={(e) => {
+                    setType(e.target.value);
                     setErrorMessage("");
                   }}
-                >
-                  <SelectTrigger
-                    id="pres-type"
-                    className="h-10 w-full rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus:ring-2 focus:ring-[#B77C29]/15"
-                  >
-                    <SelectValue placeholder="Select presentation type" />
-                  </SelectTrigger>
+                  placeholder="e.g. Seminar, Thesis, Conference"
+                  required
+                  className="h-10 w-full rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                />
+              </div>
+            </div>
 
-                  <SelectContent>
-                    {presentationTypes.map((item) => (
-                      <SelectItem
-                        key={item}
-                        value={item}
-                      >
-                        {item}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <div className="space-y-2">
+              <Label
+                htmlFor="presentation-category"
+                className="text-xs font-semibold text-[#565D54]"
+              >
+                Presentation Category
+              </Label>
+              <Input
+                id="presentation-category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                placeholder="AI, computer vision, robotics"
+                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="presenter-name"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Presenter Names
+                </Label>
+                <Input
+                  id="presenter-name"
+                  value={presenterNames}
+                  onChange={(e) => setPresenterNames(e.target.value)}
+                  placeholder="Names, separated by commas"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="presenter-email"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Presenter Emails
+                </Label>
+                <Input
+                  id="presenter-email"
+                  value={presenterEmails}
+                  onChange={(e) => setPresenterEmails(e.target.value)}
+                  placeholder="Emails, separated by commas"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                />
               </div>
             </div>
 
@@ -286,7 +302,7 @@ export default function UploadPresentationForm() {
                   htmlFor="pres-event"
                   className="text-xs font-semibold text-[#565D54]"
                 >
-                  Event / Conference
+                  Event
                 </Label>
 
                 <Input
@@ -320,23 +336,19 @@ export default function UploadPresentationForm() {
               </div>
             </div>
 
-            {/* Publisher */}
             <div className="space-y-2">
               <Label
-                htmlFor="pres-publisher"
+                htmlFor="pres-tags"
                 className="text-xs font-semibold text-[#565D54]"
               >
-                Publisher
+                Presentation Tags
               </Label>
-
               <Input
-                id="pres-publisher"
-                value={publisher}
-                onChange={(e) =>
-                  setPublisher(e.target.value)
-                }
-                placeholder="e.g. IEEE, Springer, Elsevier"
-                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                id="pres-tags"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                placeholder="AI, computer vision, research"
+                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
               />
             </div>
 
