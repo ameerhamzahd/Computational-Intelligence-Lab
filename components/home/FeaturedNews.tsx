@@ -1,10 +1,5 @@
 "use client";
 
-// components/home/FeaturedNews.tsx
-// Home page "featured news" - the same three-column accordion UI as the News page,
-// limited to the pinned / latest few items per column with a link through to /news.
-// deps (already installed): motion, lucide-react, date-fns
-
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
@@ -121,7 +116,7 @@ function FeaturedCard({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.45, delay: Math.min(index * 0.06, 0.2), ease }}
-            className={`overflow-hidden rounded-2xl border bg-white transition-shadow ${open
+            className={`overflow-hidden rounded-lg border bg-white transition-shadow ${open
                 ? "border-[#A3A171]/60 shadow-[0_18px_40px_-18px_rgba(40,40,25,0.35)]"
                 : "border-neutral-200/80 hover:shadow-[0_12px_30px_-16px_rgba(40,40,25,0.25)]"
                 }`}
@@ -173,7 +168,7 @@ function FeaturedCard({
                                     src={item.poster}
                                     alt={`${item.title} poster`}
                                     loading="lazy"
-                                    className="max-h-56 w-full rounded-xl border border-neutral-200/80 object-cover"
+                                    className="max-h-56 w-full rounded-lg border border-neutral-200/80 object-cover"
                                 />
                             )}
 
@@ -182,7 +177,7 @@ function FeaturedCard({
                             </p>
 
                             {(showWhen || showVenue) && (
-                                <div className="grid grid-cols-1 gap-3 rounded-xl border border-[#DEDCD3] bg-[#FBFAF7] p-3.5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                                <div className="grid grid-cols-1 gap-3 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-3.5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                                     {showWhen && (
                                         <Detail
                                             icon={CalendarClock}
@@ -258,7 +253,7 @@ export default function FeaturedNews({
         columns.length === 1 ? "lg:grid-cols-1 lg:max-w-xl lg:mx-auto" : columns.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3";
 
     return (
-        <section id="news" className="relative overflow-hidden bg-[#F8FAFC]  pt-20">
+        <section id="news" className="relative overflow-hidden bg-[#F8FAFC] pt-20">
             <div className="relative">
                 {/* heading */}
                 <div className="mx-auto max-w-2xl px-4 text-center">
@@ -292,7 +287,7 @@ export default function FeaturedNews({
                                         <h3 className="text-lg font-semibold text-neutral-900">{col.title}</h3>
                                         <p className="text-xs text-neutral-500">{col.blurb}</p>
                                     </div>
-                                    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${col.badgeClass}`}>
+                                    <span className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${col.badgeClass}`}>
                                         {col.total}
                                     </span>
                                 </div>
@@ -322,7 +317,7 @@ export default function FeaturedNews({
                     >
                         <Link
                             href="/news"
-                            className="group inline-flex items-center gap-2 rounded-full bg-[#716f49] px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_-14px_rgba(113,111,73,0.8)] transition-colors hover:bg-[#1f321c]"
+                            className="group inline-flex items-center gap-2 rounded-lg bg-[#716f49] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_14px_30px_-14px_rgba(113,111,73,0.8)] transition-colors hover:bg-[#1f321c]"
                         >
                             View all news
                             <ArrowRight

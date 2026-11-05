@@ -216,7 +216,7 @@ function TextLines({ seed, count }: { seed: number; count: number }) {
             {Array.from({ length: count }).map((_, i) => (
                 <div
                     key={i}
-                    className="h-0.75 rounded-full bg-neutral-300/80"
+                    className="h-0.75 rounded-lg bg-neutral-300/80"
                     style={{ width: `${LINE_WIDTHS[(i + seed) % LINE_WIDTHS.length]}%` }}
                 />
             ))}
@@ -286,11 +286,11 @@ function PaperCard({
             onClick={() => onOpen(paper)}
         >
             {/* sheets stacked behind the first page */}
-            <div className="absolute inset-0 origin-bottom-left -rotate-3 rounded-sm bg-[#ECEBDD] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:-rotate-6" />
-            <div className="absolute inset-0 origin-bottom-right rotate-2 rounded-sm bg-[#F3F2E8] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:rotate-4" />
+            <div className="absolute inset-0 origin-bottom-left -rotate-3 rounded-lg bg-[#ECEBDD] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:-rotate-6" />
+            <div className="absolute inset-0 origin-bottom-right rotate-2 rounded-lg bg-[#F3F2E8] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:rotate-4" />
 
             {/* first page */}
-            <div className="relative flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-[0_14px_30px_-10px_rgba(31,50,28,0.45)] ring-1 ring-black/10">
+            <div className="relative flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-[0_14px_30px_-10px_rgba(31,50,28,0.45)] ring-1 ring-black/10">
                 <div
                     className="h-1.5 w-full"
                     style={{ background: `linear-gradient(90deg, ${tint.from}, ${tint.to})` }}
@@ -371,7 +371,7 @@ function PaperCard({
                                 event.stopPropagation();
                                 onOpen(paper);
                             }}
-                            className="grid size-8 place-items-center rounded-lg bg-[#716f49] text-white transition hover:bg-[#1F321C]"
+                            className="grid size-8 place-items-center rounded-lg bg-neutral-900 text-white transition hover:bg-neutral-700"
                         >
                             <BookOpen className="size-3.5" />
                         </button>
@@ -457,12 +457,12 @@ function PaperModal({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 12, scale: 0.97 }}
                         transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                        className="relative max-h-[calc(100dvh-2rem)] w-full max-w-xl overflow-y-auto overscroll-contain rounded-[28px] bg-white p-7 shadow-2xl"
+                        className="relative max-h-[calc(100dvh-2rem)] w-full max-w-xl overflow-y-auto overscroll-contain rounded-lg bg-white p-7 shadow-2xl"
                     >
                         <button
                             onClick={onClose}
                             aria-label="Close"
-                            className="absolute right-4 top-4 grid size-9 place-items-center rounded-full bg-neutral-100 hover:bg-neutral-200"
+                            className="absolute right-4 top-4 grid size-9 place-items-center rounded-lg bg-neutral-100 hover:bg-neutral-200"
                         >
                             <X className="size-4" />
                         </button>
@@ -481,7 +481,7 @@ function PaperModal({
                             <a
                                 href={paper ? `${apiBaseUrl}/api/research/${paper.id}/pdf` : "#"}
                                 download
-                                className="flex items-center gap-2 rounded-2xl bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
+                                className="flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
                             >
                                 <FileText className="size-4" /> PDF
                             </a>
@@ -489,7 +489,7 @@ function PaperModal({
                                 href={paper ? `${apiBaseUrl}/api/research/${paper.id}/preview` : "#"}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 rounded-2xl border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
+                                className="flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
                             >
                                 <BookOpen className="size-4" /> Preview
                             </a>
@@ -497,7 +497,7 @@ function PaperModal({
                                 <a
                                     href={`${apiBaseUrl}/api/research/${presentation.id}/presentation`}
                                     download
-                                    className="flex items-center gap-2 rounded-2xl bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
+                                    className="flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
                                 >
                                     <FileText className="size-4" /> Presentation Slide
                                 </a>
@@ -506,7 +506,7 @@ function PaperModal({
                                 href={paper.htmlUrl ?? "#"}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 rounded-2xl border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
+                                className="flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
                             >
                                 <Link className="size-4" /> LINK
                             </a>

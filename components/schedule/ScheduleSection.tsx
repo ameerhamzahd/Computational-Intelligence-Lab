@@ -196,7 +196,7 @@ function EventBlock({
                 href={slotHref(slot.id, basePath)}
                 scroll={false}
                 aria-label={`View slot: ${DAY_OF_WEEK_LABELS[slot.dayOfWeek]} ${formatSlotTime(slot)}, ${slot.place}`}
-                className={`flex h-full flex-col overflow-hidden rounded-md border text-left transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#716f49] ${styles.box} ${isActive ? "ring-2 ring-[#716f49] ring-offset-1" : ""
+                className={`flex h-full flex-col overflow-hidden rounded-lg border text-left transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#716f49] ${styles.box} ${isActive ? "ring-2 ring-[#716f49] ring-offset-1" : ""
                     }`}
             >
                 <span
@@ -266,18 +266,18 @@ function SlotModal({
                         role="dialog"
                         aria-modal="true"
                         aria-label={slot.place}
-                        className="relative w-full max-w-xl rounded-[28px] bg-white p-7 shadow-2xl"
+                        className="relative w-full max-w-xl rounded-lg bg-white p-7 shadow-2xl"
                     >
                         <button
                             onClick={onClose}
                             aria-label="Close"
-                            className="absolute right-4 top-4 grid size-9 place-items-center rounded-full bg-neutral-100 hover:bg-neutral-200"
+                            className="absolute right-4 top-4 grid size-9 place-items-center rounded-lg bg-neutral-100 hover:bg-neutral-200"
                         >
                             <X className="size-4" />
                         </button>
 
                         <p className="flex flex-wrap items-center gap-2 pr-10 text-xs font-medium uppercase tracking-wider text-neutral-500">
-                            <span className="rounded-full bg-[#F3F2E8] px-2.5 py-1 text-[#716f49]">
+                            <span className="rounded-lg bg-[#F3F2E8] px-2.5 py-1 text-[#716f49]">
                                 {DAY_OF_WEEK_LABELS[slot.dayOfWeek]}
                             </span>
                             <span>{formatSlotTime(slot)}</span>
@@ -297,7 +297,7 @@ function SlotModal({
                         <div className="mt-6 flex gap-3">
                             <button
                                 onClick={copyLink}
-                                className="flex items-center gap-2 rounded-2xl bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
+                                className="flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
                             >
                                 {copied ? (
                                     <>
@@ -393,7 +393,7 @@ export default function ScheduleSection({
         <section className="relative overflow-hidden py-28 sm:py-32">
             {/* ambient background: soft olive glow + fading dot grid */}
             <div aria-hidden className="pointer-events-none absolute inset-0">
-                <div className="absolute -top-40 left-1/2 h-105 w-205 -translate-x-1/2 rounded-full bg-[#A3A171]/25 blur-3xl" />
+                <div className="absolute -top-40 left-1/2 h-105 w-205 -translate-x-1/2 rounded-lg bg-[#A3A171]/25 blur-3xl" />
                 <div
                     className="absolute inset-0 opacity-[0.14]"
                     style={{
@@ -435,7 +435,7 @@ export default function ScheduleSection({
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-60px" }}
                         transition={{ duration: 0.55, ease }}
-                        className="overflow-hidden rounded-3xl border border-neutral-200/70 bg-white shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)]"
+                        className="overflow-hidden rounded-lg border border-neutral-200/70 bg-white shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)]"
                     >
                         {/* tabs row */}
                         <div className="flex flex-wrap items-end justify-between gap-3 border-b border-neutral-200 px-4 pt-4 sm:px-6">
@@ -454,13 +454,13 @@ export default function ScheduleSection({
                                         >
                                             <Icon className="size-4" aria-hidden />
                                             {t.label}
-                                            <span className="rounded-full bg-neutral-100 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-500">
+                                            <span className="rounded-lg bg-neutral-100 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-500">
                                                 {counts[t.id]}
                                             </span>
                                             {selected && (
                                                 <motion.span
                                                     layoutId="schedule-tab-underline"
-                                                    className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-neutral-900"
+                                                    className="absolute inset-x-0 -bottom-px h-0.5 rounded-lg bg-neutral-900"
                                                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                                 />
                                             )}
@@ -472,10 +472,10 @@ export default function ScheduleSection({
                             {/* legend */}
                             <div className="hidden items-center gap-4 pb-3 text-xs text-neutral-500 sm:flex">
                                 <span className="flex items-center gap-1.5">
-                                    <span className={`size-2 rounded-full ${EVENT_STYLES.online.dot}`} /> Online
+                                    <span className={`size-2 rounded-lg ${EVENT_STYLES.online.dot}`} /> Online
                                 </span>
                                 <span className="flex items-center gap-1.5">
-                                    <span className={`size-2 rounded-full ${EVENT_STYLES["in-person"].dot}`} /> In person
+                                    <span className={`size-2 rounded-lg ${EVENT_STYLES["in-person"].dot}`} /> In person
                                 </span>
                             </div>
                         </div>
@@ -501,7 +501,7 @@ export default function ScheduleSection({
                                             key={v}
                                             onClick={() => setView(v)}
                                             aria-pressed={view === v}
-                                            className={`rounded-md px-3.5 py-1.5 font-medium capitalize transition ${view === v
+                                            className={`rounded-lg px-3.5 py-1.5 font-medium capitalize transition ${view === v
                                                 ? "bg-white text-neutral-900 shadow-sm"
                                                 : "text-neutral-500 hover:text-neutral-800"
                                                 }`}
@@ -520,8 +520,8 @@ export default function ScheduleSection({
 
                         {sorted.length === 0 ? (
                             <div className="border-t border-neutral-200 px-6 py-16">
-                                <div className="mx-auto max-w-md rounded-[28px] border border-dashed border-neutral-300 bg-white/60 px-6 py-12 text-center">
-                                    <span className="mx-auto grid size-12 place-items-center rounded-full bg-[#F3F2E8] text-[#716f49]">
+                                <div className="mx-auto max-w-md rounded-lg border border-dashed border-neutral-300 bg-white/60 px-6 py-12 text-center">
+                                    <span className="mx-auto grid size-12 place-items-center rounded-lg bg-[#F3F2E8] text-[#716f49]">
                                         <CalendarDays className="size-5" aria-hidden />
                                     </span>
                                     <p className="mt-4 text-sm font-semibold text-neutral-900">No schedule published yet</p>
@@ -542,7 +542,7 @@ export default function ScheduleSection({
                                                         type="button"
                                                         aria-label="Previous day"
                                                         onClick={() => stepDay(-1)}
-                                                        className="grid size-7 place-items-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900"
+                                                        className="grid size-7 place-items-center rounded-lg text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900"
                                                     >
                                                         <ChevronLeft className="size-4" />
                                                     </button>
@@ -550,7 +550,7 @@ export default function ScheduleSection({
                                                         type="button"
                                                         aria-label="Next day"
                                                         onClick={() => stepDay(1)}
-                                                        className="grid size-7 place-items-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900"
+                                                        className="grid size-7 place-items-center rounded-lg text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900"
                                                     >
                                                         <ChevronRight className="size-4" />
                                                     </button>
@@ -645,7 +645,7 @@ export default function ScheduleSection({
                                                             className="pointer-events-none absolute inset-x-0 z-10 flex items-center"
                                                             style={{ top: ((nowMin - startHour * 60) / 60) * HOUR_H }}
                                                         >
-                                                            <span className="-ml-1 size-2 rounded-full bg-[#5579A6]" />
+                                                            <span className="-ml-1 size-2 rounded-lg bg-[#5579A6]" />
                                                             <span className="h-px flex-1 bg-[#5579A6]" />
                                                         </div>
                                                     )}
@@ -655,13 +655,13 @@ export default function ScheduleSection({
 
                                         {filtered.length === 0 ? (
                                             <div className="pointer-events-none absolute inset-y-0 left-16 right-0 z-10 grid place-items-center px-4">
-                                                <p className="rounded-xl bg-white/90 px-4 py-2 text-sm text-neutral-500 shadow-sm ring-1 ring-neutral-200">
+                                                <p className="rounded-lg bg-white/90 px-4 py-2 text-sm text-neutral-500 shadow-sm ring-1 ring-neutral-200">
                                                     No slots in this category.
                                                 </p>
                                             </div>
                                         ) : view === "day" && placedByDay[selectedDay].length === 0 ? (
                                             <div className="pointer-events-none absolute inset-y-0 left-16 right-0 z-10 grid place-items-center px-4">
-                                                <p className="rounded-xl bg-white/90 px-4 py-2 text-sm text-neutral-500 shadow-sm ring-1 ring-neutral-200">
+                                                <p className="rounded-lg bg-white/90 px-4 py-2 text-sm text-neutral-500 shadow-sm ring-1 ring-neutral-200">
                                                     No slots on {DAY_OF_WEEK_LABELS[selectedDay]}.
                                                 </p>
                                             </div>

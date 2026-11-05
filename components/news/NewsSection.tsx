@@ -159,7 +159,7 @@ function AccordionCard({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.45, ease }}
-            className={`scroll-mt-28 overflow-hidden rounded-2xl border bg-white transition-shadow ${open
+            className={`scroll-mt-28 overflow-hidden rounded-lg border bg-white transition-shadow ${open
                 ? "border-[#A3A171]/60 shadow-[0_18px_40px_-18px_rgba(40,40,25,0.35)]"
                 : "border-neutral-200/80 hover:shadow-[0_12px_30px_-16px_rgba(40,40,25,0.25)]"
                 }`}
@@ -210,14 +210,14 @@ function AccordionCard({
                                 <img
                                     src={item.poster}
                                     alt={`${item.title} poster`}
-                                    className="max-h-80 w-full rounded-xl border border-neutral-200/80 object-cover"
+                                    className="max-h-80 w-full rounded-lg border border-neutral-200/80 object-cover"
                                 />
                             )}
 
                             <p className="whitespace-pre-line text-sm leading-relaxed text-neutral-700">{item.body}</p>
 
                             {(showWhen || showVenue) && (
-                                <div className="grid grid-cols-1 gap-3 rounded-xl border border-[#DEDCD3] bg-[#FBFAF7] p-3.5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                                <div className="grid grid-cols-1 gap-3 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-3.5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                                     {showWhen && (
                                         <Detail
                                             icon={CalendarClock}
@@ -232,7 +232,7 @@ function AccordionCard({
                             )}
 
                             {extras.length > 0 && (
-                                <dl className="divide-y divide-neutral-100 rounded-xl border border-neutral-200/80 text-xs">
+                                <dl className="divide-y divide-neutral-100 rounded-lg border border-neutral-200/80 text-xs">
                                     {extras.map((f, i) => (
                                         <div key={`${f.key}-${i}`} className="flex gap-3 px-3.5 py-2.5">
                                             <dt className="w-2/5 shrink-0 font-semibold text-neutral-500">{f.key}</dt>
@@ -294,11 +294,11 @@ function ColumnPagination({
     onChange: (p: number) => void;
 }) {
     const arrow =
-        "grid size-8 place-items-center rounded-full text-neutral-600 transition hover:bg-neutral-100 disabled:pointer-events-none disabled:opacity-35";
+        "grid size-8 place-items-center rounded-lg text-neutral-600 transition hover:bg-neutral-100 disabled:pointer-events-none disabled:opacity-35";
 
     return (
         <nav aria-label={`${kind} pagination`} className="mt-6 flex flex-col items-center gap-2">
-            <div className="flex items-center gap-0.5 rounded-full border border-neutral-200/80 bg-white/80 p-1 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.2)] backdrop-blur-md">
+            <div className="flex items-center gap-0.5 rounded-lg border border-neutral-200/80 bg-white/80 p-1 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.2)] backdrop-blur-md">
                 <button
                     type="button"
                     aria-label="Previous page"
@@ -321,12 +321,12 @@ function ColumnPagination({
                             onClick={() => onChange(item)}
                             aria-label={`Page ${item}`}
                             aria-current={item === page ? "page" : undefined}
-                            className="relative grid size-8 place-items-center rounded-full text-xs font-medium"
+                            className="relative grid size-8 place-items-center rounded-lg text-xs font-medium"
                         >
                             {item === page && (
                                 <motion.span
                                     layoutId={`page-pill-${kind}`}
-                                    className="absolute inset-0 rounded-full bg-neutral-900"
+                                    className="absolute inset-0 rounded-lg bg-neutral-900"
                                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                 />
                             )}
@@ -424,7 +424,7 @@ export default function NewsNotices({
         <section className="relative overflow-hidden bg-[#F8FAFC] py-28 sm:py-32">
             {/* ambient background: soft olive glow + fading dot grid */}
             <div aria-hidden className="pointer-events-none absolute inset-0">
-                <div className="absolute -top-40 left-1/2 h-105 w-205 -translate-x-1/2 rounded-full bg-[#A3A171]/25 blur-3xl" />
+                <div className="absolute -top-40 left-1/2 h-105 w-205 -translate-x-1/2 rounded-lg bg-[#A3A171]/25 blur-3xl" />
                 <div
                     className="absolute inset-0 opacity-[0.14]"
                     style={{
@@ -481,14 +481,14 @@ export default function NewsNotices({
                                                 <p className="text-xs text-neutral-500">{section.blurb}</p>
                                             </div>
                                             <span
-                                                className={`rounded-full px-2.5 py-1 text-xs font-semibold ${section.badgeClass}`}
+                                                className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${section.badgeClass}`}
                                             >
                                                 {items.length}
                                             </span>
                                         </div>
 
                                         {items.length === 0 ? (
-                                            <p className="rounded-2xl border border-dashed border-neutral-300 bg-white/60 px-4 py-10 text-center text-sm text-neutral-500">
+                                            <p className="rounded-lg border border-dashed border-neutral-300 bg-white/60 px-4 py-10 text-center text-sm text-neutral-500">
                                                 {section.empty}
                                             </p>
                                         ) : (

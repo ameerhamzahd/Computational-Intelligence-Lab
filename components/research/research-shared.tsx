@@ -70,7 +70,7 @@ function Highlight({ text, tokens }: { text: string; tokens: string[] }) {
         <>
             {text.split(re).map((part, i) =>
                 i % 2 === 1 ? (
-                    <mark key={i} className="rounded-sm bg-[#A3A171]/35 px-0.5 text-inherit">
+                    <mark key={i} className="rounded-lg bg-[#A3A171]/35 px-0.5 text-inherit">
                         {part}
                     </mark>
                 ) : (
@@ -94,7 +94,7 @@ function TextLines({ seed, count }: { seed: number; count: number }) {
             {Array.from({ length: count }).map((_, i) => (
                 <div
                     key={i}
-                    className="h-0.75 rounded-full bg-neutral-300/80"
+                    className="h-0.75 rounded-lg bg-neutral-300/80"
                     style={{ width: `${LINE_WIDTHS[(i + seed) % LINE_WIDTHS.length]}%` }}
                 />
             ))}
@@ -190,11 +190,11 @@ export function ResearchCard({
             className="group relative mx-auto aspect-3/4 w-full max-w-72 cursor-pointer"
         >
             {/* sheets stacked behind the first page */}
-            <div className="absolute inset-0 origin-bottom-left -rotate-3 rounded-sm bg-[#ECEBDD] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:-rotate-6" />
-            <div className="absolute inset-0 origin-bottom-right rotate-2 rounded-sm bg-[#F3F2E8] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:rotate-4" />
+            <div className="absolute inset-0 origin-bottom-left -rotate-3 rounded-lg bg-[#ECEBDD] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:-rotate-6" />
+            <div className="absolute inset-0 origin-bottom-right rotate-2 rounded-lg bg-[#F3F2E8] shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:rotate-4" />
 
             {/* first page */}
-            <div className="relative flex h-full flex-col overflow-hidden rounded-sm bg-white shadow-[0_14px_30px_-10px_rgba(31,50,28,0.45)] ring-1 ring-black/10">
+            <div className="relative flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-[0_14px_30px_-10px_rgba(31,50,28,0.45)] ring-1 ring-black/10">
                 <div
                     className="h-1.5 w-full"
                     style={{ background: `linear-gradient(90deg, ${tint.from}, ${tint.to})` }}
@@ -285,7 +285,7 @@ export function ResearchCard({
                                 event.stopPropagation();
                                 onOpen();
                             }}
-                            className="grid size-8 place-items-center rounded-lg bg-[#716f49] text-white transition hover:bg-[#1F321C]"
+                            className="grid size-8 place-items-center rounded-lg bg-neutral-900 text-white transition hover:bg-neutral-700"
                         >
                             <BookOpen className="size-3.5" />
                         </button>
@@ -297,7 +297,7 @@ export function ResearchCard({
 }
 
 export const pill =
-    "inline-flex items-center gap-1 rounded-full bg-white/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-neutral-800 backdrop-blur-md";
+    "inline-flex items-center gap-1 rounded-lg bg-white/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-neutral-800 backdrop-blur-md";
 
 /* -------------------------------------------------------------------------- */
 /*                                pagination UI                               */
@@ -317,11 +317,11 @@ function Pagination({
     onChange: (p: number) => void;
 }) {
     const arrow =
-        "grid size-10 place-items-center rounded-full text-neutral-600 transition hover:bg-neutral-100 disabled:pointer-events-none disabled:opacity-35";
+        "grid size-10 place-items-center rounded-lg text-neutral-600 transition hover:bg-neutral-100 disabled:pointer-events-none disabled:opacity-35";
 
     return (
         <nav aria-label={`${label} pagination`} className="mt-12 flex flex-col items-center gap-3">
-            <div className="flex items-center gap-1 rounded-full border border-neutral-200/80 bg-white/80 p-1.5 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.2)] backdrop-blur-md">
+            <div className="flex items-center gap-1 rounded-lg border border-neutral-200/80 bg-white/80 p-1.5 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.2)] backdrop-blur-md">
                 <button
                     type="button"
                     aria-label="Previous page"
@@ -344,12 +344,12 @@ function Pagination({
                             onClick={() => onChange(item)}
                             aria-label={`Page ${item}`}
                             aria-current={item === page ? "page" : undefined}
-                            className="relative grid size-10 place-items-center rounded-full text-sm font-medium"
+                            className="relative grid size-10 place-items-center rounded-lg text-sm font-medium"
                         >
                             {item === page && (
                                 <motion.span
                                     layoutId={`${id}-page-pill`}
-                                    className="absolute inset-0 rounded-full bg-neutral-900"
+                                    className="absolute inset-0 rounded-lg bg-neutral-900"
                                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                 />
                             )}
@@ -465,7 +465,7 @@ export function ResearchGrid<T extends { id: string }>({
                         }}
                         placeholder={searchPlaceholder}
                         aria-label={`Search ${noun}s`}
-                        className="h-12 w-full rounded-full border border-neutral-200 bg-white pl-11 pr-11 text-sm text-neutral-900 shadow-[0_8px_24px_-14px_rgba(0,0,0,0.25)] outline-none transition placeholder:text-neutral-400 focus:border-[#716f49] focus:ring-2 focus:ring-[#716f49]/20 [&::-webkit-search-cancel-button]:hidden"
+                        className="h-12 w-full rounded-lg border border-neutral-200 bg-white pl-11 pr-11 text-sm text-neutral-900 shadow-[0_8px_24px_-14px_rgba(0,0,0,0.25)] outline-none transition placeholder:text-neutral-400 focus:border-[#716f49] focus:ring-2 focus:ring-[#716f49]/20 [&::-webkit-search-cancel-button]:hidden"
                     />
                     {query && (
                         <button
@@ -475,7 +475,7 @@ export function ResearchGrid<T extends { id: string }>({
                                 setQuery("");
                                 setPage(1);
                             }}
-                            className="absolute right-2.5 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-full bg-neutral-100 text-neutral-600 transition hover:bg-neutral-200"
+                            className="absolute right-2.5 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-lg bg-neutral-100 text-neutral-600 transition hover:bg-neutral-200"
                         >
                             <X className="size-3.5" />
                         </button>
@@ -531,8 +531,8 @@ export function ResearchGrid<T extends { id: string }>({
                     ))}
                 </motion.div>
             ) : (
-                <div className="mt-6 rounded-3xl border border-dashed border-neutral-300 bg-white/60 px-6 py-16 text-center">
-                    <span className="mx-auto grid size-12 place-items-center rounded-full bg-[#F3F2E8] text-[#716f49]">
+                <div className="mt-6 rounded-lg border border-dashed border-neutral-300 bg-white/60 px-6 py-16 text-center">
+                    <span className="mx-auto grid size-12 place-items-center rounded-lg bg-[#F3F2E8] text-[#716f49]">
                         <Search className="size-5" />
                     </span>
                     <p className="mt-4 text-sm font-semibold text-neutral-900">
@@ -544,7 +544,7 @@ export function ResearchGrid<T extends { id: string }>({
                             <button
                                 type="button"
                                 onClick={() => setQuery("")}
-                                className="mt-5 rounded-full bg-neutral-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-neutral-700"
+                                className="mt-5 rounded-lg bg-neutral-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-neutral-700"
                             >
                                 Clear search
                             </button>
@@ -603,13 +603,13 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
                         role="dialog"
                         aria-modal="true"
                         aria-label={data.title}
-                        className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-[28px] bg-white p-7 shadow-2xl"
+                        className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg bg-white p-7 shadow-2xl"
                     >
                         <button
                             type="button"
                             onClick={onClose}
                             aria-label="Close"
-                            className="absolute right-4 top-4 grid size-9 place-items-center rounded-full bg-neutral-100 hover:bg-neutral-200"
+                            className="absolute right-4 top-4 grid size-9 place-items-center rounded-lg bg-neutral-100 hover:bg-neutral-200"
                         >
                             <X className="size-4" />
                         </button>
@@ -621,7 +621,7 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
                         <p className="mt-5 text-sm leading-relaxed text-neutral-700">{data.body}</p>
 
                         {data.note && (
-                            <p className="mt-4 flex items-center gap-2 rounded-xl bg-[#F3F2E8] px-3.5 py-2.5 text-xs text-[#716f49]">
+                            <p className="mt-4 flex items-center gap-2 rounded-lg bg-[#F3F2E8] px-3.5 py-2.5 text-xs text-[#716f49]">
                                 <Lock className="size-3.5 shrink-0" />
                                 {data.note}
                             </p>
@@ -640,8 +640,8 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
                                             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                                             className={
                                                 a.primary
-                                                    ? "flex items-center gap-2 rounded-2xl bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
-                                                    : "flex items-center gap-2 rounded-2xl border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
+                                                    ? "flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
+                                                    : "flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
                                             }
                                         >
                                             <AIcon className="size-4" /> {a.label}

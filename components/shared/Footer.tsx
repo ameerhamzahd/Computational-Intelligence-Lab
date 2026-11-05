@@ -33,6 +33,7 @@ const LINK_GROUPS = [
     {
         title: "About us",
         links: [
+            { label: "Introduction", href: "/#introduction" },
             { label: "Members", href: "/about-us/members" },
             { label: "Contact information", href: "/about-us/contact-information" },
         ],
@@ -48,7 +49,7 @@ const LINK_GROUPS = [
         title: "Extra",
         links: [
             { label: "Terms & Conditions", href: "/terms" },
-            { label: "Privacy Policy", href: "/research/presentations" },
+            { label: "Privacy Policy", href: "/privacy" },
         ],
     }
 ];
@@ -203,7 +204,7 @@ export default function Footer() {
                             onClick={scrollToTop}
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.95 }}
-                            className="group flex cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition-colors hover:border-[#716f49]/60 hover:text-white"
+                            className="group flex cursor-pointer items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white/70 transition-colors hover:border-[#716f49]/60 hover:text-white"
                         >
                             Back to top
                             <ArrowUp className="size-3.5 transition-transform group-hover:-translate-y-0.5" aria-hidden />

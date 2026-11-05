@@ -111,7 +111,7 @@ function FaqItem({
 
                     <span
                         aria-hidden
-                        className={`grid size-9 shrink-0 place-items-center rounded-full border transition-all duration-300 ${open
+                        className={`grid size-9 shrink-0 place-items-center rounded-lg border transition-all duration-300 ${open
                                 ? "border-[#716f49] bg-[#716f49] text-white shadow-[0_8px_20px_-8px_rgba(113,111,73,0.7)]"
                                 : "border-neutral-200 bg-white text-neutral-500 group-hover:border-[#716f49]/40 group-hover:text-[#716f49]"
                             }`}
@@ -181,7 +181,7 @@ export default function FaqSection() {
 
                 {/* accordion card */}
                 <div className="mx-auto mt-14 max-w-7xl px-4 sm:px-6">
-                    <div className="overflow-hidden rounded-3xl border border-neutral-200/70 bg-white shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)]">
+                    <div className="overflow-hidden rounded-lg border border-neutral-200/70 bg-white shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)]">
                         {FAQ_ITEMS.map((item, index) => (
                             <FaqItem
                                 key={item.question}
