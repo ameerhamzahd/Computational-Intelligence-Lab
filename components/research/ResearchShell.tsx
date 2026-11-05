@@ -24,7 +24,7 @@ export function ResearchShell({ hero, children }: { hero?: ReactNode; children: 
     return (
         <section className="relative overflow-hidden bg-[#F8FAFC] py-32">
             <div aria-hidden className="pointer-events-none absolute inset-0">
-                <div className="absolute -top-40 left-1/2 h-105 w-205 -translate-x-1/2 rounded-full bg-[#A3A171]/25 blur-3xl" />
+                <div className="absolute -top-40 left-1/2 h-105 w-205 -translate-x-1/2 rounded-lg bg-[#A3A171]/25 blur-3xl" />
                 <div
                     className="absolute inset-0 opacity-[0.14]"
                     style={{

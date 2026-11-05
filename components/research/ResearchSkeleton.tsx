@@ -8,11 +8,11 @@ function ResearchCardSkeleton() {
     return (
         <div className="relative mx-auto aspect-3/4 w-full max-w-72">
             {/* stacked sheets */}
-            <div className="absolute inset-0 -rotate-3 rounded-sm bg-neutral-200/60" />
-            <div className="absolute inset-0 rotate-2 rounded-sm bg-neutral-200/80" />
+            <div className="absolute inset-0 -rotate-3 rounded-lg bg-neutral-200/60" />
+            <div className="absolute inset-0 rotate-2 rounded-lg bg-neutral-200/80" />
 
             {/* first page */}
-            <div className="relative flex h-full flex-col overflow-hidden rounded-sm bg-white ring-1 ring-black/10">
+            <div className="relative flex h-full flex-col overflow-hidden rounded-lg bg-white ring-1 ring-black/10">
                 <Skeleton className="h-1.5 w-full rounded-none" />
                 <div className="flex-1 space-y-3 px-4 pt-4">
                     <Skeleton className="h-2 w-full" />

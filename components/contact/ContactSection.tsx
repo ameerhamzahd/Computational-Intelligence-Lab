@@ -92,7 +92,7 @@ export default function ContactSection() {
         <section className="relative overflow-hidden bg-[#F8FAFC] py-28 sm:py-32">
             {/* ambient background: soft olive glow + fading dot grid */}
             <div aria-hidden className="pointer-events-none absolute inset-0">
-                <div className="absolute -top-40 left-1/2 h-105 w-205 -translate-x-1/2 rounded-full bg-[#A3A171]/25 blur-3xl" />
+                <div className="absolute -top-40 left-1/2 h-105 w-205 -translate-x-1/2 rounded-lg bg-[#A3A171]/25 blur-3xl" />
                 <div
                     className="absolute inset-0 opacity-[0.14]"
                     style={{
@@ -135,11 +135,11 @@ export default function ContactSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-60px" }}
                             transition={{ duration: 0.6, ease }}
-                            className="h-fit rounded-[28px] border border-neutral-200/70 bg-white p-6 shadow-[0_18px_40px_-24px_rgba(0,0,0,0.18)] sm:p-7"
+                            className="h-fit rounded-lg border border-neutral-200/70 bg-white p-6 shadow-[0_18px_40px_-24px_rgba(0,0,0,0.18)] sm:p-7"
                         >
                             <div className="flex flex-wrap items-center justify-between gap-3">
                                 <h2 className="text-lg font-semibold tracking-tight text-neutral-900">Lab details</h2>
-                                <span className="rounded-full bg-[#EAF0E5] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#5C7A4C]">
+                                <span className="rounded-lg bg-[#EAF0E5] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#5C7A4C]">
                                     {CONTACT.hours[0]}
                                 </span>
                             </div>
@@ -182,14 +182,14 @@ export default function ContactSection() {
                             <div className="mt-6 flex gap-2.5">
                                 <a
                                     href={`mailto:${CONTACT.email}`}
-                                    className="group inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/20 bg-linear-to-br from-[#716f49] to-[#1f321c] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_30px_-14px_rgba(31,50,28,0.75),inset_0_1px_0_rgba(255,255,255,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-16px_rgba(31,50,28,0.85)] active:translate-y-0 active:scale-[0.98]"
+                                    className="group inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-white/20 bg-linear-to-br from-[#716f49] to-[#1f321c] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_30px_-14px_rgba(31,50,28,0.75),inset_0_1px_0_rgba(255,255,255,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-16px_rgba(31,50,28,0.85)] active:translate-y-0 active:scale-[0.98]"
                                 >
                                     <Mail className="size-4" aria-hidden />
                                     Email
                                 </a>
                                 <a
                                     href={`tel:${CONTACT.phone.replace(/[^\d+]/g, "")}`}
-                                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-800 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#716f49]/50 hover:bg-[#716f49]/5 hover:text-[#1f321c] active:translate-y-0"
+                                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-800 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#716f49]/50 hover:bg-[#716f49]/5 hover:text-[#1f321c] active:translate-y-0"
                                 >
                                     <Phone className="size-4 text-neutral-500" aria-hidden />
                                     Call
@@ -197,7 +197,7 @@ export default function ContactSection() {
                             </div>
 
                             {/* socials */}
-                            <div className="mt-6 border-t border-neutral-200/70 pt-5">
+                            {/* <div className="mt-6 border-t border-neutral-200/70 pt-5">
                                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-neutral-400">
                                     Follow
                                 </p>
@@ -218,7 +218,7 @@ export default function ContactSection() {
                                         );
                                     })}
                                 </div>
-                            </div>
+                            </div> */}
                         </motion.div>
 
                         {/* map */}
@@ -227,14 +227,14 @@ export default function ContactSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-60px" }}
                             transition={{ duration: 0.6, delay: 0.1, ease }}
-                            className="flex flex-col overflow-hidden rounded-[28px] border border-neutral-200/70 bg-white shadow-[0_18px_40px_-24px_rgba(0,0,0,0.18)]"
+                            className="flex flex-col overflow-hidden rounded-lg border border-neutral-200/70 bg-white shadow-[0_18px_40px_-24px_rgba(0,0,0,0.18)]"
                         >
                             <div className="relative min-h-90 flex-1 bg-[#F3F2E8] sm:min-h-105 lg:min-h-130">
                                 {/* placeholder until the embed paints */}
                                 {!mapReady && (
                                     <div className="absolute inset-0 grid place-items-center">
                                         <div className="flex flex-col items-center gap-3">
-                                            <span className="grid size-11 place-items-center rounded-full bg-white/80 text-[#716f49] shadow-sm">
+                                            <span className="grid size-11 place-items-center rounded-lg bg-white/80 text-[#716f49] shadow-sm">
                                                 <MapPin className="size-5" aria-hidden />
                                             </span>
                                             <span className="text-xs font-medium text-neutral-500">Loading map…</span>
@@ -263,7 +263,7 @@ export default function ContactSection() {
                                     href={mapLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:border-[#716f49]/50 hover:bg-[#E4E6DC]"
+                                    className="group inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors hover:border-[#716f49]/50 hover:bg-[#E4E6DC]"
                                 >
                                     Open in Google Maps
                                     <ArrowUpRight

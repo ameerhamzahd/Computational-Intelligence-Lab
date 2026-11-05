@@ -173,7 +173,7 @@ export default function Introduction() {
                                     whileHover={{ scale: 1.05 }}
                                     animate={{ scale: index === activeStep ? 1.1 : 1 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                    className={`cursor-pointer rounded-lg px-5 py-3 text-lg font-medium transition-colors duration-300 ${
+                                    className={`cursor-pointer rounded-lg px-6 py-2.5 text-lg font-medium transition-colors duration-300 ${
                                         index === activeStep
                                             ? "bg-[#716f49] text-white"
                                             : "border border-[#dddbd8] bg-[#F3F2E8] text-[#716f49] hover:border-[#716f49]"
@@ -197,9 +197,9 @@ export default function Introduction() {
                                 className="mb-6 md:mb-8 lg:sticky lg:top-(--top)"
                                 style={{ "--top": `${120 + i * 36}px` } as React.CSSProperties}
                             >
-                                <div className="overflow-hidden rounded-[40px] bg-[#F3F2E8] p-3 shadow-[0_0px_8px_rgba(31,50,28,0.12)] ring-1 ring-[#dddbd8]">
+                                <div className="overflow-hidden rounded-lg bg-[#F3F2E8] p-3 shadow-[0_0px_8px_rgba(31,50,28,0.12)] ring-1 ring-[#dddbd8]">
                                     {/* gradient "image" */}
-                                    <div className={`relative h-56 overflow-hidden rounded-[40px] md:h-72 ${GRADIENTS[i]}`}>
+                                    <div className={`relative h-56 overflow-hidden rounded-lg md:h-72 ${GRADIENTS[i]}`}>
                                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.25),transparent_55%)]" />
                                         <Icon
                                             className="absolute -right-6 -top-6 size-48 text-white/10"

@@ -395,7 +395,7 @@ export default function Banner() {
         {/* Search bar */}
         <form
           onSubmit={handleSearch}
-          className="mx-auto mb-6 flex w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60 focus-within:border-[#716f49]/60 focus-within:ring-4 focus-within:ring-[#716f49]/15 transition-all duration-200"
+          className="mx-auto mb-6 flex w-full max-w-2xl overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl shadow-slate-200/60 focus-within:border-[#716f49]/60 focus-within:ring-4 focus-within:ring-[#716f49]/15 transition-all duration-200"
         >
           <span className="flex items-center pl-5 text-slate-400">
             <Search size={20} />
@@ -409,7 +409,7 @@ export default function Banner() {
           />
           <button
             type="submit"
-            className="m-1.5 rounded-xl bg-[#716f49] px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#1f321c] active:scale-95 cursor-pointer"
+            className="m-1.5 rounded-lg bg-[#716f49] px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#1f321c] active:scale-95 cursor-pointer"
           >
             Search
           </button>
@@ -423,7 +423,7 @@ export default function Banner() {
               key={s}
               type="button"
               onClick={() => setQuery(s)}
-              className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-medium text-slate-600 backdrop-blur-sm transition-colors hover:border-[#716f49]/50 hover:bg-[#716f49]/8 hover:text-[#1f321c]"
+              className="rounded-lg border border-slate-200 bg-white/80 px-3 py-1 text-xs font-medium text-slate-600 backdrop-blur-sm transition-colors hover:border-[#716f49]/50 hover:bg-[#716f49]/8 hover:text-[#1f321c]"
             >
               {s}
             </button>
