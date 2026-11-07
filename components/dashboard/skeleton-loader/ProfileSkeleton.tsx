@@ -3,10 +3,10 @@ import { Skeleton } from "./Skeleton";
 
 function IdentityCardSkeleton() {
     return (
-        <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+        <Card className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
             <CardContent className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:gap-6">
                 <div className="relative h-24 w-24 shrink-0">
-                    <Skeleton className="size-24 rounded-2xl" />
+                    <Skeleton className="size-24 rounded-lg" />
                     <Skeleton className="absolute -right-1.5 -bottom-1.5 size-9 rounded-full" />
                 </div>
 
@@ -35,7 +35,7 @@ function SectionCardSkeleton({
     children: React.ReactNode;
 }) {
     return (
-        <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+        <Card className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
             <CardHeader className="border-b border-[#DEDCD3] px-5 py-4">
                 <Skeleton className={`h-4 ${titleWidth} rounded`} />
                 <Skeleton className={`mt-1.5 h-3 ${subtitleWidth} rounded`} />

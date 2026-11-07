@@ -36,7 +36,10 @@ export function loadPdfThumb(id: string): Promise<string | null> {
             const url = canvas.toDataURL("image/jpeg", 0.85);
             void loadingTask.destroy();
             return url;
-        } catch {
+        } catch (error) {
+            // Don't cache failures, so a transient error doesn't hide the preview until reload.
+            cache.delete(id);
+            console.warn(`[pdf-thumb] Could not render the first page of paper ${id}:`, error);
             return null;
         }
     })();

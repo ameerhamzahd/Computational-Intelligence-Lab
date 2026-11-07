@@ -4,7 +4,7 @@ import { Skeleton, SkeletonCircle } from "./Skeleton";
 
 function UserRowSkeleton() {
     return (
-        <div className="flex items-center gap-3 rounded-xl border border-transparent p-3">
+        <div className="flex items-center gap-3 rounded-lg border border-transparent p-3">
             <SkeletonCircle />
 
             <div className="flex-1 space-y-2">
@@ -19,7 +19,7 @@ function UserRowSkeleton() {
 
 function ShareDetailsSkeleton() {
     return (
-        <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+        <Card className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
             <CardHeader className="border-b border-[#DEDCD3] px-5 py-4">
                 <Skeleton className="h-4 w-36 rounded" />
                 <Skeleton className="mt-1.5 h-3 w-48 rounded" />
@@ -50,7 +50,7 @@ function ShareDetailsSkeleton() {
 
 function RecipientsSkeleton() {
     return (
-        <Card className="overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] shadow-[0_12px_35px_rgba(30,31,20,0.08)]">
+        <Card className="overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] shadow-[0_12px_35px_rgba(30,31,20,0.08)]">
             <CardHeader className="border-b border-[#DEDCD3] px-5 py-4">
                 <div className="flex items-center justify-between gap-3">
                     <div>
@@ -58,7 +58,7 @@ function RecipientsSkeleton() {
                         <Skeleton className="mt-1.5 h-3 w-36 rounded" />
                     </div>
 
-                    <Skeleton className="h-6 w-20 rounded-full" />
+                    <Skeleton className="h-6 w-20 rounded-lg" />
                 </div>
             </CardHeader>
 

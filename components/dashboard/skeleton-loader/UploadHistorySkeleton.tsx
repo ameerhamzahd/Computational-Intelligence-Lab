@@ -2,12 +2,14 @@ import { Skeleton } from "./Skeleton";
 
 function HistoryRowSkeleton() {
     return (
-        <div className="rounded-xl border border-[#D9D8CD] bg-[#F7F6F1] px-4 py-4">
+        <div className="rounded-lg border border-[#D9D8CD] bg-[#F7F6F1] px-4 py-4">
             <div className="flex items-start gap-3">
+                <Skeleton className="mt-0.5 size-5 shrink-0 rounded" />
+
                 <div className="min-w-0 flex-1">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <Skeleton className="h-4 w-2/3 rounded" />
-                        <Skeleton className="h-5 w-20 rounded-full" />
+                        <Skeleton className="h-5 w-20 rounded-lg" />
                     </div>
 
                     <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -27,6 +29,16 @@ function HistoryRowSkeleton() {
     );
 }
 
+function UploadHistoryRowsSkeleton({ rows = 5 }: { rows?: number }) {
+    return (
+        <div className="space-y-2" aria-busy="true" aria-live="polite">
+            {Array.from({ length: rows }).map((_, index) => (
+                <HistoryRowSkeleton key={index} />
+            ))}
+        </div>
+    );
+}
+
 function UploadHistorySkeleton({ rows = 5 }: { rows?: number }) {
     return (
         <div
@@ -35,7 +47,7 @@ function UploadHistorySkeleton({ rows = 5 }: { rows?: number }) {
             aria-live="polite"
         >
             <div className="px-6 py-4 border-b border-[#D9D8CD]">
-                <div className="flex h-10 w-full gap-1 rounded-xl border border-[#D5D4C9] bg-[#E8E7DD] p-1 sm:w-fit">
+                <div className="flex h-10 w-full gap-1 rounded-lg border border-[#D5D4C9] bg-[#E8E7DD] p-1 sm:w-fit">
                     <Skeleton className="h-8 w-20 rounded-lg" />
                     <Skeleton className="h-8 w-24 rounded-lg" />
                     <Skeleton className="h-8 w-32 rounded-lg" />
@@ -53,4 +65,4 @@ function UploadHistorySkeleton({ rows = 5 }: { rows?: number }) {
     );
 }
 
-export { UploadHistorySkeleton };
+export { UploadHistorySkeleton, UploadHistoryRowsSkeleton };

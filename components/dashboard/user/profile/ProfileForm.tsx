@@ -455,14 +455,14 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                             variant="ghost"
                             onClick={handleReset}
                             disabled={!isDirty || isSubmitting}
-                            className="rounded-lg border border-white/15 bg-white/5 px-5 text-sm text-white/80 backdrop-blur-md hover:bg-white/10 hover:text-white disabled:opacity-40"
+                            className="rounded-lg border border-white/15 bg-white/5 px-5 text-sm text-white/80 backdrop-blur-md hover:bg-white/10 hover:text-white disabled:opacity-40 cursor-pointer"
                         >
                             Discard
                         </Button>
                         <Button
                             type="submit"
                             disabled={isSubmitting || !isDirty}
-                            className="rounded-lg bg-[#716F49] px-5 text-sm font-medium text-white shadow-[0_5px_15px_rgba(40,40,25,0.2)] transition-all hover:bg-[#625F3F] hover:shadow-[0_7px_18px_rgba(40,40,25,0.25)] disabled:opacity-50"
+                            className="rounded-lg bg-[#716F49] px-5 text-sm font-medium text-white shadow-[0_5px_15px_rgba(40,40,25,0.2)] transition-all hover:bg-[#625F3F] hover:shadow-[0_7px_18px_rgba(40,40,25,0.25)] disabled:opacity-50 cursor-pointer"
                         >
                             {isSubmitting ? (
                                 <>

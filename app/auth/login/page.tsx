@@ -102,7 +102,7 @@ export default function LoginForm() {
                         id="email"
                         type="email"
                         autoComplete="email"
-                        placeholder="jane@university.edu"
+                        placeholder="khalilcse021@gmail.com"
                         value={formData.email}
                         onChange={handleTextChange("email")}
                         className={`mt-1.5 ${authInputClass}`}

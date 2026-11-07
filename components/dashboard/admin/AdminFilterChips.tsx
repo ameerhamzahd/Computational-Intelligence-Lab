@@ -34,7 +34,7 @@ export default function AdminFilterChips<T extends string>({
                     onClick={() => onValueChange(option.value)}
                     aria-pressed={value === option.value}
                     className={cn(
-                        "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                        "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
                         value === option.value
                             ? "bg-[#656748] text-white shadow-sm"
                             : "text-[#737568] hover:text-[#41482D]"

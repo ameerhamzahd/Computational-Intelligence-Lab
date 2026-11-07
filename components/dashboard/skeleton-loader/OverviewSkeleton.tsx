@@ -4,12 +4,12 @@ import { Skeleton } from "./Skeleton";
 
 function StateCardSkeleton() {
     return (
-        <Card className="rounded-[18px] border border-white/60 bg-[#F4F3EE]">
+        <Card className="rounded-lg border border-white/60 bg-[#F4F3EE]">
             <CardContent className="p-5">
                 <Skeleton className="h-3 w-28 rounded" />
 
                 <div className="mt-2 flex items-baseline gap-2">
-                    <Skeleton className="h-8 w-20 rounded-md" />
+                    <Skeleton className="h-8 w-20 rounded-lg" />
                     <Skeleton className="h-4 w-12 rounded" />
                 </div>
 
@@ -51,7 +51,7 @@ function StatColumnSkeleton({ className }: { className?: string }) {
 
 function SummaryTileSkeleton() {
     return (
-        <div className="rounded-[14px] border border-[#D9DAD3] bg-[#ECEBE4]/70 px-4 py-4">
+        <div className="rounded-lg border border-[#D9DAD3] bg-[#ECEBE4]/70 px-4 py-4">
             <Skeleton className="h-2.5 w-36 rounded" />
 
             <div className="mt-3 flex items-end gap-2">
@@ -76,7 +76,7 @@ function OverviewSkeleton() {
             </div>
 
             <div className="w-full py-4">
-                <Card className="overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95">
+                <Card className="overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95">
                     <CardContent className="p-5">
                         <div className="grid grid-cols-1 gap-8 xl:grid-cols-3 xl:gap-0">
                             {Array.from({ length: 3 }).map((_, index) => (

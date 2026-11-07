@@ -17,9 +17,9 @@ export default function AdminEmptyState({
     action,
 }: AdminEmptyStateProps) {
     return (
-        <Card className="rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] p-12 text-center">
+        <Card className="rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] p-12 text-center">
             <CardContent className="flex flex-col items-center">
-                <span className="mb-4 flex size-16 items-center justify-center rounded-2xl bg-[#ECEBE4]">
+                <span className="mb-4 flex size-16 items-center justify-center rounded-lg bg-[#ECEBE4]">
                     <Icon className="h-7 w-7 text-[#B3B0A4]" strokeWidth={1.7} aria-hidden />
                 </span>
 

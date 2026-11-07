@@ -7,23 +7,23 @@ function UploadStatCardSkeleton({
     hasTrend?: boolean;
 }) {
     return (
-        <Card className="rounded-[18px] border border-white/60 bg-[#F4F3EE]/95">
+        <Card className="rounded-lg border border-white/60 bg-[#F4F3EE]/95">
             <CardContent className="flex h-full flex-col p-5">
                 <div className="flex items-start justify-between gap-4">
                     <Skeleton className="h-3 w-28 rounded" />
 
                     {hasTrend && (
-                        <Skeleton className="h-5 w-16 rounded-[8px]" />
+                        <Skeleton className="h-5 w-16 rounded-lg" />
                     )}
                 </div>
 
                 <div className="mt-4">
-                    <Skeleton className="h-8 w-16 rounded-md" />
+                    <Skeleton className="h-8 w-16 rounded-lg" />
                     <Skeleton className="mt-2 h-3 w-40 rounded" />
                 </div>
 
                 <div className="mt-auto pt-6">
-                    <Skeleton className="h-0.75 w-full rounded-full" />
+                    <Skeleton className="h-0.75 w-full rounded-lg" />
 
                     {hasTrend && (
                         <Skeleton className="mt-2 h-2.5 w-20 rounded" />

@@ -15,6 +15,9 @@ export interface Paper {
     abstract?: string;
     htmlUrl?: string;
     pdfUrl?: string;
+    /** ISO timestamp the paper was published on the site */
+    publishedAt?: string;
+    fileSizeMb?: number;
 }
 
 export type PresentationType =
@@ -38,6 +41,9 @@ export interface Presentation {
     abstract?: string;
     slidesUrl?: string;
     videoUrl?: string;
+    featured?: boolean;
+    publishedAt?: string;
+    fileSizeMb?: number;
 }
 
 export interface ResearchData {

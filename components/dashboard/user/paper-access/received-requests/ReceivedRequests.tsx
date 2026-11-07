@@ -202,19 +202,16 @@ export default function ReceivedRequests() {
                 </div>
             </div>
 
-            <div
-                className={cn(
-                    "grid grid-cols-1 gap-4 sm:grid-cols-3",
-                    isLoading && "hidden"
-                )}
-            >
-                <SummaryStat title="Pending Review" value={pendingCount} icon={Clock} accent="#C58A3A" />
-                <SummaryStat title="Accepted" value={acceptedCount} icon={CheckCircle} accent="#4F8A63" />
-                <SummaryStat title="Declined" value={declinedCount} icon={XCircle} accent="#B85C55" />
-            </div>
+            {!isLoading && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <SummaryStat title="Pending Review" value={pendingCount} icon={Clock} accent="#C58A3A" />
+                    <SummaryStat title="Accepted" value={acceptedCount} icon={CheckCircle} accent="#4F8A63" />
+                    <SummaryStat title="Declined" value={declinedCount} icon={XCircle} accent="#B85C55" />
+                </div>
+            )}
 
             {isLoading ? (
-                <ReceivedRequestsSkeleton showStats={false} />
+                <ReceivedRequestsSkeleton />
             ) : errorMessage ? (
                 <Card className="rounded-lg border border-[#E4C2BC] bg-[#FBF0EE] p-12 text-center">
                     <XCircle className="mx-auto mb-4 h-12 w-12 text-[#A45B4B]" aria-hidden />

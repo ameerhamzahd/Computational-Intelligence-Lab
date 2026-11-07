@@ -123,7 +123,7 @@ export default function RegisterForm() {
                     </Label>
                     <Input
                         id="name"
-                        placeholder="Jane Smith"
+                        placeholder="Dr. Md. Khaliluzzaman"
                         value={formData.name}
                         onChange={handleTextChange("name")}
                         className={`mt-1.5 ${authInputClass}`}
@@ -139,7 +139,7 @@ export default function RegisterForm() {
                     <Input
                         id="email"
                         type="email"
-                        placeholder="jane@university.edu"
+                        placeholder="khalilcse021@gmail.com"
                         value={formData.email}
                         onChange={handleTextChange("email")}
                         className={`mt-1.5 ${authInputClass}`}
@@ -196,7 +196,7 @@ export default function RegisterForm() {
                     </Label>
                     <Input
                         id="institution"
-                        placeholder="IIUC"
+                        placeholder="International Islamic University Chittagong"
                         value={formData.institution}
                         onChange={handleTextChange("institution")}
                         className={`mt-1.5 ${authInputClass}`}

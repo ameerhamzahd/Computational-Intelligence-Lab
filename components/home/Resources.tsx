@@ -1,203 +1,17 @@
 "use client";
 
-// components/research/ResearchPapers.tsx
-// deps: npm i motion lucide-react
-
-import { useEffect, useRef, useState } from "react";
-import type { MouseEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import { fetchResearch } from "@/lib/api/research";
 import { loadPdfThumb } from "@/lib/pdf-thumb";
-import type { Presentation } from "@/lib/types/research";
-import { AnimatePresence, motion } from "motion/react";
+import type { Paper, Presentation } from "@/lib/types/research";
+import { DetailModal, paperModal } from "@/components/research/research-shared";
+import { motion } from "motion/react";
 import {
     BookOpen,
     Check,
-    FileText,
-    Link,
-    Lock,
     Share2,
-    Unlock,
-    X,
 } from "lucide-react";
-
-export type PaperType = "Conference" | "Journal" | "Magazine" | "Early Access";
-
-export interface Paper {
-    id: string;
-    title: string;
-    authors: string[];
-    venue: string;
-    year: number;
-    type: PaperType;
-    publisher: string;
-    citedBy: number;
-    topic: string;
-    access: "open" | "locked";
-    abstract?: string;
-    htmlUrl?: string;
-    pdfUrl?: string;
-}
-
-export const papers: Paper[] = [
-    {
-        id: "p1",
-        title:
-            "E-STGCN: Enhanced Spatial-Temporal Graph Convolutional Network for Road Traffic Forecasting",
-        authors: ["Oleg Golovnin", "Nikita Perevozchikov"],
-        venue: "2021 International Conference on Information Technology and Nanotechnology (ITNT)",
-        year: 2021,
-        type: "Conference",
-        publisher: "IEEE",
-        citedBy: 2,
-        topic: "Graph Neural Networks",
-        access: "locked",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p2",
-        title: "Integrating YOLO and DG-STGCN Systems for Enhanced Human Action Recognition",
-        authors: [
-            "Tzu-Shan Hsiao",
-            "Hsun-Yuan Hou",
-            "Po Ting Lin",
-            "Ching-Yuan Chang",
-            "Yung-Yao Chen",
-            "Chao-Lung Yang",
-        ],
-        venue: "2024 International Conference on Advanced Robotics and Intelligent Systems (ARIS)",
-        year: 2024,
-        type: "Conference",
-        publisher: "IEEE",
-        citedBy: 3,
-        topic: "Computer Vision",
-        access: "locked",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p3",
-        title: "STGCN-Based Spatio-Temporal Evolution Modeling of Distribution System Disaster Chains",
-        authors: ["Zongchao Yu", "Ming Wen", "Xintao Xie", "Bo Wen", "Jiaxi Li", "Haipeng Xie", "Jingqi Fan"],
-        venue: "2025 IEEE 9th Conference on Energy Internet and Energy System Integration (EI2)",
-        year: 2025,
-        type: "Conference",
-        publisher: "IEEE",
-        citedBy: 0,
-        topic: "Smart Grid",
-        access: "locked",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p4",
-        title: "Sample Paper: Transformer Architectures for Low-Resource Language Understanding",
-        authors: ["Author One", "Author Two"],
-        venue: "IEEE Transactions on Neural Networks and Learning Systems",
-        year: 2023,
-        type: "Journal",
-        publisher: "IEEE",
-        citedBy: 14,
-        topic: "Natural Language Processing",
-        access: "open",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p5",
-        title: "Sample Paper: Federated Learning for Privacy-Preserving Intrusion Detection",
-        authors: ["Author Three", "Author Four", "Author Five"],
-        venue: "IEEE Access",
-        year: 2024,
-        type: "Journal",
-        publisher: "IEEE",
-        citedBy: 9,
-        topic: "Cybersecurity",
-        access: "open",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p6",
-        title: "Sample Paper: Consensus Mechanisms for Scalable Blockchain Networks",
-        authors: ["Author Six", "Author Seven"],
-        venue: "2022 IEEE International Conference on Blockchain (Blockchain)",
-        year: 2022,
-        type: "Conference",
-        publisher: "IEEE",
-        citedBy: 6,
-        topic: "Blockchain",
-        access: "locked",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p7",
-        title: "Sample Paper: Self-Supervised Representation Learning for Medical Imaging",
-        authors: ["Author Eight", "Author Nine"],
-        venue: "IEEE Journal of Biomedical and Health Informatics",
-        year: 2025,
-        type: "Early Access",
-        publisher: "IEEE",
-        citedBy: 1,
-        topic: "Computer Vision",
-        access: "locked",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p8",
-        title: "Sample Paper: A Survey of Explainable AI in Safety-Critical Systems",
-        authors: ["Author Ten", "Author Eleven", "Author Twelve"],
-        venue: "IEEE Computational Intelligence Magazine",
-        year: 2023,
-        type: "Magazine",
-        publisher: "IEEE",
-        citedBy: 21,
-        topic: "Machine Learning",
-        access: "open",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p9",
-        title: "Sample Paper: Evolutionary Neural Architecture Search with Multi-Objective Optimization",
-        authors: ["Author Thirteen", "Author Fourteen"],
-        venue: "2024 IEEE Congress on Evolutionary Computation (CEC)",
-        year: 2024,
-        type: "Conference",
-        publisher: "IEEE",
-        citedBy: 5,
-        topic: "Neural Networks",
-        access: "locked",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-    {
-        id: "p10",
-        title: "Sample Paper: Reinforcement Learning for Adaptive Network Resource Allocation",
-        authors: ["Author Fifteen", "Author Sixteen"],
-        venue: "IEEE Transactions on Network and Service Management",
-        year: 2022,
-        type: "Journal",
-        publisher: "IEEE",
-        citedBy: 11,
-        topic: "Machine Learning",
-        access: "locked",
-        abstract: "Abstract text goes here.",
-        htmlUrl: "#",
-        pdfUrl: "#",
-    },
-];
 
 /* ----------------------------- helpers ----------------------------- */
 
@@ -331,7 +145,7 @@ function PaperCard({
 
                         {/* abstract */}
                         <p className="mt-3 line-clamp-3 text-justify font-serif text-[9px] leading-snug text-neutral-600">
-                            <span className="font-bold italic text-neutral-800">Abstract—</span>
+                            <span className="font-bold italic text-neutral-800">Abstract-</span>
                             {paper.abstract ?? "No abstract available."}
                         </p>
 
@@ -346,15 +160,8 @@ function PaperCard({
                 {/* footer fades over the text, like a page curling away */}
                 <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-linear-to-t from-white via-white/95 to-transparent px-4 pb-3 pt-10">
                     <div className="min-w-0">
-                        <p className="flex items-center gap-1 text-[10px] font-semibold text-neutral-700">
-                            {paper.access === "open" ? (
-                                <Unlock className="size-3 text-[#716f49]" aria-hidden />
-                            ) : (
-                                <Lock className="size-3 text-[#716f49]" aria-hidden />
-                            )}
-                            {paper.access === "open" ? "Open access" : "Restricted"}
-                        </p>
-                        <p className="mt-0.5 text-[9px] text-neutral-400">Cited by {paper.citedBy}</p>
+                        <p className="truncate text-sm font-semibold text-neutral-700">{paper.publisher}</p>
+                        <p className="mt-0.5 text-[10px] text-neutral-400">{paper.year}</p>
                     </div>
 
                     <div className="flex shrink-0 items-center gap-1.5">
@@ -382,18 +189,18 @@ function PaperCard({
     );
 }
 
-function MarqueeRow({
+function MarqueeRow<T extends { id: string }>({
     items,
     duration,
     offset = 0,
     reverse = false,
-    onOpen,
+    renderCard,
 }: {
-    items: Paper[];
+    items: T[];
     duration: number;
     offset?: number;
     reverse?: boolean;
-    onOpen: (p: Paper) => void;
+    renderCard: (item: T, index: number, onHoverChange: (paused: boolean) => void) => ReactNode;
 }) {
     const [paused, setPaused] = useState(false);
     // Repeat enough times to fill wide screens, then duplicate once for a seamless -50% -> 0 loop.
@@ -414,107 +221,11 @@ function MarqueeRow({
                     animationPlayState: paused ? "paused" : "running",
                 }}
             >
-                {[...base, ...base].map((p, i) => (
-                    <PaperCard
-                        key={`${p.id}-${i}`}
-                        paper={p}
-                        index={i}
-                        onOpen={onOpen}
-                        onHoverChange={setPaused}
-                    />
+                {[...base, ...base].map((item, i) => (
+                    <Fragment key={`${item.id}-${i}`}>{renderCard(item, i, setPaused)}</Fragment>
                 ))}
             </div>
         </div>
-    );
-}
-
-/* ----------------------------- detail modal ---------------------------- */
-
-function PaperModal({
-    paper,
-    presentation,
-    onClose,
-}: {
-    paper: Paper | null;
-    presentation?: Presentation;
-    onClose: () => void;
-}) {
-    const apiBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-
-    return (
-        <AnimatePresence>
-            {paper && (
-                <motion.div
-                    className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-sm"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={onClose}
-                >
-                    <motion.div
-                        onClick={(e) => e.stopPropagation()}
-                        initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 12, scale: 0.97 }}
-                        transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                        className="relative max-h-[calc(100dvh-2rem)] w-full max-w-xl overflow-y-auto overscroll-contain rounded-lg bg-white p-7 shadow-2xl"
-                    >
-                        <button
-                            onClick={onClose}
-                            aria-label="Close"
-                            className="absolute right-4 top-4 grid size-9 place-items-center rounded-lg bg-neutral-100 hover:bg-neutral-200"
-                        >
-                            <X className="size-4" />
-                        </button>
-                        <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
-                            {paper.type} · {paper.year} · {paper.publisher}
-                        </p>
-                        <h3 className="mt-2 pr-8 text-xl font-semibold leading-snug text-neutral-900">
-                            {paper.title}
-                        </h3>
-                        <p className="mt-3 text-sm text-sky-800">{paper.authors.join("; ")}</p>
-                        <p className="mt-1 text-sm text-neutral-600">{paper.venue}</p>
-                        <p className="mt-5 text-sm leading-relaxed text-neutral-700">
-                            {paper.abstract ?? "No abstract available."}
-                        </p>
-                        <div className="mt-6 flex flex-wrap gap-3">
-                            <a
-                                href={paper ? `${apiBaseUrl}/api/research/${paper.id}/pdf` : "#"}
-                                download
-                                className="flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
-                            >
-                                <FileText className="size-4" /> PDF
-                            </a>
-                            <a
-                                href={paper ? `${apiBaseUrl}/api/research/${paper.id}/preview` : "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
-                            >
-                                <BookOpen className="size-4" /> Preview
-                            </a>
-                            {paper && presentation && (
-                                <a
-                                    href={`${apiBaseUrl}/api/research/${presentation.id}/presentation`}
-                                    download
-                                    className="flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
-                                >
-                                    <FileText className="size-4" /> Presentation Slide
-                                </a>
-                            )}
-                            <a
-                                href={paper.htmlUrl ?? "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
-                            >
-                                <Link className="size-4" /> LINK
-                            </a>
-                        </div>
-                    </motion.div>
-                </motion.div>
-            )}
-        </AnimatePresence>
     );
 }
 
@@ -523,7 +234,21 @@ function PaperModal({
 export default function Resources() {
     const [active, setActive] = useState<Paper | null>(null);
     const [researchPapers, setResearchPapers] = useState<Paper[]>([]);
-    const [researchPresentations, setResearchPresentations] = useState<Presentation[]>([]);
+    const [allPresentations, setAllPresentations] = useState<Presentation[]>([]);
+    const modal = useMemo(() => {
+        if (!active) return null;
+        const apiBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+        const presentation = allPresentations.find((item) =>
+            Boolean(active.htmlUrl && active.htmlUrl === item.videoUrl)
+        );
+        return paperModal(
+            active,
+            `${apiBaseUrl}/api/research/${active.id}/pdf`,
+            `${apiBaseUrl}/api/research/${active.id}/preview`,
+            presentation,
+            presentation ? `${apiBaseUrl}/api/research/${presentation.id}/presentation` : undefined,
+        );
+    }, [active, allPresentations]);
     const [loadError, setLoadError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -533,7 +258,7 @@ export default function Resources() {
             .then(({ papers: fetchedPapers, presentations: fetchedPresentations }) => {
                 if (!activeRequest) return;
                 setResearchPapers(fetchedPapers.filter((paper) => paper.featured));
-                setResearchPresentations(fetchedPresentations);
+                setAllPresentations(fetchedPresentations);
             })
             .catch((error: unknown) => {
                 if (!activeRequest) return;
@@ -544,10 +269,6 @@ export default function Resources() {
             activeRequest = false;
         };
     }, []);
-
-    const half = Math.ceil(researchPapers.length / 2);
-    const top = researchPapers.slice(0, half);
-    const bottom = researchPapers.slice(half).concat(researchPapers.slice(0, 2));
 
     return (
         <section id="research-papers" className="relative overflow-hidden bg-[#F8FAFC] pt-20">
@@ -586,7 +307,7 @@ export default function Resources() {
                 </p>
             )}
 
-            {/* marquees (top moves left → right, bottom moves right → left) */}
+            {/* featured papers marquee (moves left → right) */}
             <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -594,17 +315,16 @@ export default function Resources() {
                 transition={{ duration: 1, delay: 0.2 }}
                 className="mt-10"
             >
-                <MarqueeRow items={top} duration={70} onOpen={setActive} />
-                <MarqueeRow items={bottom} duration={90} offset={-12} reverse onOpen={setActive} />
+                <MarqueeRow
+                    items={researchPapers}
+                    duration={70}
+                    renderCard={(paper, i, onHoverChange) => (
+                        <PaperCard paper={paper} index={i} onOpen={setActive} onHoverChange={onHoverChange} />
+                    )}
+                />
             </motion.div>
 
-            <PaperModal
-                paper={active}
-                presentation={researchPresentations.find((presentation) =>
-                    Boolean(active?.htmlUrl && active.htmlUrl === presentation.videoUrl)
-                )}
-                onClose={() => setActive(null)}
-            />
+            <DetailModal data={modal} onClose={() => setActive(null)} />
         </section>
     );
 }

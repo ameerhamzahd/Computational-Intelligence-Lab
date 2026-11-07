@@ -302,7 +302,7 @@ function StatsRow() {
             <div key={label} className="flex flex-col items-center">
               <span className="text-2xl font-extrabold text-[#716f49] sm:text-3xl">
                 {value === undefined ? (
-                  "—"
+                  "-"
                 ) : inView ? (
                   <CountUp
                     start={0}

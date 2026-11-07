@@ -21,19 +21,19 @@ function AdminStatCardsSkeleton({ count = 4 }: { count?: number }) {
             {Array.from({ length: count }).map((_, index) => (
                 <Card
                     key={index}
-                    className="rounded-[18px] border border-white/60 bg-[#F4F3EE]/95"
+                    className="rounded-lg border border-white/60 bg-[#F4F3EE]/95"
                 >
                     <CardContent className="flex flex-col p-5">
                         <div className="flex items-start justify-between gap-3">
                             <Skeleton className="h-3 w-28 rounded" />
                         </div>
 
-                        <Skeleton className="mt-3 h-8 w-16 rounded-md" />
+                        <Skeleton className="mt-3 h-8 w-16 rounded-lg" />
 
                         <Skeleton className="mt-2 h-2.5 w-36 rounded" />
 
                         <div className="mt-auto pt-5">
-                            <Skeleton className="h-0.75 w-full rounded-full" />
+                            <Skeleton className="h-0.75 w-full rounded-lg" />
                         </div>
                     </CardContent>
                 </Card>
@@ -71,7 +71,7 @@ function AdminChipsSkeleton({ items = 4, className }: { items?: number; classNam
             {Array.from({ length: items }).map((_, index) => (
                 <Skeleton
                     key={index}
-                    className={cn("h-8 rounded-md", index % 2 === 0 ? "w-20" : "w-24")}
+                    className={cn("h-8 rounded-lg", index % 2 === 0 ? "w-20" : "w-24")}
                 />
             ))}
         </div>
@@ -104,14 +104,14 @@ function AdminCardSkeleton({
     return (
         <div
             className={cn(
-                "overflow-hidden rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]",
+                "overflow-hidden rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]",
                 className
             )}
         >
             {(title || subtitle) && (
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DEDCD3] px-5 py-4">
                     <div className="flex min-w-0 items-center gap-3">
-                        {withIcon && <Skeleton className="size-9 shrink-0 rounded-xl" />}
+                        {withIcon && <Skeleton className="size-9 shrink-0 rounded-lg" />}
 
                         <div className="min-w-0 space-y-2">
                             {title && <Skeleton className="h-4 w-44 rounded" />}
@@ -133,7 +133,7 @@ function AdminBadgeRowSkeleton({ count = 2 }: { count?: number }) {
             {Array.from({ length: count }).map((_, index) => (
                 <Skeleton
                     key={index}
-                    className={cn("h-5 rounded-full", index % 2 === 0 ? "w-20" : "w-24")}
+                    className={cn("h-5 rounded-lg", index % 2 === 0 ? "w-20" : "w-24")}
                 />
             ))}
         </div>
@@ -186,9 +186,9 @@ function AdminRowCardSkeleton({
     badges?: number;
 }) {
     return (
-        <div className="rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] p-5 sm:p-6">
+        <div className="rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] p-5 sm:p-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-                {avatar && <Skeleton className="size-12 shrink-0 rounded-xl" />}
+                {avatar && <Skeleton className="size-12 shrink-0 rounded-lg" />}
 
                 <div className="min-w-0 flex-1 space-y-3">
                     <Skeleton className="h-5 w-2/3 rounded" />
@@ -298,7 +298,7 @@ function AdminFormSkeleton() {
 function AdminPanelsSkeleton() {
     return (
         <div className="space-y-6">
-            <Card className="overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95">
+            <Card className="overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95">
                 <CardContent className="p-5">
                     <div className="flex flex-wrap items-end justify-between gap-3">
                         <div className="space-y-2">
@@ -310,7 +310,7 @@ function AdminPanelsSkeleton() {
                         <Skeleton className="h-3 w-32 rounded" />
                     </div>
 
-                    <Skeleton className="mt-6 h-72 w-full rounded-xl" />
+                    <Skeleton className="mt-6 h-72 w-full rounded-lg" />
 
                     <div className="mt-5 flex flex-wrap items-center gap-4 border-t border-[#D8D9D2] pt-4">
                         {Array.from({ length: 3 }).map((_, index) => (
@@ -325,7 +325,7 @@ function AdminPanelsSkeleton() {
             </Card>
 
             <div className={TWO_COLUMN_CLASS}>
-                <Card className="overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95">
+                <Card className="overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95">
                     <CardContent className="p-5">
                         <Skeleton className="h-2.5 w-24 rounded" />
 
@@ -337,7 +337,7 @@ function AdminPanelsSkeleton() {
                             ))}
                         </div>
 
-                        <div className="mt-6 flex items-center gap-3 rounded-xl border border-[#DEDCD3] bg-[#FBFAF7] p-4">
+                        <div className="mt-6 flex items-center gap-3 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-4">
                             <Skeleton className="size-9 shrink-0 rounded-lg" />
 
                             <div className="space-y-2">
@@ -349,7 +349,7 @@ function AdminPanelsSkeleton() {
                     </CardContent>
                 </Card>
 
-                <Card className="overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95">
+                <Card className="overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95">
                     <CardContent className="p-5">
                         <Skeleton className="h-2.5 w-24 rounded" />
 
@@ -370,7 +370,7 @@ function AdminPanelsSkeleton() {
 function AdminUsersSkeleton() {
     return (
         <div className="space-y-6">
-            <Card className="rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE]">
+            <Card className="rounded-lg border border-[#D8D5C9] bg-[#F4F3EE]">
                 <CardContent className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 xl:grid-cols-4">
                     <AdminFieldSkeleton labelWidth="w-16" />
 
@@ -400,7 +400,7 @@ function AdminComposerSkeleton() {
 
                     <div className="mt-2 grid grid-cols-3 gap-1 rounded-lg border border-[#D9D8CD] bg-[#E8E7DD] p-1">
                         {Array.from({ length: 3 }).map((_, index) => (
-                            <Skeleton key={index} className="h-12 rounded-md" />
+                            <Skeleton key={index} className="h-12 rounded-lg" />
                         ))}
                     </div>
                 </div>
@@ -448,7 +448,7 @@ function AdminListPanelSkeleton({ rows = 3 }: { rows?: number }) {
                 {Array.from({ length: rows }).map((_, index) => (
                     <div
                         key={index}
-                        className="rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] p-6"
+                        className="rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] p-6"
                     >
                         <AdminBadgeRowSkeleton count={4} />
 
@@ -507,12 +507,12 @@ function AdminAccessRequestsSkeleton() {
                 {Array.from({ length: 5 }).map((_, index) => (
                     <div
                         key={index}
-                        className="rounded-2xl border border-[#D8D5C9] bg-[#F4F3EE] p-6"
+                        className="rounded-lg border border-[#D8D5C9] bg-[#F4F3EE] p-6"
                     >
                         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                             <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-3">
-                                    <Skeleton className="h-5 w-24 rounded-full" />
+                                    <Skeleton className="h-5 w-24 rounded-lg" />
 
                                     <Skeleton className="h-3 w-32 rounded" />
                                 </div>
@@ -585,14 +585,14 @@ function AdminScheduleSkeleton() {
                     {Array.from({ length: 4 }).map((_, index) => (
                         <div
                             key={index}
-                            className="rounded-xl border border-[#D9D8CD] bg-[#FBFAF7] px-4 py-4"
+                            className="rounded-lg border border-[#D9D8CD] bg-[#FBFAF7] px-4 py-4"
                         >
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                 <div className="min-w-0 space-y-2.5">
                                     <div className="flex flex-wrap items-center gap-2">
                                         <Skeleton className="h-4 w-40 rounded" />
 
-                                        <Skeleton className="h-5 w-16 rounded-md" />
+                                        <Skeleton className="h-5 w-16 rounded-lg" />
                                     </div>
 
                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1">

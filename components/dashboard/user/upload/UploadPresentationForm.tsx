@@ -174,7 +174,7 @@ export default function UploadPresentationForm() {
   };
 
   return (
-    <Card className="w-full rounded-[20px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl"
+    <Card className="w-full rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl"
     >
       <CardContent className="p-5">
 
@@ -220,7 +220,7 @@ export default function UploadPresentationForm() {
                   }
                   placeholder="Enter presentation title"
                   required
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none transition-all focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none transition-all focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
 
@@ -238,7 +238,7 @@ export default function UploadPresentationForm() {
                   }}
                   placeholder="e.g. Seminar, Thesis, Conference"
                   required
-                  className="h-10 w-full rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                  className="h-10 w-full rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function UploadPresentationForm() {
                     setEvent(e.target.value)
                   }
                   placeholder="e.g. NeurIPS 2026, CVPR Workshop"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
               <div className="space-y-2">
@@ -274,7 +274,7 @@ export default function UploadPresentationForm() {
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   placeholder="AI, computer vision, robotics"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
             </div>
@@ -292,7 +292,7 @@ export default function UploadPresentationForm() {
                   value={presenterNames}
                   onChange={(e) => setPresenterNames(e.target.value)}
                   placeholder="Names, separated by commas"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
               <div className="space-y-2">
@@ -307,7 +307,7 @@ export default function UploadPresentationForm() {
                   value={presenterEmails}
                   onChange={(e) => setPresenterEmails(e.target.value)}
                   placeholder="Emails, separated by commas"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
             </div>
@@ -328,7 +328,7 @@ export default function UploadPresentationForm() {
                   onChange={(e) =>
                     setDate(e.target.value)
                   }
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
               <div className="space-y-2">
@@ -343,7 +343,7 @@ export default function UploadPresentationForm() {
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
                   placeholder="AI, computer vision, research"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
             </div>
@@ -365,7 +365,7 @@ export default function UploadPresentationForm() {
                   setPublicationLink(e.target.value)
                 }
                 placeholder="e.g. https://doi.org/10.1000/xyz123 or publisher page"
-                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
               />
             </div>
 
@@ -386,7 +386,7 @@ export default function UploadPresentationForm() {
                 }
                 placeholder="Provide a brief description of the presentation..."
                 rows={5}
-                className="w-full resize-none rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5 text-sm leading-relaxed text-[#252C26] placeholder:text-[#969A91] outline-none transition-all focus:border-[#B77C29] focus:ring-2 focus:ring-[#B77C29]/15"
+                className="w-full resize-none rounded-lg border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5 text-sm leading-relaxed text-[#252C26] placeholder:text-[#969A91] outline-none transition-all focus:border-[#B77C29] focus:ring-2 focus:ring-[#B77C29]/15"
               />
             </div>
 
@@ -413,7 +413,7 @@ export default function UploadPresentationForm() {
 
             <div
               {...getRootProps()}
-              className={`relative overflow-hidden rounded-[14px] border border-dashed p-7 transition-all duration-200
+              className={`relative overflow-hidden rounded-lg border border-dashed p-7 transition-all duration-200
                 ${isDragActive
                   ? `border-[#B77C29] bg-[#B77C29]/8`
                   : `border-[#C9CBC2] bg-[#ECEBE4] hover:border-[#B77C29] hover:bg-[#E9E7DE]`
@@ -426,7 +426,7 @@ export default function UploadPresentationForm() {
 
                   <div className="flex min-w-0 items-center gap-3">
                     <div
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[#ECE1C9]"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#ECE1C9]"
                     >
                       <CheckCircle
                         className="h-5 w-5 text-[#B77C29]"
@@ -449,7 +449,7 @@ export default function UploadPresentationForm() {
                   <button
                     type="button"
                     onClick={removeFile}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] text-[#85897F] transition-colors hover:bg-[#DCDDD5] hover:text-[#B85C55]"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#85897F] transition-colors hover:bg-[#DCDDD5] hover:text-[#B85C55]"
                     aria-label="Remove file"
                   >
                     <X
@@ -461,7 +461,7 @@ export default function UploadPresentationForm() {
               ) : (
                 <div className="flex flex-col items-center text-center">
 
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[12px] border border-[#D8D4C8] bg-[#E4E0D5]">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-[#D8D4C8] bg-[#E4E0D5]">
                     <FileText
                       className="h-5 w-5 text-[#B77C29]"
                       strokeWidth={1.8}
@@ -484,7 +484,7 @@ export default function UploadPresentationForm() {
                     type="button"
                     variant="outline"
                     onClick={open}
-                    className="mt-4 h-9 rounded-[9px] border-[#C9CBC2] bg-[#F4F3EE] px-4 text-xs font-medium text-[#4C5548] shadow-none hover:bg-[#E3E4DB] hover:text-[#30382F]"
+                    className="mt-4 h-9 rounded-lg border-[#C9CBC2] bg-[#F4F3EE] px-4 text-xs font-medium text-[#4C5548] shadow-none hover:bg-[#E3E4DB] hover:text-[#30382F]"
                   >
                     Browse File
                   </Button>
@@ -494,7 +494,7 @@ export default function UploadPresentationForm() {
 
             {/* Error */}
             {errorMessage && (
-              <div className="flex items-center gap-2 rounded-[9px] border border-[#E6C9C6] bg-[#F6E9E7] px-3 py-2 text-xs text-[#A84D47]">
+              <div className="flex items-center gap-2 rounded-lg border border-[#E6C9C6] bg-[#F6E9E7] px-3 py-2 text-xs text-[#A84D47]">
                 <AlertCircle
                   className="h-4 w-4 shrink-0"
                   aria-hidden
@@ -506,7 +506,7 @@ export default function UploadPresentationForm() {
 
             {/* Success */}
             {uploadStatus === "success" && (
-              <div className="flex items-center gap-2 rounded-[9px] border border-[#C8D9CB] bg-[#EAF1EB] px-3 py-2 text-xs text-[#4F8A63]">
+              <div className="flex items-center gap-2 rounded-lg border border-[#C8D9CB] bg-[#EAF1EB] px-3 py-2 text-xs text-[#4F8A63]">
                 <CheckCircle
                   className="h-4 w-4 shrink-0"
                   aria-hidden
@@ -528,7 +528,7 @@ export default function UploadPresentationForm() {
             <Button
               type="submit"
               disabled={isUploading}
-              className="h-10 rounded-[10px] bg-[#626C49] px-5 text-xs font-medium text-white shadow-[0_4px_12px_rgba(64,73,42,0.18)] transition-all hover:bg-[#535D3D] hover:shadow-[0_6px_16px_rgba(64,73,42,0.22)]disabled:opacity-60">
+              className="h-10 rounded-lg bg-[#626C49] px-5 text-xs font-medium text-white shadow-[0_4px_12px_rgba(64,73,42,0.18)] transition-all hover:bg-[#535D3D] hover:shadow-[0_6px_16px_rgba(64,73,42,0.22)]disabled:opacity-60">
               {isUploading ? (
                 <>
                   <Loader2

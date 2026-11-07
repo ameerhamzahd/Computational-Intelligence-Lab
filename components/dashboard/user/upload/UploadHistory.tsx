@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UploadHistoryRowsSkeleton } from "@/components/dashboard/skeleton-loader/UploadHistorySkeleton";
 import { confirmAction } from "@/lib/confirm";
 
 type UploadType = "paper" | "presentation";
@@ -239,7 +240,7 @@ export default function UploadHistory() {
       <div className="px-4 py-3 sm:px-6">
         {errorMessage && <p className="mb-3 rounded-lg bg-[#F6E8E8] px-3 py-2 text-xs text-[#A64A4A]">{errorMessage}</p>}
         {isLoading ? (
-          <div className="flex justify-center py-14"><Loader2 className="h-6 w-6 animate-spin text-[#656748]" /></div>
+          <UploadHistoryRowsSkeleton />
         ) : filteredUploads.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[#CFCFC2] bg-[#F7F6F1] py-14">
             <FileText className="mb-3 h-5 w-5 text-[#7A7C70]" />

@@ -172,7 +172,7 @@ export default function UploadPaperForm() {
   };
 
   return (
-    <Card className="w-full min-w-0 max-w-full overflow-hidden rounded-[20px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
+    <Card className="w-full min-w-0 max-w-full overflow-hidden rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl">
       <CardContent className="min-w-0 p-5">
         {/* Header */}
         <div className="flex items-center gap-3 pb-6">
@@ -216,7 +216,7 @@ export default function UploadPaperForm() {
                   }
                   placeholder="Enter paper title"
                   required
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none transition-all focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none transition-all focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
 
@@ -235,7 +235,7 @@ export default function UploadPaperForm() {
                   }}
                   placeholder="e.g. Machine Learning, Computer Vision"
                   required
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
             </div>
@@ -256,7 +256,7 @@ export default function UploadPaperForm() {
                   setAuthors(e.target.value)
                 }
                 placeholder="Author names, separated by commas"
-                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
               />
             </div>
 
@@ -272,7 +272,7 @@ export default function UploadPaperForm() {
                 value={authorsEmail}
                 onChange={(e) => setAuthorsEmail(e.target.value)}
                 placeholder="Emails, separated by commas"
-                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
               />
             </div>
 
@@ -289,7 +289,7 @@ export default function UploadPaperForm() {
                   value={publicationType}
                   onChange={(e) => setPublicationType(e.target.value)}
                   placeholder="e.g. journal"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
               <div className="space-y-2">
@@ -304,7 +304,7 @@ export default function UploadPaperForm() {
                   value={publicationVenue}
                   onChange={(e) => setPublicationVenue(e.target.value)}
                   placeholder="Journal or conference name"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
             </div>
@@ -326,7 +326,7 @@ export default function UploadPaperForm() {
                     setPublisher(e.target.value)
                   }
                   placeholder="e.g. IEEE, Springer, Elsevier"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
 
@@ -342,7 +342,7 @@ export default function UploadPaperForm() {
                   value={indexedIn}
                   onChange={(e) => setIndexedIn(e.target.value)}
                   placeholder="Scopus, Web of Science"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
             </div>
@@ -360,7 +360,7 @@ export default function UploadPaperForm() {
                   type="date"
                   value={publicationDate}
                   onChange={(e) => setPublicationDate(e.target.value)}
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
 
@@ -380,7 +380,7 @@ export default function UploadPaperForm() {
                     setTags(e.target.value)
                   }
                   placeholder="e.g. cnn, gnn"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                  className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
                 />
               </div>
             </div>
@@ -402,7 +402,7 @@ export default function UploadPaperForm() {
                   setPublicationLink(e.target.value)
                 }
                 placeholder="e.g. https://doi.org/10.1000/xyz123 or publisher page"
-                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
+                className="h-10 rounded-lg border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#858A69] focus-visible:ring-2 focus-visible:ring-[#858A69]/15"
               />
             </div>
 
@@ -423,14 +423,14 @@ export default function UploadPaperForm() {
                 }
                 placeholder="Provide a brief summary of your research..."
                 rows={5}
-                className="w-full resize-none rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5 text-sm leading-relaxed text-[#252C26] focus:ring-[#858A69]/15"
+                className="w-full resize-none rounded-lg border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5 text-sm leading-relaxed text-[#252C26] focus:ring-[#858A69]/15"
               />
             </div>
 
             {/* Featured */}
             <label
               htmlFor="paper-featured"
-              className="flex cursor-pointer items-start gap-3 rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5"
+              className="flex cursor-pointer items-start gap-3 rounded-lg border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5"
             >
               <input
                 id="paper-featured"
@@ -470,14 +470,14 @@ export default function UploadPaperForm() {
 
             <div
               {...getRootProps()}
-              className={`relative w-full min-w-0 max-w-full overflow-hidden rounded-[14px] border border-dashed p-7 transition-all duration-200 ${isDragActive ? `border-[#68724D] bg-[#68724D]/8` : `border-[#C9CBC2] bg-[#ECEBE4] hover:border-[#8A906F] hover:bg-[#E8E8DF]`}`}
+              className={`relative w-full min-w-0 max-w-full overflow-hidden rounded-lg border border-dashed p-7 transition-all duration-200 ${isDragActive ? `border-[#68724D] bg-[#68724D]/8` : `border-[#C9CBC2] bg-[#ECEBE4] hover:border-[#8A906F] hover:bg-[#E8E8DF]`}`}
             >
               <input {...getInputProps()} />
 
               {pdfFile ? (
                 <div className="flex w-full min-w-0 items-center justify-between gap-4">
                   <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[#DDE5D8]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#DDE5D8]">
                       <CheckCircle className="h-5 w-5 text-[#4F8A63]" strokeWidth={1.8} aria-hidden />
                     </div>
 
@@ -497,7 +497,7 @@ export default function UploadPaperForm() {
                   <button
                     type="button"
                     onClick={removeFile}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] text-[#85897F] transition-colors hover:bg-[#DCDDD5] hover:text-[#B85C55]"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#85897F] transition-colors hover:bg-[#DCDDD5] hover:text-[#B85C55]"
                     aria-label="Remove file"
                   >
                     <X
@@ -508,7 +508,7 @@ export default function UploadPaperForm() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[12px] border border-[#D5D7CE] bg-[#E2E2D9]">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-[#D5D7CE] bg-[#E2E2D9]">
                     <Upload
                       className="h-5 w-5 text-[#69734E]"
                       strokeWidth={1.8}
@@ -531,7 +531,7 @@ export default function UploadPaperForm() {
                     type="button"
                     variant="outline"
                     onClick={open}
-                    className="mt-4 h-9 rounded-[9px] border-[#C9CBC2] bg-[#F4F3EE] px-4 text-xs font-medium text-[#4C5548] shadow-none hover:bg-[#E3E4DB] hover:text-[#30382F]"
+                    className="mt-4 h-9 rounded-lg border-[#C9CBC2] bg-[#F4F3EE] px-4 text-xs font-medium text-[#4C5548] shadow-none hover:bg-[#E3E4DB] hover:text-[#30382F]"
                   >
                     Browse File
                   </Button>
@@ -542,7 +542,7 @@ export default function UploadPaperForm() {
             {/* Error */}
             {errorMessage && (
               <div
-                className="flex items-center gap-2 rounded-[9px] border border-[#E6C9C6] bg-[#F6E9E7] px-3 py-2 text-xs text-[#A84D47]"
+                className="flex items-center gap-2 rounded-lg border border-[#E6C9C6] bg-[#F6E9E7] px-3 py-2 text-xs text-[#A84D47]"
               >
                 <AlertCircle
                   className="h-4 w-4 shrink-0"
@@ -555,7 +555,7 @@ export default function UploadPaperForm() {
 
             {/* Success */}
             {uploadStatus === "success" && (
-              <div className="flex items-center gap-2 rounded-[9px] border border-[#C8D9CB] bg-[#EAF1EB] px-3 py-2 text-xs text-[#4F8A63]">
+              <div className="flex items-center gap-2 rounded-lg border border-[#C8D9CB] bg-[#EAF1EB] px-3 py-2 text-xs text-[#4F8A63]">
                 <CheckCircle
                   className="h-4 w-4 shrink-0"
                   aria-hidden

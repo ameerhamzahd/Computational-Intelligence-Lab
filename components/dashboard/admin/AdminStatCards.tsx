@@ -49,7 +49,7 @@ export default function AdminStatCards({
                 return (
                     <Card
                         key={stat.id}
-                        className="group rounded-[18px] border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5"
+                        className="group rounded-lg border border-white/60 bg-[#F4F3EE]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5"
                     >
                         <CardContent className="flex flex-col p-5">
                             <div className="flex items-start justify-between gap-3">
@@ -85,9 +85,9 @@ export default function AdminStatCards({
                             )}
 
                             <div className="mt-auto pt-5">
-                                <div className="h-0.75 w-full overflow-hidden rounded-full bg-[#DFE0DA]">
+                                <div className="h-0.75 w-full overflow-hidden rounded-lg bg-[#DFE0DA]">
                                     <div
-                                        className="h-full rounded-full transition-all duration-500 group-hover:w-[85%]"
+                                        className="h-full rounded-lg transition-all duration-500 group-hover:w-[85%]"
                                         style={{
                                             width: "45%",
                                             backgroundColor: stat.accent,

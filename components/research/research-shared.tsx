@@ -14,7 +14,6 @@ import {
     Presentation as PresentationIcon,
     Search,
     Share2,
-    Unlock,
     X,
     type LucideIcon,
 } from "lucide-react";
@@ -44,7 +43,7 @@ const tokenize = (q: string) => q.toLowerCase().split(/\s+/).filter(Boolean);
 export const presentationYear = (p: Presentation) => Number.parseInt(p.date.slice(0, 4), 10);
 
 const formatDate = (iso: string) => {
-    const d = new Date(`${iso}T00:00:00`);
+    const d = new Date(iso.includes("T") ? iso : `${iso}T00:00:00`);
     return Number.isNaN(d.getTime()) ? iso : format(d, "MMM d, yyyy");
 };
 
@@ -113,7 +112,7 @@ export function ResearchCard({
     meta,
     venue,
     abstract,
-    status,
+    publisher,
     footnote,
     thumbId,
     badge,
@@ -132,8 +131,8 @@ export function ResearchCard({
     meta: string;
     venue?: string;
     abstract?: string;
-    /** lock state shown in the footer; omit for items without access control */
-    status?: "open" | "locked";
+    /** publisher shown in the footer */
+    publisher?: string;
     footnote?: string;
     /** paper id whose PDF first page is rendered as the card face */
     thumbId?: string;
@@ -239,7 +238,7 @@ export function ResearchCard({
 
                         {/* abstract */}
                         <p className="mt-3 line-clamp-3 text-justify font-serif text-[9px] leading-snug text-neutral-600">
-                            <span className="font-bold italic text-neutral-800">Abstract—</span>
+                            <span className="font-bold italic text-neutral-800">Abstract-</span>
                             {abstract ?? "No abstract available."}
                         </p>
 
@@ -256,17 +255,10 @@ export function ResearchCard({
                 {/* footer fades over the text, like a page curling away */}
                 <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-linear-to-t from-white via-white/95 to-transparent px-4 pb-3 pt-10">
                     <div className="min-w-0">
-                        {status && (
-                            <p className="flex items-center gap-1 text-[10px] font-semibold text-neutral-700">
-                                {status === "open" ? (
-                                    <Unlock className="size-3 text-[#716f49]" aria-hidden />
-                                ) : (
-                                    <Lock className="size-3 text-[#716f49]" aria-hidden />
-                                )}
-                                {status === "open" ? "Open access" : "Restricted"}
-                            </p>
+                        {publisher && (
+                            <p className="truncate text-sm font-semibold text-neutral-700">{publisher}</p>
                         )}
-                        {footnote && <p className="mt-0.5 truncate text-[9px] text-neutral-400">{footnote}</p>}
+                        {footnote && <p className="mt-0.5 truncate text-[10px] text-neutral-400">{footnote}</p>}
                     </div>
 
                     <div className="flex shrink-0 items-center gap-1.5">
@@ -571,6 +563,7 @@ export interface ModalData {
     sub?: string;
     body: string;
     note?: string;
+    details?: { label: string; value: string }[];
     actions: { label: string; href?: string; icon: LucideIcon; primary?: boolean; download?: boolean }[];
 }
 
@@ -620,6 +613,19 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
                         {data.sub && <p className="mt-1 text-sm text-neutral-600">{data.sub}</p>}
                         <p className="mt-5 text-sm leading-relaxed text-neutral-700">{data.body}</p>
 
+                        {data.details && data.details.length > 0 && (
+                            <dl className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3 rounded-lg border border-neutral-200 bg-[#F8F8F3] p-4 text-sm sm:grid-cols-2">
+                                {data.details.map((d) => (
+                                    <div key={d.label} className="min-w-0">
+                                        <dt className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+                                            {d.label}
+                                        </dt>
+                                        <dd className="mt-0.5 wrap-break-word text-neutral-800">{d.value}</dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        )}
+
                         {data.note && (
                             <p className="mt-4 flex items-center gap-2 rounded-lg bg-[#F3F2E8] px-3.5 py-2.5 text-xs text-[#716f49]">
                                 <Lock className="size-3.5 shrink-0" />
@@ -639,9 +645,7 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
                                             {...(a.download ? { download: true } : {})}
                                             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                                             className={
-                                                a.primary
-                                                    ? "flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
-                                                    : "flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
+                                                "flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
                                             }
                                         >
                                             <AIcon className="size-4" /> {a.label}
@@ -657,6 +661,29 @@ export function DetailModal({ data, onClose }: { data: ModalData | null; onClose
     );
 }
 
+const capitalize = (value?: string) => (value ? value.charAt(0).toUpperCase() + value.slice(1) : undefined);
+
+const toDetails = (rows: [string, string | undefined][]) =>
+    rows.flatMap(([label, value]) => (value ? [{ label, value }] : []));
+
+const paperDetails = (p: Paper) =>
+    toDetails([
+        ["Type", capitalize(p.type)],
+        ["Publisher", p.publisher],
+        ["Published", p.publishedAt ? formatDate(p.publishedAt) : String(p.year)],
+        ["Topic", p.topic],
+        ["Access", p.access === "open" ? "Open access" : "Restricted"],
+        ["File size", p.fileSizeMb ? `${p.fileSizeMb} MB` : undefined],
+    ]);
+
+const presentationDetails = (p: Presentation) =>
+    toDetails([
+        ["Type", capitalize(p.type)],
+        ["Date", formatDate(p.date)],
+        ["Topic", p.topic],
+        ["File size", p.fileSizeMb ? `${p.fileSizeMb} MB` : undefined],
+    ]);
+
 export const paperModal = (
     p: Paper,
     pdfUrl = p.pdfUrl,
@@ -669,6 +696,7 @@ export const paperModal = (
     byline: p.authors.join("; "),
     sub: p.venue,
     body: p.abstract ?? "No abstract available.",
+    details: paperDetails(p),
     note: p.access === "locked" ? "Full text requires a publisher subscription or institutional access." : undefined,
     actions: [
         ...(pdfUrl ? [{ label: "PDF", href: pdfUrl, icon: FileText, primary: true, download: true }] : []),
@@ -686,6 +714,7 @@ export const presentationModal = (p: Presentation, paperPreviewUrl?: string): Mo
     byline: p.speakers.join("; "),
     sub: [p.event, p.location].filter(Boolean).join(" · "),
     body: p.abstract ?? "No abstract available.",
+    details: presentationDetails(p),
     actions: [
         ...(p.slidesUrl ? [{ label: "Slides", href: p.slidesUrl, icon: PresentationIcon, primary: true }] : []),
         ...(paperPreviewUrl ? [{ label: "Paper", href: paperPreviewUrl, icon: FileText }] : []),
