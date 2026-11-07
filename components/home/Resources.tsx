@@ -532,7 +532,7 @@ export default function Resources() {
         fetchResearch()
             .then(({ papers: fetchedPapers, presentations: fetchedPresentations }) => {
                 if (!activeRequest) return;
-                setResearchPapers(fetchedPapers);
+                setResearchPapers(fetchedPapers.filter((paper) => paper.featured));
                 setResearchPresentations(fetchedPresentations);
             })
             .catch((error: unknown) => {

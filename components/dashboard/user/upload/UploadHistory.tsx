@@ -30,6 +30,7 @@ interface UploadItem {
   upload_type: UploadType;
   metadata: Record<string, string | string[] | boolean>;
   original_filename: string;
+  mime_type: string;
   cloudinary_url: string;
   status: UploadStatus;
   file_size: number;
@@ -116,7 +117,7 @@ export default function UploadHistory() {
       title: upload.title,
       categoryOrType: upload.upload_type === "paper" ? metadataText(metadata.paper_category) : metadataText(metadata.presentation_event),
       authors: metadataText(upload.upload_type === "paper" ? metadata.authors_name : metadata.presenter_name),
-      event: metadataText(metadata.presentation_event),
+      event: metadataText(metadata.event_name ?? metadata.presentation_event),
       date: metadataText(upload.upload_type === "paper" ? metadata.publication_date : metadata.presentation_date),
       tags: metadataText(upload.upload_type === "paper" ? metadata.paper_tags : metadata.presentation_tags),
       abstractOrDescription: metadataText(metadata.paper_abstract),
@@ -147,7 +148,10 @@ export default function UploadHistory() {
   };
 
   const handleFileAction = async (upload: UploadItem, action: "preview" | "download") => {
-    if (action === "preview") {
+    const isNonPdfPresentation =
+      upload.upload_type === "presentation" && upload.mime_type !== "application/pdf";
+
+    if (action === "preview" && !isNonPdfPresentation) {
       window.open(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/research/${upload.id}/preview`,
         "_blank",
@@ -187,7 +191,7 @@ export default function UploadHistory() {
           paper_category: editing.categoryOrType, paper_tags: editing.tags, paper_url: editing.publicationLink,
         }
       : {
-          presentation_title: editing.title, presenter_name: editing.authors, presentation_event: editing.event,
+          presentation_title: editing.title, presenter_name: editing.authors, event_name: editing.event,
           presentation_date: editing.date, presentation_category: editing.categoryOrType,
           presentation_tags: editing.tags, paper_url: editing.publicationLink,
         };
@@ -263,7 +267,7 @@ export default function UploadHistory() {
                       </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => handleFileAction(upload, "preview")} title="Preview"><Eye className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => handleFileAction(upload, "preview")} title={upload.upload_type === "presentation" && upload.mime_type !== "application/pdf" ? "Download" : "Preview"}><Eye className="h-4 w-4" /></Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => handleFileAction(upload, "download")} title="Download"><Download className="h-4 w-4" /></Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => openEditor(upload)} title="Edit"><Pencil className="h-4 w-4" /></Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-[#9A6B6B]" onClick={() => handleDelete(upload.id)} title="Delete"><Trash2 className="h-4 w-4" /></Button>
@@ -289,7 +293,7 @@ export default function UploadHistory() {
               </>
             ) : (
               <>
-                <div className="space-y-2"><Label htmlFor="edit-event">Event</Label><Input id="edit-event" value={editing.event} onChange={(event) => setEditing({ ...editing, event: event.target.value })} /></div>
+                <div className="space-y-2"><Label htmlFor="edit-event">Event name</Label><Input id="edit-event" value={editing.event} onChange={(event) => setEditing({ ...editing, event: event.target.value })} /></div>
                 <div className="space-y-2"><Label htmlFor="edit-date">Date</Label><Input id="edit-date" type="date" value={editing.date} onChange={(event) => setEditing({ ...editing, date: event.target.value })} /></div>
               </>
             )}

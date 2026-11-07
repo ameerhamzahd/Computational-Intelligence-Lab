@@ -24,6 +24,8 @@ export interface ModerationSubmission {
     category: string;
     author: ModerationAuthor;
     fileUrl: string;
+    fileDownloadUrl: string;
+    mimeType: string;
     fileSizeMb: number;
     submittedAt: string;
     status: ModerationStatus;

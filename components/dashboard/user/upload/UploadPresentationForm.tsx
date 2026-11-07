@@ -27,7 +27,6 @@ export default function UploadPresentationForm() {
   const [tags, setTags] = useState("");
   const [description, setDescription] = useState("");
   const [publicationLink, setPublicationLink] = useState("");
-  const [featured, setFeatured] = useState(false);
   const [file, setFile] = useState<File | null>(null);
 
   const [isUploading, setIsUploading] = useState(false);
@@ -128,10 +127,10 @@ export default function UploadPresentationForm() {
       formData.append("presenter_email", presenterEmails);
       formData.append("presentation_category", category);
       formData.append("presentation_event", type);
+      formData.append("event_name", event);
       formData.append("presentation_date", date);
       formData.append("presentation_tags", tags);
       formData.append("paper_url", trimmedPublicationLink);
-      formData.append("is_featured", String(featured));
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/presentations/upload`,
@@ -162,7 +161,6 @@ export default function UploadPresentationForm() {
       setPresenterEmails("");
       setTags("");
       setDescription("");
-      setFeatured(false);
       setFile(null);
       window.dispatchEvent(new Event("uploads:changed"));
     } catch (error) {
@@ -245,20 +243,40 @@ export default function UploadPresentationForm() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label
-                htmlFor="presentation-category"
-                className="text-xs font-semibold text-[#565D54]"
-              >
-                Presentation Category
-              </Label>
-              <Input
-                id="presentation-category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                placeholder="AI, computer vision, robotics"
-                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
-              />
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="pres-event"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Event name
+                </Label>
+
+                <Input
+                  id="pres-event"
+                  value={event}
+                  onChange={(e) =>
+                    setEvent(e.target.value)
+                  }
+                  placeholder="e.g. NeurIPS 2026, CVPR Workshop"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="presentation-category"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Presentation Category
+                </Label>
+                <Input
+                  id="presentation-category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  placeholder="AI, computer vision, robotics"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -294,28 +312,7 @@ export default function UploadPresentationForm() {
               </div>
             </div>
 
-            {/* Event + Date */}
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="pres-event"
-                  className="text-xs font-semibold text-[#565D54]"
-                >
-                  Event
-                </Label>
-
-                <Input
-                  id="pres-event"
-                  value={event}
-                  onChange={(e) =>
-                    setEvent(e.target.value)
-                  }
-                  placeholder="e.g. NeurIPS 2026, CVPR Workshop"
-                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
-                />
-              </div>
-
               <div className="space-y-2">
                 <Label
                   htmlFor="pres-date"
@@ -334,22 +331,21 @@ export default function UploadPresentationForm() {
                   className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
                 />
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label
-                htmlFor="pres-tags"
-                className="text-xs font-semibold text-[#565D54]"
-              >
-                Presentation Tags
-              </Label>
-              <Input
-                id="pres-tags"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                placeholder="AI, computer vision, research"
-                className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
-              />
+              <div className="space-y-2">
+                <Label
+                  htmlFor="pres-tags"
+                  className="text-xs font-semibold text-[#565D54]"
+                >
+                  Presentation Tags
+                </Label>
+                <Input
+                  id="pres-tags"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  placeholder="AI, computer vision, research"
+                  className="h-10 rounded-[10px] border-[#D7D8D0] bg-[#EBEAE3] text-sm text-[#252C26] placeholder:text-[#969A91] shadow-none focus-visible:border-[#B77C29] focus-visible:ring-2 focus-visible:ring-[#B77C29]/15"
+                />
+              </div>
             </div>
 
             {/* Publication Link */}
@@ -394,27 +390,6 @@ export default function UploadPresentationForm() {
               />
             </div>
 
-            {/* Featured */}
-            <label
-              htmlFor="pres-featured"
-              className="flex cursor-pointer items-start gap-3 rounded-[10px] border border-[#D7D8D0] bg-[#EBEAE3] px-3 py-2.5"
-            >
-              <input
-                id="pres-featured"
-                type="checkbox"
-                checked={featured}
-                onChange={(e) => setFeatured(e.target.checked)}
-                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#626C49]"
-              />
-              <span>
-                <span className="block text-xs font-semibold text-[#565D54]">
-                  Show as featured
-                </span>
-                <span className="block text-[11px] text-[#85897F]">
-                  Highlight this presentation as featured.
-                </span>
-              </span>
-            </label>
           </div>
 
           {/* Divider */}

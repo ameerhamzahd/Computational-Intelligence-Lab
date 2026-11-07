@@ -3,6 +3,7 @@ export type PaperType = "Conference" | "Journal" | "Magazine" | "Early Access";
 export interface Paper {
     id: string;
     title: string;
+    featured: boolean;
     authors: string[];
     venue: string;
     year: number;

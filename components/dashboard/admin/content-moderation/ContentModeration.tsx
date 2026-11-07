@@ -26,6 +26,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 import { fetchModerationQueue, submitModerationDecision } from "@/lib/api/admin/moderation";
+import { getAuthToken } from "@/lib/api/admin/client";
 import { confirmAction } from "@/lib/confirm";
 import { useDashboardLoading } from "@/lib/hooks/use-dashboard-loading";
 import type {
@@ -70,6 +71,10 @@ function formatDate(value: string) {
     });
 }
 
+function isPdf(mimeType: string) {
+    return mimeType === "application/pdf";
+}
+
 const SEARCH_FIELD =
     "h-11 w-full rounded-lg border border-[#D7D4C9] bg-[#FBFAF7] pl-10 pr-4 text-sm text-[#2D2D27] shadow-none " +
     "placeholder:text-[#A5A297] transition-colors focus-visible:border-[#716F49] focus-visible:ring-1 " +
@@ -91,6 +96,33 @@ export default function ContentModeration() {
     }, []);
 
     const { isLoading, refresh } = useDashboardLoading(loadQueue);
+
+    const downloadSubmission = async (submission: ModerationSubmission) => {
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}${submission.fileDownloadUrl}`,
+                {
+                    headers: {
+                        ...(getAuthToken()
+                            ? { Authorization: `Bearer ${getAuthToken()}` }
+                            : {}),
+                    },
+                }
+            );
+            if (!response.ok) throw new Error("Unable to download the presentation.");
+
+            const fileUrl = URL.createObjectURL(await response.blob());
+            const link = document.createElement("a");
+            link.href = fileUrl;
+            link.download = submission.title;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.setTimeout(() => URL.revokeObjectURL(fileUrl), 60_000);
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : "Unable to download the presentation.");
+        }
+    };
 
     const counts = useMemo(
         () => ({
@@ -336,16 +368,26 @@ export default function ContentModeration() {
 
                                                         <span>{submission.fileSizeMb} MB</span>
 
-                                                        <a
-                                                            href={submission.fileUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-center gap-1 text-[#716F49] hover:underline"
-                                                        >
-                                                            <Eye className="h-3.5 w-3.5" aria-hidden />
-
-                                                            Preview file
-                                                        </a>
+                                                        {isPdf(submission.mimeType) ? (
+                                                            <a
+                                                                href={submission.fileUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex items-center gap-1 text-[#716F49] hover:underline"
+                                                            >
+                                                                <Eye className="h-3.5 w-3.5" aria-hidden />
+                                                                Preview file
+                                                            </a>
+                                                        ) : (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => downloadSubmission(submission)}
+                                                                className="flex items-center gap-1 text-[#716F49] hover:underline"
+                                                            >
+                                                                <Eye className="h-3.5 w-3.5" aria-hidden />
+                                                                Download file
+                                                            </button>
+                                                        )}
                                                     </div>
 
                                                     {submission.reviewNote && (
