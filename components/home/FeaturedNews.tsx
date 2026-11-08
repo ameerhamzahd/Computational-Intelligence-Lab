@@ -31,6 +31,7 @@ const SECTIONS: {
     blurb: string;
     icon: typeof Megaphone;
     badgeClass: string;
+    empty: string;
 }[] = [
         {
             kind: "announcement",
@@ -38,6 +39,7 @@ const SECTIONS: {
             blurb: "Calls for papers and conference updates",
             icon: Megaphone,
             badgeClass: "bg-[#E4E6DC] text-[#5C6446]",
+            empty: "No pinned conferences right now. Browse all news for the latest.",
         },
         {
             kind: "notice",
@@ -45,6 +47,7 @@ const SECTIONS: {
             blurb: "Quick, at-a-glance lab updates",
             icon: StickyNote,
             badgeClass: "bg-[#ECE7DA] text-[#8A6420]",
+            empty: "No pinned notices right now. Browse all news for the latest.",
         },
         {
             kind: "seminar",
@@ -52,6 +55,7 @@ const SECTIONS: {
             blurb: "Upcoming talks and sessions",
             icon: Presentation,
             badgeClass: "bg-[#E3E8F0] text-[#5579A6]",
+            empty: "No pinned seminars right now. Browse all news for the latest.",
         },
     ];
 
@@ -71,12 +75,12 @@ function fmt(value: string | undefined, pattern: string) {
     return Number.isNaN(d.getTime()) ? value : format(d, pattern);
 }
 
-/** Published only; pinned first, then newest → oldest. */
+/** Published and pinned only; newest → oldest. */
 function featuredSort(items: Announcement[]) {
     return items
-        .filter((n) => n.status === "published")
+        .filter((n) => n.status === "published" && n.pinned)
         .slice()
-        .sort((a, b) => Number(b.pinned) - Number(a.pinned) || time(b) - time(a));
+        .sort((a, b) => time(b) - time(a));
 }
 
 const noticeHref = (id: string) => `/news?notice=${encodeURIComponent(id)}`;
@@ -235,7 +239,7 @@ export default function FeaturedNews({
         return SECTIONS.map((section) => {
             const all = sorted.filter((n) => n.kind === section.kind);
             return { ...section, total: all.length, items: all.slice(0, perColumn) };
-        }).filter((c) => c.items.length > 0);
+        });
     }, [source, perColumn]);
 
     // One open card per column; the first card of each column starts open.
@@ -245,12 +249,6 @@ export default function FeaturedNews({
 
     const toggle = (kind: AnnouncementKind, id: string) =>
         setOpenIds((cur) => ({ ...cur, [kind]: cur[kind] === id ? null : id }));
-
-    // Nothing published - don't render an empty section on the home page.
-    if (columns.length === 0) return null;
-
-    const gridCols =
-        columns.length === 1 ? "lg:grid-cols-1 lg:max-w-xl lg:mx-auto" : columns.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3";
 
     return (
         <section id="news" className="relative overflow-hidden bg-[#F8FAFC] pt-20">
@@ -279,7 +277,7 @@ export default function FeaturedNews({
 
                 {/* columns */}
                 <div className="mx-auto mt-14 max-w-7xl px-4 sm:px-6">
-                    <div className={`grid grid-cols-1 items-start gap-8 ${gridCols}`}>
+                    <div className={`grid grid-cols-1 items-start gap-8 lg:grid-cols-3`}>
                         {columns.map((col) => (
                             <div key={col.kind} className="min-w-0">
                                 <div className="mb-4 flex items-center justify-between gap-3 border-b border-neutral-200/80 pb-3">
@@ -292,17 +290,23 @@ export default function FeaturedNews({
                                     </span>
                                 </div>
 
-                                <div className="space-y-3">
-                                    {col.items.map((item, i) => (
-                                        <FeaturedCard
-                                            key={item.id}
-                                            item={item}
-                                            index={i}
-                                            open={openIds[col.kind] === item.id}
-                                            onToggle={() => toggle(col.kind, item.id)}
-                                        />
-                                    ))}
-                                </div>
+                                {col.items.length === 0 ? (
+                                    <p className="rounded-lg border border-dashed border-neutral-300 bg-white/60 px-4 py-10 text-center text-sm text-neutral-500">
+                                        {col.empty}
+                                    </p>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {col.items.map((item, i) => (
+                                            <FeaturedCard
+                                                key={item.id}
+                                                item={item}
+                                                index={i}
+                                                open={openIds[col.kind] === item.id}
+                                                onToggle={() => toggle(col.kind, item.id)}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
