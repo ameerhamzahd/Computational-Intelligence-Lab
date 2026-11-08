@@ -131,6 +131,7 @@ export default function UploadPresentationForm() {
       formData.append("presentation_date", date);
       formData.append("presentation_tags", tags);
       formData.append("paper_url", trimmedPublicationLink);
+      formData.append("presentation_description", description);
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/presentations/upload`,

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { MouseEvent, ReactNode } from "react";
 import { fetchResearch } from "@/lib/api/research";
 import { loadPdfThumb } from "@/lib/pdf-thumb";
@@ -14,6 +14,9 @@ import {
 } from "lucide-react";
 
 /* ----------------------------- helpers ----------------------------- */
+
+/** Up to this many featured papers are shown as static cards; more scroll as a marquee. */
+const MARQUEE_THRESHOLD = 4;
 
 const TINTS = [
     { from: "#F3F2E8", to: "#A3A171" }, // olive
@@ -204,6 +207,8 @@ function MarqueeRow<T extends { id: string }>({
 }) {
     const [paused, setPaused] = useState(false);
     // Repeat enough times to fill wide screens, then duplicate once for a seamless -50% -> 0 loop.
+    // Spacing is a per-item padding (not flex gap / track padding) so the track is exactly
+    // two identical halves; otherwise the -50% shift lands off by the gap and the loop jumps.
     const base = [...items, ...items, ...items];
     return (
         <div
@@ -214,7 +219,7 @@ function MarqueeRow<T extends { id: string }>({
             }}
         >
             <div
-                className={`rp-marquee flex w-max gap-16 px-4${reverse ? " rp-marquee-rtl" : ""}`}
+                className={`rp-marquee flex w-max${reverse ? " rp-marquee-rtl" : ""}`}
                 style={{
                     animationDuration: `${duration}s`,
                     animationDelay: `${offset}s`,
@@ -222,7 +227,9 @@ function MarqueeRow<T extends { id: string }>({
                 }}
             >
                 {[...base, ...base].map((item, i) => (
-                    <Fragment key={`${item.id}-${i}`}>{renderCard(item, i, setPaused)}</Fragment>
+                    <div key={`${item.id}-${i}`} className="shrink-0 pr-16">
+                        {renderCard(item, i, setPaused)}
+                    </div>
                 ))}
             </div>
         </div>
@@ -315,13 +322,27 @@ export default function Resources() {
                 transition={{ duration: 1, delay: 0.2 }}
                 className="mt-10"
             >
-                <MarqueeRow
-                    items={researchPapers}
-                    duration={70}
-                    renderCard={(paper, i, onHoverChange) => (
-                        <PaperCard paper={paper} index={i} onOpen={setActive} onHoverChange={onHoverChange} />
-                    )}
-                />
+                {researchPapers.length > MARQUEE_THRESHOLD ? (
+                    <MarqueeRow
+                        items={researchPapers}
+                        duration={70}
+                        renderCard={(paper, i, onHoverChange) => (
+                            <PaperCard paper={paper} index={i} onOpen={setActive} onHoverChange={onHoverChange} />
+                        )}
+                    />
+                ) : (
+                    <div className="flex flex-wrap justify-center gap-x-16 gap-y-12 px-4 py-8">
+                        {researchPapers.map((paper, i) => (
+                            <PaperCard
+                                key={paper.id}
+                                paper={paper}
+                                index={i}
+                                onOpen={setActive}
+                                onHoverChange={() => {}}
+                            />
+                        ))}
+                    </div>
+                )}
             </motion.div>
 
             <DetailModal data={modal} onClose={() => setActive(null)} />

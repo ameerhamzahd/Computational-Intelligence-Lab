@@ -42,23 +42,50 @@ interface EditState {
   id: string;
   type: UploadType;
   title: string;
-  categoryOrType: string;
-  authors: string;
-  event: string;
-  date: string;
-  tags: string;
-  abstractOrDescription: string;
-  publicationLink: string;
+  /** Keyed by the same metadata/payload keys the upload forms send. */
+  fields: Record<string, string>;
+  featured: boolean;
 }
 
-const PAPER_CATEGORIES = [
-  "Machine Learning", "Computer Vision", "NLP", "Graph Neural Networks",
-  "Optimization", "Robotics", "Reinforcement Learning", "Other",
+interface EditField {
+  key: string;
+  label: string;
+  type?: "text" | "date" | "url" | "textarea";
+  required?: boolean;
+  full?: boolean;
+  placeholder?: string;
+}
+
+// Mirrors the fields collected by UploadPaperForm (title and "featured" are handled separately).
+const PAPER_FIELDS: EditField[] = [
+  { key: "paper_category", label: "Paper Category", required: true, placeholder: "e.g. Machine Learning" },
+  { key: "authors_name", label: "Authors", placeholder: "Author names, separated by commas" },
+  { key: "authors_email", label: "Author Emails", placeholder: "Emails, separated by commas" },
+  { key: "publication_type", label: "Publication Type", placeholder: "e.g. journal" },
+  { key: "publication_venue", label: "Publication Venue", placeholder: "Journal or conference name" },
+  { key: "publisher", label: "Publisher", placeholder: "e.g. IEEE, Springer, Elsevier" },
+  { key: "indexed_in", label: "Indexed In", placeholder: "Scopus, Web of Science" },
+  { key: "publication_date", label: "Publication Date", type: "date" },
+  { key: "paper_tags", label: "Research Tags", placeholder: "e.g. cnn, gnn" },
+  { key: "paper_url", label: "Publication Link", type: "url", full: true },
+  { key: "paper_abstract", label: "Abstract", type: "textarea", full: true },
 ];
-const PRESENTATION_TYPES = [
-  "Conference Talk", "Workshop", "Seminar", "Poster Session", "Demo Session",
-  "Tutorial", "Keynote", "Panel Discussion", "Other",
+
+// Mirrors the fields collected by UploadPresentationForm (title is handled separately).
+const PRESENTATION_FIELDS: EditField[] = [
+  { key: "presentation_event", label: "Presentation Event", required: true, placeholder: "e.g. Seminar, Thesis, Conference" },
+  { key: "event_name", label: "Event Name", placeholder: "e.g. NeurIPS 2026" },
+  { key: "presentation_category", label: "Presentation Category", placeholder: "AI, computer vision, robotics" },
+  { key: "presenter_name", label: "Presenter Names", placeholder: "Names, separated by commas" },
+  { key: "presenter_email", label: "Presenter Emails", placeholder: "Emails, separated by commas" },
+  { key: "presentation_date", label: "Presentation Date", type: "date" },
+  { key: "presentation_tags", label: "Presentation Tags", placeholder: "AI, computer vision, research" },
+  { key: "paper_url", label: "Publication Link", type: "url", full: true },
+  { key: "presentation_description", label: "Description", type: "textarea", full: true },
 ];
+
+const fieldsFor = (type: UploadType) => (type === "paper" ? PAPER_FIELDS : PRESENTATION_FIELDS);
+const INPUT_CLASS = "h-10 w-full rounded-lg border border-[#D7D8D0] bg-white px-3 text-sm";
 
 function authHeaders(): Record<string, string> {
   const token = localStorage.getItem("token");
@@ -112,17 +139,17 @@ export default function UploadHistory() {
 
   const openEditor = (upload: UploadItem) => {
     const metadata = upload.metadata ?? {};
+    const fields: Record<string, string> = {};
+    fieldsFor(upload.upload_type).forEach(({ key }) => {
+      fields[key] = metadataText(metadata[key]);
+    });
+    const featured = metadata.is_featured ?? metadata.featured;
     setEditing({
       id: upload.id,
       type: upload.upload_type,
       title: upload.title,
-      categoryOrType: upload.upload_type === "paper" ? metadataText(metadata.paper_category) : metadataText(metadata.presentation_event),
-      authors: metadataText(upload.upload_type === "paper" ? metadata.authors_name : metadata.presenter_name),
-      event: metadataText(metadata.event_name ?? metadata.presentation_event),
-      date: metadataText(upload.upload_type === "paper" ? metadata.publication_date : metadata.presentation_date),
-      tags: metadataText(upload.upload_type === "paper" ? metadata.paper_tags : metadata.presentation_tags),
-      abstractOrDescription: metadataText(metadata.paper_abstract),
-      publicationLink: metadataText(metadata.paper_url),
+      fields,
+      featured: featured === true || featured === "true",
     });
   };
 
@@ -187,15 +214,8 @@ export default function UploadHistory() {
     setIsSaving(true);
     setErrorMessage("");
     const body = editing.type === "paper"
-      ? {
-          paper_title: editing.title, authors_name: editing.authors, paper_abstract: editing.abstractOrDescription,
-          paper_category: editing.categoryOrType, paper_tags: editing.tags, paper_url: editing.publicationLink,
-        }
-      : {
-          presentation_title: editing.title, presenter_name: editing.authors, event_name: editing.event,
-          presentation_date: editing.date, presentation_category: editing.categoryOrType,
-          presentation_tags: editing.tags, paper_url: editing.publicationLink,
-        };
+      ? { paper_title: editing.title, ...editing.fields, is_featured: editing.featured }
+      : { presentation_title: editing.title, ...editing.fields };
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/uploads/${editing.id}`, {
@@ -286,20 +306,30 @@ export default function UploadHistory() {
           <form className="max-h-[90vh] w-full max-w-xl space-y-4 overflow-y-auto rounded-lg bg-[#F4F3EE] p-6 shadow-2xl" onSubmit={saveEdit} onClick={(event) => event.stopPropagation()}>
             <div><h2 className="text-lg font-semibold text-[#292D25]">Edit {editing.type === "paper" ? "paper" : "presentation"}</h2><p className="text-xs text-[#7A7C70]">Update the uploaded file details.</p></div>
             <div className="space-y-2"><Label htmlFor="edit-title">Title</Label><Input id="edit-title" value={editing.title} onChange={(event) => setEditing({ ...editing, title: event.target.value })} required /></div>
-            <div className="space-y-2"><Label htmlFor="edit-category">{editing.type === "paper" ? "Category" : "Presentation type"}</Label><select id="edit-category" className="h-10 w-full rounded-lg border border-[#D7D8D0] bg-white px-3 text-sm" value={editing.categoryOrType} onChange={(event) => setEditing({ ...editing, categoryOrType: event.target.value })} required><option value="">Select one</option>{(editing.type === "paper" ? PAPER_CATEGORIES : PRESENTATION_TYPES).map((option) => <option key={option} value={option}>{option}</option>)}</select></div>
-            {editing.type === "paper" ? (
-              <>
-                <div className="space-y-2"><Label htmlFor="edit-authors">Authors</Label><Input id="edit-authors" value={editing.authors} onChange={(event) => setEditing({ ...editing, authors: event.target.value })} /></div>
-                <div className="space-y-2"><Label htmlFor="edit-tags">Tags</Label><Input id="edit-tags" value={editing.tags} onChange={(event) => setEditing({ ...editing, tags: event.target.value })} /></div>
-              </>
-            ) : (
-              <>
-                <div className="space-y-2"><Label htmlFor="edit-event">Event name</Label><Input id="edit-event" value={editing.event} onChange={(event) => setEditing({ ...editing, event: event.target.value })} /></div>
-                <div className="space-y-2"><Label htmlFor="edit-date">Date</Label><Input id="edit-date" type="date" value={editing.date} onChange={(event) => setEditing({ ...editing, date: event.target.value })} /></div>
-              </>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {fieldsFor(editing.type).map((field) => {
+                const id = `edit-${field.key}`;
+                const value = editing.fields[field.key] ?? "";
+                const onChange = (next: string) =>
+                  setEditing({ ...editing, fields: { ...editing.fields, [field.key]: next } });
+                return (
+                  <div key={field.key} className={`space-y-2 ${field.full ? "sm:col-span-2" : ""}`}>
+                    <Label htmlFor={id}>{field.label}{field.required && <span className="ml-1 text-[#B85C55]">*</span>}</Label>
+                    {field.type === "textarea" ? (
+                      <textarea id={id} rows={4} className="w-full resize-none rounded-lg border border-[#D7D8D0] bg-white px-3 py-2 text-sm" value={value} placeholder={field.placeholder} onChange={(event) => onChange(event.target.value)} required={field.required} />
+                    ) : (
+                      <input id={id} type={field.type ?? "text"} className={INPUT_CLASS} value={value} placeholder={field.placeholder} onChange={(event) => onChange(event.target.value)} required={field.required} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {editing.type === "paper" && (
+              <label htmlFor="edit-featured" className="flex cursor-pointer items-start gap-3 rounded-lg border border-[#D7D8D0] bg-white px-3 py-2.5">
+                <input id="edit-featured" type="checkbox" checked={editing.featured} onChange={(event) => setEditing({ ...editing, featured: event.target.checked })} className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#626C49]" />
+                <span><span className="block text-xs font-semibold text-[#565D54]">Show as featured</span><span className="block text-[11px] text-[#85897F]">Highlight this paper as featured.</span></span>
+              </label>
             )}
-            <div className="space-y-2"><Label htmlFor="edit-description">{editing.type === "paper" ? "Abstract" : "Description"}</Label><textarea id="edit-description" className="min-h-24 w-full rounded-lg border border-[#D7D8D0] bg-white px-3 py-2 text-sm" value={editing.abstractOrDescription} onChange={(event) => setEditing({ ...editing, abstractOrDescription: event.target.value })} /></div>
-            <div className="space-y-2"><Label htmlFor="edit-link">Publication link</Label><Input id="edit-link" type="url" value={editing.publicationLink} onChange={(event) => setEditing({ ...editing, publicationLink: event.target.value })} /></div>
             <div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setEditing(null)} disabled={isSaving}>Cancel</Button><Button type="submit" disabled={isSaving}>{isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Save changes</Button></div>
           </form>
         </div>
