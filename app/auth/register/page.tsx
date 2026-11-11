@@ -93,7 +93,7 @@ export default function RegisterForm() {
                     institution: formData.institution,
                     role: formData.role,
                 });
-                toast.success("Account created. You can now sign in.");
+                toast.success("Verification email sent. Check your inbox to complete registration.");
                 router.push("/auth/login");
             } catch (error) {
                 const message =
@@ -232,10 +232,10 @@ export default function RegisterForm() {
                     {isSubmitting ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Creating account...
+                            Sending verification email...
                         </>
                     ) : (
-                        "Create Account"
+                        "Register"
                     )}
                 </Button>
 

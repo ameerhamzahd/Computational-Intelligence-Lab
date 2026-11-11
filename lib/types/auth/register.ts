@@ -58,3 +58,9 @@ export interface RegisterApiResponse {
     message: string;
     userId?: string;
 }
+
+export interface VerifyRegistrationApiResponse {
+    success: boolean;
+    message: string;
+    userId?: string;
+}
