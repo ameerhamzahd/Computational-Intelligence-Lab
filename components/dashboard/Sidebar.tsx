@@ -78,7 +78,7 @@ export default function Sidebar() {
     const pathname = usePathname();
     const [collapsed, setCollapsed] = useState(false);
     const [paperAccessOpen, setPaperAccessOpen] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [appRole, setAppRole] = useState<string | null>(null);
     const [mobileSheet, setMobileSheet] = useState<null | "paper-access" | "admin">(null);
 
     const isPaperAccessActive = PAPER_ACCESS_ITEMS.some((item) => pathname === item.href);
@@ -87,12 +87,21 @@ export default function Sidebar() {
     useEffect(() => {
         const syncRole = () => {
             const user = getStoredUser();
-            setIsAdmin(Boolean(user && "appRole" in user && user.appRole === "ADMIN"));
+            setAppRole(user && "appRole" in user && typeof user.appRole === "string" ? user.appRole : null);
         };
         syncRole();
         window.addEventListener(AUTH_CHANGED_EVENT, syncRole);
         return () => window.removeEventListener(AUTH_CHANGED_EVENT, syncRole);
     }, []);
+
+    const isAdmin = appRole === "ADMIN";
+    const canManageUploads = isAdmin || appRole === "MEMBER";
+    const visiblePaperAccessItems = canManageUploads
+        ? PAPER_ACCESS_ITEMS
+        : PAPER_ACCESS_ITEMS.filter((item) => item.href !== "/dashboard/paper-access/received-requests");
+    const visibleNavItems = canManageUploads
+        ? NAV_ITEMS
+        : NAV_ITEMS.filter((item) => item.href !== "/dashboard/upload" && item.href !== "/dashboard/my-papers");
 
     const expandIfCollapsed = () => {
         if (collapsed) setCollapsed(false);
@@ -145,7 +154,7 @@ export default function Sidebar() {
                 </div>
 
                 <nav className="thin-scrollbar-light flex w-full flex-col gap-1.5 overflow-y-auto">
-                    {NAV_ITEMS.map((item) => {
+                    {visibleNavItems.map((item) => {
                         const Icon = item.icon;
                         const isActive = pathname === item.href;
 
@@ -169,7 +178,7 @@ export default function Sidebar() {
                     <CollapsibleNavGroup
                         label={PAPER_ACCESS_LABEL}
                         icon={FolderOpen}
-                        items={PAPER_ACCESS_ITEMS}
+                        items={visiblePaperAccessItems}
                         open={paperAccessOpen}
                         onOpenChange={(open) => {
                             expandIfCollapsed();
@@ -221,7 +230,7 @@ export default function Sidebar() {
             </aside>
 
             <nav className="fixed bottom-2 left-2 right-2 z-50 flex items-stretch justify-around gap-1 border border-white/10 bg-[#716f49]/80 shadow-2xl px-2 py-2 backdrop-blur-xl rounded-lg lg:hidden">
-                {NAV_ITEMS.map((item) => {
+                {visibleNavItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
 
@@ -294,7 +303,7 @@ export default function Sidebar() {
             <MobileNavSheet
                 open={mobileSheet === "paper-access"}
                 title={PAPER_ACCESS_LABEL}
-                groups={[{ label: PAPER_ACCESS_LABEL, icon: FolderOpen, items: PAPER_ACCESS_ITEMS }]}
+                groups={[{ label: PAPER_ACCESS_LABEL, icon: FolderOpen, items: visiblePaperAccessItems }]}
                 onClose={() => setMobileSheet(null)}
             />
 

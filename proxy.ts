@@ -11,6 +11,9 @@ import type { AppRole } from "@/lib/types/admin/role";
 // Route prefixes that require a specific app role. Anything else under /dashboard only needs a session.
 const ROLE_PROTECTED_ROUTES: { prefix: string; roles: AppRole[] }[] = [
     { prefix: "/dashboard/admin", roles: ["ADMIN"] },
+    { prefix: "/dashboard/upload", roles: ["MEMBER", "ADMIN"] },
+    { prefix: "/dashboard/my-papers", roles: ["MEMBER", "ADMIN"] },
+    { prefix: "/dashboard/paper-access/received-requests", roles: ["MEMBER", "ADMIN"] },
 ];
 
 function matchesPrefix(pathname: string, prefix: string) {

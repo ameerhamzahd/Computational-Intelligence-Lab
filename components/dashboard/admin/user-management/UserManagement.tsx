@@ -79,6 +79,10 @@ const APP_ROLE_CONFIG: Record<AppRole, { label: string; badgeClass: string }> = 
         label: "User",
         badgeClass: "bg-[#ECEBE4] text-[#5E5D50] border border-[#DEDCD3]",
     },
+    MEMBER: {
+        label: "Member",
+        badgeClass: "bg-[#EAF0EA] text-[#356044] border border-[#D8E2D9]",
+    },
 };
 
 const SORT_LABELS: Record<ManagedUserSort, string> = {
@@ -234,7 +238,7 @@ export default function UserManagement() {
 
             toast.success(
                 changes.appRole
-                    ? `${user.name} is now an ${changes.appRole === "ADMIN" ? "administrator" : "user"}.`
+                    ? `${user.name} is now a ${changes.appRole === "ADMIN" ? "administrator" : changes.appRole === "MEMBER" ? "member" : "user"}.`
                     : changes.status === "active"
                         ? `${user.name} has been reinstated.`
                         : `${user.name} has been suspended.`
@@ -637,8 +641,8 @@ export default function UserManagement() {
                                                                 onClick={() =>
                                                                     patchUser(
                                                                         user,
-                                                                        { appRole: "USER" },
-                                                                        { title: "Remove admin rights?", text: `Remove admin rights from ${user.name}?`, confirmText: "Remove admin", icon: "warning", tone: "danger" }
+                                                                        { appRole: "MEMBER" },
+                                                                        { title: "Remove admin rights?", text: `Remove admin rights from ${user.name}? They will keep member access.`, confirmText: "Remove admin", icon: "warning", tone: "danger" }
                                                                     )
                                                                 }
                                                                 className="rounded-lg text-[#6B4E86] hover:bg-[#F0EAF3]"
@@ -648,30 +652,55 @@ export default function UserManagement() {
                                                                     aria-hidden
                                                                 />
 
-                                                                Demote
+                                                                Make member
                                                             </Button>
                                                         ) : (
-                                                            <Button
-                                                                type="button"
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                disabled={isBusy}
-                                                                onClick={() =>
-                                                                    patchUser(
-                                                                        user,
-                                                                        { appRole: "ADMIN" },
-                                                                        { title: "Grant admin rights?", text: `Grant admin rights to ${user.name}?`, confirmText: "Grant admin", icon: "question" }
-                                                                    )
-                                                                }
-                                                                className="rounded-lg text-[#5E5D50] hover:bg-[#ECEBE4]"
-                                                            >
-                                                                <UserCog
-                                                                    className="mr-1 h-3.5 w-3.5"
-                                                                    aria-hidden
-                                                                />
+                                                            <>
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    disabled={isBusy}
+                                                                    onClick={() =>
+                                                                        patchUser(
+                                                                            user,
+                                                                            { appRole: "ADMIN" },
+                                                                            { title: "Grant admin rights?", text: `Grant admin rights to ${user.name}?`, confirmText: "Grant admin", icon: "question" }
+                                                                        )
+                                                                    }
+                                                                    className="rounded-lg text-[#5E5D50] hover:bg-[#ECEBE4]"
+                                                                >
+                                                                    <UserCog
+                                                                        className="mr-1 h-3.5 w-3.5"
+                                                                        aria-hidden
+                                                                    />
 
-                                                                Promote
-                                                            </Button>
+                                                                    Promote admin
+                                                                </Button>
+                                                                {user.appRole === "USER" && (
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        disabled={isBusy}
+                                                                        onClick={() =>
+                                                                            patchUser(
+                                                                                user,
+                                                                                { appRole: "MEMBER" },
+                                                                                { title: "Grant member access?", text: `Grant member access to ${user.name}?`, confirmText: "Make member", icon: "question" }
+                                                                            )
+                                                                        }
+                                                                        className="rounded-lg text-[#356044] hover:bg-[#EAF0EA]"
+                                                                    >
+                                                                        <UserCheck
+                                                                            className="mr-1 h-3.5 w-3.5"
+                                                                            aria-hidden
+                                                                        />
+
+                                                                        Make member
+                                                                    </Button>
+                                                                )}
+                                                            </>
                                                         )}
                                                     </div>
                                                 </div>

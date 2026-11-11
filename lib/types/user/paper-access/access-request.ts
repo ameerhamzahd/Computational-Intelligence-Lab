@@ -4,6 +4,7 @@ export interface User {
     email: string;
     role: string;
     institution: string;
+    appRole?: "MEMBER";
     avatar?: string;
 }
 
