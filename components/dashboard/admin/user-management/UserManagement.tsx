@@ -702,6 +702,29 @@ export default function UserManagement() {
                                                                 )}
                                                             </>
                                                         )}
+                                                        {user.appRole !== "USER" && (
+                                                            <Button
+                                                                type="button"
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                disabled={isBusy}
+                                                                onClick={() =>
+                                                                    patchUser(
+                                                                        user,
+                                                                        { appRole: "USER" },
+                                                                        { title: "Demote to user?", text: `Remove elevated access from ${user.name}? They will become a regular user.`, confirmText: "Demote to user", icon: "warning", tone: "danger" }
+                                                                    )
+                                                                }
+                                                                className="rounded-lg text-[#8A5A4A] hover:bg-[#FBF0EE]"
+                                                            >
+                                                                <UserMinus
+                                                                    className="mr-1 h-3.5 w-3.5"
+                                                                    aria-hidden
+                                                                />
+
+                                                                Demote to user
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
