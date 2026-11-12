@@ -36,6 +36,7 @@ interface UploadItem {
   status: UploadStatus;
   file_size: number;
   created_at: string;
+  is_owner: boolean;
 }
 
 interface EditState {
