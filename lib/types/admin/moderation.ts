@@ -17,6 +17,8 @@ export interface ModerationAuthor {
     institution: string;
 }
 
+export type ModerationMetadataValue = string | string[] | boolean | null;
+
 export interface ModerationSubmission {
     id: string;
     contentType: ModerationContentType;
@@ -25,8 +27,10 @@ export interface ModerationSubmission {
     author: ModerationAuthor;
     fileUrl: string;
     fileDownloadUrl: string;
+    originalFilename: string;
     mimeType: string;
     fileSizeMb: number;
+    metadata: Record<string, ModerationMetadataValue>;
     submittedAt: string;
     status: ModerationStatus;
     reviewNote?: string;

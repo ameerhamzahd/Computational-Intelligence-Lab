@@ -63,6 +63,37 @@ const CONTENT_TYPE_LABELS: Record<ModerationContentType, string> = {
     presentation: "Presentation",
 };
 
+const DETAIL_FIELDS: Record<
+    ModerationContentType,
+    { key: string; label: string; full?: boolean }[]
+> = {
+    paper: [
+        { key: "authors_name", label: "Authors" },
+        { key: "authors_email", label: "Author emails" },
+        { key: "paper_category", label: "Paper category" },
+        { key: "publication_type", label: "Publication type" },
+        { key: "publication_venue", label: "Publication venue" },
+        { key: "publisher", label: "Publisher" },
+        { key: "indexed_in", label: "Indexed in" },
+        { key: "publication_date", label: "Publication date" },
+        { key: "paper_tags", label: "Research tags" },
+        { key: "paper_url", label: "Publication link" },
+        { key: "paper_abstract", label: "Abstract", full: true },
+        { key: "is_featured", label: "Featured" },
+    ],
+    presentation: [
+        { key: "presenter_name", label: "Presenter names" },
+        { key: "presenter_email", label: "Presenter emails" },
+        { key: "presentation_event", label: "Presentation event" },
+        { key: "event_name", label: "Event name" },
+        { key: "presentation_category", label: "Presentation category" },
+        { key: "presentation_date", label: "Presentation date" },
+        { key: "presentation_tags", label: "Presentation tags" },
+        { key: "paper_url", label: "Publication link" },
+        { key: "presentation_description", label: "Description", full: true },
+    ],
+};
+
 function formatDate(value: string) {
     return new Date(value).toLocaleDateString("en-US", {
         year: "numeric",
@@ -73,6 +104,13 @@ function formatDate(value: string) {
 
 function isPdf(mimeType: string) {
     return mimeType === "application/pdf";
+}
+
+function formatDetailValue(value: unknown) {
+    if (Array.isArray(value)) return value.length ? value.join(", ") : "Not provided";
+    if (typeof value === "boolean") return value ? "Yes" : "No";
+    if (typeof value === "string" && value.trim()) return value;
+    return "Not provided";
 }
 
 const SEARCH_FIELD =
@@ -121,6 +159,36 @@ export default function ContentModeration() {
             window.setTimeout(() => URL.revokeObjectURL(fileUrl), 60_000);
         } catch (error) {
             toast.error(error instanceof Error ? error.message : "Unable to download the presentation.");
+        }
+    };
+
+    const previewSubmission = async (submission: ModerationSubmission) => {
+        const previewWindow = window.open("about:blank", "_blank");
+
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/moderation/${submission.id}/preview`,
+                {
+                    headers: {
+                        ...(getAuthToken()
+                            ? { Authorization: `Bearer ${getAuthToken()}` }
+                            : {}),
+                    },
+                }
+            );
+            if (!response.ok) throw new Error("Unable to preview the paper.");
+
+            const fileUrl = URL.createObjectURL(await response.blob());
+            if (previewWindow) {
+                previewWindow.location.href = fileUrl;
+                window.setTimeout(() => URL.revokeObjectURL(fileUrl), 60_000);
+            } else {
+                URL.revokeObjectURL(fileUrl);
+                throw new Error("Unable to open the paper preview.");
+            }
+        } catch (error) {
+            previewWindow?.close();
+            toast.error(error instanceof Error ? error.message : "Unable to preview the paper.");
         }
     };
 
@@ -366,18 +434,22 @@ export default function ContentModeration() {
                                                     <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-[#89877B]">
                                                         <span>Submitted {formatDate(submission.submittedAt)}</span>
 
-                                                        <span>{submission.fileSizeMb} MB</span>
+                                                        <span
+                                                            className="max-w-56 truncate"
+                                                            title={submission.originalFilename}
+                                                        >
+                                                            {submission.originalFilename} · {submission.fileSizeMb} MB
+                                                        </span>
 
                                                         {isPdf(submission.mimeType) ? (
-                                                            <a
-                                                                href={submission.fileUrl}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => previewSubmission(submission)}
                                                                 className="flex items-center gap-1 text-[#716F49] hover:underline"
                                                             >
                                                                 <Eye className="h-3.5 w-3.5" aria-hidden />
                                                                 Preview file
-                                                            </a>
+                                                            </button>
                                                         ) : (
                                                             <button
                                                                 type="button"
@@ -388,6 +460,28 @@ export default function ContentModeration() {
                                                                 Download file
                                                             </button>
                                                         )}
+                                                    </div>
+
+                                                    <div className="mt-4 rounded-lg border border-[#DEDCD3] bg-[#FBFAF7] p-4">
+                                                        <p className="text-xs font-semibold uppercase tracking-wide text-[#5E5D50]">
+                                                            Submission details
+                                                        </p>
+
+                                                        <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+                                                            {DETAIL_FIELDS[submission.contentType].map((field) => (
+                                                                <div
+                                                                    key={field.key}
+                                                                    className={cn(field.full && "sm:col-span-2")}
+                                                                >
+                                                                    <dt className="text-[11px] font-medium uppercase tracking-wide text-[#89877B]">
+                                                                        {field.label}
+                                                                    </dt>
+                                                                    <dd className="mt-1 whitespace-pre-wrap break-words text-sm text-[#3F3E35]">
+                                                                        {formatDetailValue(submission.metadata[field.key])}
+                                                                    </dd>
+                                                                </div>
+                                                            ))}
+                                                        </dl>
                                                     </div>
 
                                                     {submission.reviewNote && (

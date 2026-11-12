@@ -34,6 +34,7 @@ interface UploadItem {
   mime_type: string;
   cloudinary_url: string;
   status: UploadStatus;
+  review_note?: string;
   file_size: number;
   created_at: string;
   is_owner: boolean;
@@ -301,6 +302,12 @@ export default function UploadHistory() {
                         <span>{category || (isPaper ? "Paper" : "Presentation")}</span><span>•</span>
                         <span>{formatDate(upload.created_at)}</span><span>•</span><span>{formatFileSize(upload.file_size)}</span>
                       </div>
+                      {upload.review_note && (
+                        <div className="mt-3 rounded-lg border border-[#E1C0C0] bg-[#F6E8E8] px-3 py-2 text-xs text-[#7A4141]">
+                          <span className="font-semibold">Review note:</span>{" "}
+                          {upload.review_note}
+                        </div>
+                      )}
                     </div>
                     <div className="flex shrink-0 items-center gap-1">
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-[#737568]" onClick={() => handleFileAction(upload, "preview")} title={upload.upload_type === "presentation" && upload.mime_type !== "application/pdf" ? "Download" : "Preview"}><Eye className="h-4 w-4" /></Button>
