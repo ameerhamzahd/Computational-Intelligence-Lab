@@ -43,6 +43,8 @@ interface EditState {
   id: string;
   type: UploadType;
   title: string;
+  originalFilename: string;
+  replacementFile: File | null;
   /** Keyed by the same metadata/payload keys the upload forms send. */
   fields: Record<string, string>;
   featured: boolean;
@@ -149,6 +151,8 @@ export default function UploadHistory() {
       id: upload.id,
       type: upload.upload_type,
       title: upload.title,
+      originalFilename: upload.original_filename,
+      replacementFile: null,
       fields,
       featured: featured === true || featured === "true",
     });
@@ -214,15 +218,25 @@ export default function UploadHistory() {
     if (!editing) return;
     setIsSaving(true);
     setErrorMessage("");
-    const body = editing.type === "paper"
-      ? { paper_title: editing.title, ...editing.fields, is_featured: editing.featured }
-      : { presentation_title: editing.title, ...editing.fields };
+    const isPaper = editing.type === "paper";
+    const body: BodyInit = isPaper
+      ? (() => {
+        const formData = new FormData();
+        formData.append("paper_title", editing.title);
+        Object.entries(editing.fields).forEach(([key, value]) => formData.append(key, value));
+        formData.append("is_featured", String(editing.featured));
+        if (editing.replacementFile) formData.append("paper_file", editing.replacementFile);
+        return formData;
+      })()
+      : JSON.stringify({ presentation_title: editing.title, ...editing.fields });
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/uploads/${editing.id}`, {
         method: "PATCH",
-        headers: { ...authHeaders(), "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        headers: isPaper
+          ? authHeaders()
+          : { ...authHeaders(), "Content-Type": "application/json" },
+        body,
       });
       const data = await response.json().catch(() => null);
       if (!response.ok) throw new Error(data?.message ?? "Unable to update this upload.");
@@ -330,6 +344,20 @@ export default function UploadHistory() {
                 <input id="edit-featured" type="checkbox" checked={editing.featured} onChange={(event) => setEditing({ ...editing, featured: event.target.checked })} className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#626C49]" />
                 <span><span className="block text-xs font-semibold text-[#565D54]">Show as featured</span><span className="block text-[11px] text-[#85897F]">Highlight this paper as featured.</span></span>
               </label>
+            )}
+            {editing.type === "paper" && (
+              <div className="space-y-2 rounded-lg border border-[#D7D8D0] bg-white px-3 py-3">
+                <Label htmlFor="edit-paper-file">Research paper PDF</Label>
+                <p className="truncate text-xs text-[#6F7267]" title={editing.originalFilename}>Current file: {editing.originalFilename}</p>
+                <input
+                  id="edit-paper-file"
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  className="block w-full text-xs text-[#565D54] file:mr-3 file:rounded-md file:border-0 file:bg-[#E8E7DD] file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-[#565D54]"
+                  onChange={(event) => setEditing({ ...editing, replacementFile: event.target.files?.[0] ?? null })}
+                />
+                <p className="text-[11px] text-[#85897F]">Choose a PDF only if you want to replace the current paper.</p>
+              </div>
             )}
             <div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setEditing(null)} disabled={isSaving}>Cancel</Button><Button type="submit" disabled={isSaving}>{isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Save changes</Button></div>
           </form>
